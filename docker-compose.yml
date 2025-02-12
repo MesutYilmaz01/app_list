@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  mylist-app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "9080:8080"
+    container_name: mylist-app
+    volumes:
+      - ./:/var/www
+    networks:
+      mylist-backend:
+  mylist-web:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-nginx
+    ports:
+      - "90:80"
+    container_name: mylist-web
+    volumes:
+      - ./:/var/www
+      - ./:/etc/nginx/conf.d/
+    networks:
+      mylist-backend:
+  mylist-db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mylist
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: mypassword
+    container_name: mylist-db
+    networks:
+      mylist-backend:
+networks:
+  mylist-backend:
+    driver: bridge
