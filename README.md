@@ -9,7 +9,7 @@ Install composer with following command.<br />
 Create database<br />
 **```php artisan migrate```**<br />
 
-**Project must work after these steps.**
+**Project must work after these steps at [localhost](https://localhost:90/).**
 
 ## Database Credentials
 
