@@ -19,7 +19,7 @@ Route::group([
     'controller' => CategoryController::class
 ], function ($router) {
     Route::get('/','getAll');
-    Route::post('/{id}', 'show');
+    Route::get('/{id}', 'show');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
         Route::put('/{id}', 'update');

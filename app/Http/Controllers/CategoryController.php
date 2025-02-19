@@ -2,23 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\CategoryCreateRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\Category\CategoryShowRequest;
 
 class CategoryController extends Controller
 {
     public function getAll()
     {
-        //Todo
+        return Category::all();
     }
 
-    public function show()
+    public function show(CategoryShowRequest $request)
     {
-        //Todo
+        return Category::where('id', $request->id)->first();
     }
 
-    public function create()
+    public function create(CategoryCreateRequest $request)
     {
-        //Todo
+        $category = Category::create([
+            'name' => $request->name
+        ]);
+
+        if(!$category)
+        {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'category cant created'
+            ]);
+        }
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'category created'
+        ]);
     }
 
     public function update()
