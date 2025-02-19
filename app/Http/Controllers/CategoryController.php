@@ -6,12 +6,20 @@ use App\Http\Requests\Category\CategoryCreateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\Category\CategoryShowRequest;
+use App\Modules\Category\Application\Manager\CategoryManager;
 
 class CategoryController extends Controller
 {
+    private CategoryManager $categoryManager;
+
+    public function __construct(CategoryManager $categoryManager)
+    {
+        $this->categoryManager = $categoryManager;
+    }
+
     public function getAll()
     {
-        return Category::all();
+        return $this->categoryManager->getAll();
     }
 
     public function show(CategoryShowRequest $request)
