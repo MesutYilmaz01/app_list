@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryCreateRequest;
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\Category\CategoryDeleteRequest;
 use App\Http\Requests\Category\CategoryShowRequest;
+use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Modules\Category\Application\Manager\CategoryManager;
+use Exception;
 
 class CategoryController extends Controller
 {
@@ -19,41 +20,51 @@ class CategoryController extends Controller
 
     public function getAll()
     {
-        return $this->categoryManager->getAll();
+        try {
+            $categories = $this->categoryManager->getAll();
+            return response()->json($categories, 200);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function show(CategoryShowRequest $request)
     {
-        return Category::where('id', $request->id)->first();
+        try {
+            $category = $this->categoryManager->getById($request->id);
+            return response()->json($category, 200);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function create(CategoryCreateRequest $request)
     {
-        $category = Category::create([
-            'name' => $request->name
-        ]);
-
-        if(!$category)
-        {
-            return response()->json([
-                'status' => 'fail',
-                'message' => 'category cant created'
-            ]);
+        try {
+            $category = $this->categoryManager->create($request->all());
+            return response()->json($category, 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => 'category created'
-        ]);
     }
 
-    public function update()
+    public function update(CategoryUpdateRequest $request)
     {
-        //Todo
+        try {
+            $category = $this->categoryManager->update($request->id, $request->except("id"));
+            return response()->json($category, 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
-    public function delete()
+    public function delete(CategoryDeleteRequest $request)
     {
-        //Todo
+        try {
+            $this->categoryManager->delete($request->id);
+            return response()->json(["message" => "Category deletion is successfuly completed."], 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 }
