@@ -1,6 +1,6 @@
 <?php
  
-namespace App\Modules\User\Middlewares;
+namespace App\Modules\User\Infrastructure\Middlewares;
 
 use App\Modules\User\Application\Manager\UserMiddlewareManager;
 use Closure;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\User\Middlewares\AdminMiddleware;
+use App\Modules\User\Infrastructure\Middlewares\AdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

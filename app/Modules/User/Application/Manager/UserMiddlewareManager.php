@@ -2,7 +2,7 @@
 
 namespace App\Modules\User\Application\Manager;
 
-use App\Modules\User\Enums\UserType;
+use App\Modules\User\Domain\Enums\UserType;
 
 class UserMiddlewareManager
 {

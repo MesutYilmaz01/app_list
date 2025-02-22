@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\User\Enums;
+namespace App\Modules\User\Domain\Enums;
 
 
 enum UserType: int
