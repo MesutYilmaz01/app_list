@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\Category\Domain\IRepository;
+namespace App\Modules\Shared\Repository;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

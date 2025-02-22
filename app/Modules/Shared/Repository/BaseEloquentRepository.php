@@ -1,8 +1,7 @@
 <?
 
-namespace App\Modules\Category\Infrastructure\Repository;
+namespace App\Modules\Shared\Repository;
 
-use App\Modules\Category\Domain\IRepository\IBaseEloquentRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;

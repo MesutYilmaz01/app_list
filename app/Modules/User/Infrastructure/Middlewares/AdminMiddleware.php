@@ -2,19 +2,13 @@
  
 namespace App\Modules\User\Infrastructure\Middlewares;
 
-use App\Modules\User\Application\Manager\UserMiddlewareManager;
+use App\Modules\User\Domain\Enums\UserType;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
  
 class AdminMiddleware
 {
-    private UserMiddlewareManager $userMiddlewareManager;
-
-    public function __construct(UserMiddlewareManager $userMiddlewareManager)
-    {
-        $this->userMiddlewareManager = $userMiddlewareManager;
-    }
     /**
      * Handle an incoming request.
      *
@@ -22,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($this->userMiddlewareManager->isAdmin()) {
+        if(auth()->user()->user_type != UserType::ADMIN->value) {
             return response()->json(['message' => 'Only admins can do this operation.'], 400);
         }
  
