@@ -105,11 +105,11 @@ class CategoryManager
      * Deletes a category according to given id
      * 
      * @param int $id
-     * @return bool||null
+     * @return bool
      * 
      * @throws Exception
      */
-    public function delete(int $id): ?bool
+    public function delete(int $id): bool
     {
         $isDeleted = $this->categoryCrudService->delete($id);
 

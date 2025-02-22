@@ -20,7 +20,7 @@ Route::group([
 ], function ($router) {
     Route::get('/','getAll');
     Route::get('/{id}', 'show');
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum', 'is_admin')->group(function () {
         Route::post('/', 'create');
         Route::put('/{id}', 'update');
         Route::delete('/{id}', 'delete');

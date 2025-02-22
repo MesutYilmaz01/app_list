@@ -4,7 +4,6 @@ namespace App\Modules\Category\Domain\Services;
 
 use App\Models\Category;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
-use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
 use Illuminate\Database\Eloquent\Collection;
 
 class CategoryCrudService
@@ -69,9 +68,9 @@ class CategoryCrudService
      * Deletes a category according to given id
      * 
      * @param int $id
-     * @return bool||null
+     * @return bool
      */
-    public function delete(int $id): ?bool
+    public function delete(int $id): bool
     {
         $category = $this->categoryRepo->getById($id);
         if(!$category)
