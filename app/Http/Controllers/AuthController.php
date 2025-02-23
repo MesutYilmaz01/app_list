@@ -6,56 +6,75 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateUserRequest;
 use App\Http\Requests\Auth\UserLoginRequest;
-use App\Models\User;
+use App\Modules\User\Application\Manager\AuthManager;
+use App\Modules\User\Domain\DTO\UserDTO;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(CreateUserRequest $request)
+    private AuthManager $authManager;
+
+    public function __construct(AuthManager $authManager)
     {
-        $user = User::create(
-            [
-                'username' => $request->username,
-                'name' => $request->name,
-                'surname' => $request->surname,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]
-        );
+        $this->authManager = $authManager;
+    }
 
-        $token = $user->createToken("auth_token")->plainTextToken;
+    /**
+     * Create a user via given credentials and returns a token.
+     *
+     * @param CreateUserRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws Exception
+     */
+    public function register(CreateUserRequest $request): JsonResponse
+    {
+        try {
+            $userDto = UserDTO::fromCreateRequest($request);
+            $user = $this->authManager->register($userDto);
+            $token = $user->createToken("auth_token")->plainTextToken;
 
-        return response()->json([
-            'status' => '1',
-            'message' => 'User created successfully.',
-            'token' => $token
-        ]);
+            return response()->json([
+                'message' => 'User created successfully.',
+                'user' => $user,
+                'token' => $token
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Get a token via given credentials.
      *
+     * @param UserLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws Exception
      */
-    public function login(UserLoginRequest $request)
-    {   
-        $user = User::where('email', $request->email)->first();
+    public function login(UserLoginRequest $request): JsonResponse
+    {
+        try {
+            $user = $this->authManager->getByEmail($request->email);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+            if (!Hash::check($request->password, $user->password)) {
+
+                throw new Exception("Bad credentials.", 400);
+            }
+
+            $token = $user->createToken("auth_token")->plainTextToken;
 
             return response()->json([
-                'status' => '0',
-                'message' => 'Bad credentials.',
-            ]);
+                'message' => 'User logined successfully.',
+                'user' => $user,
+                'token' => $token
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
-
-        $token = $user->createToken("auth_token")->plainTextToken;
-
-        return response()->json([
-            'status' => '1',
-            'message' => 'User logined successfully.',
-            'token' => $token
-        ]);
     }
 
     /**
