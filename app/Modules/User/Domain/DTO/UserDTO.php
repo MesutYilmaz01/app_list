@@ -14,7 +14,8 @@ class UserDTO
     private string $password;
     private int $userType;
 
-    public function setUsername(string $username) {
+    public function setUsername(string $username) 
+    {
         $this->username = $username;
     }
 
@@ -23,7 +24,8 @@ class UserDTO
         return $this->username;
     }
 
-    public function setName(string $name) {
+    public function setName(string $name) 
+    {
         $this->name = $name;
     }
 
@@ -32,7 +34,8 @@ class UserDTO
         return $this->name;
     }
 
-    public function setSurname(string $surname) {
+    public function setSurname(string $surname) 
+    {
         $this->surname = $surname;
     }
 
@@ -41,7 +44,8 @@ class UserDTO
         return $this->surname;
     }
 
-    public function setEmail(string $email) {
+    public function setEmail(string $email) 
+    {
         $this->email = $email;
     }
 
@@ -50,8 +54,9 @@ class UserDTO
         return $this->email;
     }
 
-    public function setPassword(string $password) {
-        $this->password = Hash::make($password);
+    public function setPassword(string $password) 
+    {
+        $this->password = $password;
     }
 
     public function getPassword()
@@ -59,7 +64,8 @@ class UserDTO
         return $this->password;
     }
 
-    public function setUserType (int $userType) {
+    public function setUserType (int $userType) 
+    {
         $this->userType = $userType;
     }
 
@@ -68,7 +74,7 @@ class UserDTO
         return $this->userType;
     }
 
-    public static function fromRequest(CreateUserRequest $request)
+    public static function fromCreateRequest(CreateUserRequest $request)
     {
         $userDTO = new self();
 
@@ -76,7 +82,7 @@ class UserDTO
         $userDTO->setSurname($request->surname);
         $userDTO->setUsername($request->username);
         $userDTO->setEmail($request->email);
-        $userDTO->setPassword($request->password);
+        $userDTO->setPassword(Hash::make($request->password));
         $userDTO->setUserType($request->userType ?? 0);
 
         return $userDTO;
