@@ -3,6 +3,7 @@
 namespace App\Modules\Category\Application\Manager;
 
 use App\Models\Category;
+use App\Modules\Category\Domain\DTO\CategoryDTO;
 use App\Modules\Category\Domain\Services\CategoryCrudService;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -61,14 +62,14 @@ class CategoryManager
     /**
      * Creates a category according to given data
      * 
-     * @param array $data
+     * @param CategoryDTO $categoryDTO
      * @return Category||null
      * 
      * @throws Exception
      */
-    public function create(array $data): ?Category
+    public function create(CategoryDTO $categoryDTO): ?Category
     {
-        $category = $this->categoryCrudService->create($data);
+        $category = $this->categoryCrudService->create($categoryDTO);
 
         if (!$category) {
             Log::alert("Category could not created.");
@@ -83,14 +84,14 @@ class CategoryManager
      * Update a category according to given data
      * 
      * @param int $id
-     * @param array $data
+     * @param CategoryDTO $categoryDTO
      * @return Category||null
      * 
      * @throws Exception
      */
-    public function update(int $id, array $data): ?Category
+    public function update(int $id, CategoryDTO $categoryDTO): ?Category
     {
-        $category = $this->categoryCrudService->update($id, $data);
+        $category = $this->categoryCrudService->update($id, $categoryDTO);
 
         if (!$category) {
             Log::alert("Category {$id} could not updated.");

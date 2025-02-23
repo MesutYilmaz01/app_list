@@ -23,14 +23,7 @@ class AuthService
      */
     public function register(UserDTO $userDTO): ?User
     {
-        return $this->userRepo->create([
-            "name" => $userDTO->getName(),
-            "surname" => $userDTO->getSurname(),
-            "email" => $userDTO->getEmail(),
-            "username" => $userDTO->getUsername(),
-            "password" => $userDTO->getPassword(),
-            "user_type" => $userDTO->getUserType()
-        ]);
+        return $this->userRepo->create($userDTO->toArray());
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Http\Requests\Category\CategoryDeleteRequest;
 use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Modules\Category\Application\Manager\CategoryManager;
+use App\Modules\Category\Domain\DTO\CategoryDTO;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -65,7 +66,8 @@ class CategoryController extends Controller
     public function create(CategoryCreateRequest $request): JsonResponse
     {
         try {
-            $category = $this->categoryManager->create($request->all());
+            $categoryDTO = CategoryDTO::fromCreateRequest($request);
+            $category = $this->categoryManager->create($categoryDTO);
             return response()->json($category, 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -75,7 +77,7 @@ class CategoryController extends Controller
     /**
      * Updates a category according to given id
      * 
-     * @param CategoryUpdateRequest $request
+     * @param CategoryDTO $request
      * @return JsonRespone
      * 
      * @throws Exception
@@ -83,7 +85,8 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request): JsonResponse
     {
         try {
-            $category = $this->categoryManager->update($request->id, $request->except("id"));
+            $categoryDTO = CategoryDTO::fromCreateRequest($request);
+            $category = $this->categoryManager->update($request->id, $categoryDTO);
             return response()->json($category, 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

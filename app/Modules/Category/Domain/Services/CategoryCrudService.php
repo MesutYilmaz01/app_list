@@ -3,6 +3,7 @@
 namespace App\Modules\Category\Domain\Services;
 
 use App\Models\Category;
+use App\Modules\Category\Domain\DTO\CategoryDTO;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -39,22 +40,22 @@ class CategoryCrudService
     /**
      * Creates a category according to given data
      * 
-     * @param array $data
+     * @param CategoryDTO $categoryDTO
      * @return Category||null
      */
-    public function create(array $data): ?Category
+    public function create(CategoryDTO $categoryDTO): ?Category
     {
-        return $this->categoryRepo->create($data);
+        return $this->categoryRepo->create($categoryDTO->toArray());
     }
 
     /**
      * Update a category according to given data
      * 
      * @param int $id
-     * @param array $data
+     * @param CategoryDTO $categoryDTO
      * @return Category||null
      */
-    public function update(int $id, array $data): ?Category
+    public function update(int $id, CategoryDTO $categoryDTO): ?Category
     {
         $category = $this->categoryRepo->getById($id);
 
@@ -62,7 +63,7 @@ class CategoryCrudService
         {
             return null;
         }
-        return $this->categoryRepo->update($category, $data);
+        return $this->categoryRepo->update($category, $categoryDTO->toArray());
     }
 
     /**
