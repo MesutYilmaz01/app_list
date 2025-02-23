@@ -1,0 +1,62 @@
+<?
+
+namespace App\Modules\User\Application\Manager;
+
+use App\Models\User;
+use App\Modules\User\Domain\DTO\UserDTO;
+use App\Modules\User\Domain\Services\AuthService;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
+
+class AuthManager
+{
+    private AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    /**
+     * Creates a new user
+     * 
+     * @param UserDTO $userDTO
+     * @return User||null
+     * 
+     * @throws Exception
+     */
+    public function register(UserDTO $userDTO): ?User
+    {
+        $user = $this->authService->register($userDTO);
+
+        if (!$user) {
+            Log::alert("User could not created.");
+            throw new Exception("User could not created.", 400);
+        }
+
+        Log::info("User {$user->id} is created.");
+        return $user;
+    }
+
+    /**
+     * Gets a user according to mail
+     * 
+     * @param string $email
+     * @return User||null
+     * 
+     * @throws Exception
+     */
+    public function getByEmail(string $email): ?User
+    {
+        $user = $this->authService->getByEmail($email);
+
+        if (!$user) {
+            Log::alert("User could not find with this email.");
+            throw new Exception("User could not findwith this email.", 400);
+        }
+
+        Log::info("User {$user->id} is finded.");
+        return $user;
+    }
+}
