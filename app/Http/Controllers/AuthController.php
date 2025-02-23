@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     private AuthManager $authManager;
-
+    
     public function __construct(AuthManager $authManager)
     {
         $this->authManager = $authManager;

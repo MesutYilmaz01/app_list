@@ -57,6 +57,7 @@ class CategoryCrudService
     public function update(int $id, array $data): ?Category
     {
         $category = $this->categoryRepo->getById($id);
+
         if(!$category)
         {
             return null;
@@ -73,6 +74,7 @@ class CategoryCrudService
     public function delete(int $id): bool
     {
         $category = $this->categoryRepo->getById($id);
+        
         if(!$category)
         {
             return false;

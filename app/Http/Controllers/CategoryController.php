@@ -8,6 +8,7 @@ use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
@@ -18,7 +19,14 @@ class CategoryController extends Controller
         $this->categoryManager = $categoryManager;
     }
 
-    public function getAll()
+    /**
+     * Gets all category data
+     * 
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function getAll(): JsonResponse
     {
         try {
             $categories = $this->categoryManager->getAll();
@@ -28,7 +36,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function show(CategoryShowRequest $request)
+    /**
+     * Gets category according to id
+     * 
+     * @param CategoryShowRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function show(CategoryShowRequest $request): JsonResponse
     {
         try {
             $category = $this->categoryManager->getById($request->id);
@@ -38,7 +54,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function create(CategoryCreateRequest $request)
+    /**
+     * Creates a category 
+     * 
+     * @param CategoryCreateRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function create(CategoryCreateRequest $request): JsonResponse
     {
         try {
             $category = $this->categoryManager->create($request->all());
@@ -48,7 +72,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(CategoryUpdateRequest $request)
+    /**
+     * Updates a category according to given id
+     * 
+     * @param CategoryUpdateRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function update(CategoryUpdateRequest $request): JsonResponse
     {
         try {
             $category = $this->categoryManager->update($request->id, $request->except("id"));
@@ -58,7 +90,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete(CategoryDeleteRequest $request)
+    /**
+     * Deletes a category according to given id
+     * 
+     * @param CategoryDeleteRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function delete(CategoryDeleteRequest $request): JsonResponse
     {
         try {
             $this->categoryManager->delete($request->id);

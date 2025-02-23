@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Modules\User\Domain\DTO\UserDTO;
 use App\Modules\User\Domain\Services\AuthService;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class AuthManager
@@ -53,7 +52,7 @@ class AuthManager
 
         if (!$user) {
             Log::alert("User could not find with this email.");
-            throw new Exception("User could not findwith this email.", 400);
+            throw new Exception("User could not find with this email.", 400);
         }
 
         Log::info("User {$user->id} is finded.");
