@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\List\Domain\IRepository;
+namespace App\Modules\UserList\Domain\IRepository;
 
 use App\Modules\Shared\Repository\IBaseEloquentRepository;
 
