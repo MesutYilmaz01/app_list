@@ -16,8 +16,9 @@ class UserList extends Model
      */
     protected $fillable = [
         'user_id',
-        'title',
+        'header',
         'description',
-        'status'
+        'status',
+        'is_public'
     ];
 }

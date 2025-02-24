@@ -15,7 +15,7 @@ class UserListItem extends Model
      */
     protected $fillable = [
         'user_list_id',
-        'title',
+        'header',
         'description',
         'status'
     ];

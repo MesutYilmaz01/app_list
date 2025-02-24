@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserListController;
 
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [AuthController::class, 'register']);
@@ -24,5 +25,18 @@ Route::group([
         Route::post('/', 'create');
         Route::put('/{id}', 'update');
         Route::delete('/{id}', 'delete');
+    });
+});
+
+Route::group([
+    'prefix' => 'lists',
+    'controller' => UserListController::class
+], function ($router) {
+    //Route::get('/','getAll');
+    //Route::get('/{id}', 'show');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', 'create');
+        //Route::put('/{id}', 'update');
+        //Route::delete('/{id}', 'delete');
     });
 });
