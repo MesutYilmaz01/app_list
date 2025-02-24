@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('header', 100);
             $table->string('description', 500);
             $table->integer('status')->default(1);
+            $table->integer('is_public')->default(1);
             $table->softDeletes(); 
             $table->timestamps();
         });
