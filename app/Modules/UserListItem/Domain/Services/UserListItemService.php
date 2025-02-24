@@ -12,4 +12,22 @@ class UserListItemService
     {
         $this->userListItemRepo = $userListItemRepo;
     }
+
+    /**
+     * Creates user list items according to given array
+     * 
+     * @param array $userListItems
+     * 
+     * @return array
+     */
+    public function create(array $userListItems): array
+    {
+        $tempUserListItems = [];
+        
+        foreach($userListItems as $userListItem) {
+            array_push($tempUserListItems, $this->userListItemRepo->create($userListItem->toArray()));
+        }
+
+        return $tempUserListItems;
+    }
 }

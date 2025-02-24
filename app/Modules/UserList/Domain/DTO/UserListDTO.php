@@ -11,8 +11,8 @@ class UserListDTO
     private string $user_id;
     private string $header;
     private string $description;
-    private string $status;
-    private string $isPublic;
+    private int $status;
+    private int $isPublic;
 
     public function setUserId(int $userId) 
     {

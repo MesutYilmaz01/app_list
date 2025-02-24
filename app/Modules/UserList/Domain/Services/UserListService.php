@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserList\Domain\Services;
 
+use App\Models\UserList;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 
@@ -14,7 +15,13 @@ class UserListService
         $this->userListRepo = $userListRepo;
     }
 
-    public function create(UserListDTO $userListDTO)
+    /**
+     * Creates a userlist according to given data
+     * 
+     * @param UserListDTO $userListDTO
+     * @return UserList||null
+     */
+    public function create(UserListDTO $userListDTO): ?UserList
     {
         return $this->userListRepo->create($userListDTO->toArray());
     }
