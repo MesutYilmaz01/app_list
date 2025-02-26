@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserList\UserListCreateRequest;
+use App\Http\Requests\UserList\UserListGetAllForUserRequest;
+use App\Http\Requests\UserList\UserListGetOneForUserRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
@@ -21,9 +23,26 @@ class UserListController extends Controller
         $this->userListItemManager = $userListItemManager;
     }
 
+    public function getAllForUser(UserListGetAllForUserRequest $request)
+    {
+        try {
+            $userLists = $this->userListManager->getAllForUser($request->user_id);
+            return response()->json([
+                "message" => "List got successfully.",
+                "user_lists" => $userLists,
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    // public function get(UserListGetOneForUserRequest $request) {
+    //     return $request;
+    // }
+
     public function create(UserListCreateRequest $request)
     {
-        try{
+        try {
             DB::beginTransaction();
 
             $userListDTO = UserListDTO::fromCreateRequest($request);
@@ -37,10 +56,8 @@ class UserListController extends Controller
                 "message" => "List item added with it's item successfully.",
                 "user_list" => $userList,
                 "user_list_items" => $userListItems
-            ],201);
-
-            
-        } catch(Exception $e) {
+            ], 201);
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }

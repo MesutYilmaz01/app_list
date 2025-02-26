@@ -17,7 +17,7 @@ class UserListsItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'header' => fake()->title(6),
+            'header' => fake()->sentence(5),
             'description' => fake()->sentence(10),
         ];
     }

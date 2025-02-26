@@ -16,13 +16,15 @@ class UserListSeeder extends Seeder
      */
     public function run(): void
     {
-        UserList::factory()->count(30)->create([
-            'user_id' =>  User::query()->inRandomOrder()->limit(1)->first()->id,
-            'category_id' =>  Category::query()->inRandomOrder()->limit(1)->first()->id
-        ])->each(function ($userlist) {
-            UserListsItem::factory()->count(8)->create([
-                'user_list_id' => $userlist->id
-            ]);
-        });
+        for($i=0; $i<30; $i++) {
+            UserList::factory()->count(1)->create([
+                'user_id' =>  User::query()->inRandomOrder()->limit(1)->first()->id,
+                'category_id' =>  Category::query()->inRandomOrder()->limit(1)->first()->id
+            ])->each(function ($userlist) {
+                UserListsItem::factory()->count(8)->create([
+                    'user_list_id' => $userlist->id
+                ]);
+            });
+        }
     }
 }

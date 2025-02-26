@@ -27,7 +27,7 @@ class UserListItemManager
     {
         $listItems = $this->userListItemCrudService->create($userListItems);
 
-        if(count($listItems) != count($userListItems)) {
+        if (count($listItems) != count($userListItems)) {
             Log::alert("Userlistitems could not created.");
             throw new Exception("An error occured while adding new item list.", 400);
         }

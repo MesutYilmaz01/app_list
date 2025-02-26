@@ -32,7 +32,7 @@ Route::group([
     'prefix' => 'lists',
     'controller' => UserListController::class
 ], function ($router) {
-    //Route::get('/','getAll');
+    Route::get('/{user_id}','getAllForUser');
     //Route::get('/{id}', 'show');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
