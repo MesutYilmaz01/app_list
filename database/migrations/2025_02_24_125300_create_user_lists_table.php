@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_lists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id',)->references('id')->on('users')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id',)->references('id')->on('categories')->constrained()->cascadeOnDelete();
             $table->string('header', 100);
             $table->string('description', 500);
             $table->integer('status')->default(1);
