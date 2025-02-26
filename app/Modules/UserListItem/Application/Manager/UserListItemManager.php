@@ -2,17 +2,17 @@
 
 namespace App\Modules\UserListItem\Application\Manager;
 
-use App\Modules\UserListItem\Domain\Services\UserListItemService;
+use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class UserListItemManager
 {
-    private UserListItemService $userListItemService;
+    private UserListItemCrudService $userListItemCrudService;
 
-    public function __construct(UserListItemService $userListItemService)
+    public function __construct(UserListItemCrudService $userListItemCrudService)
     {
-        $this->userListItemService = $userListItemService;
+        $this->userListItemCrudService = $userListItemCrudService;
     }
 
     /**
@@ -25,7 +25,7 @@ class UserListItemManager
      */
     public function create(array $userListItems): array
     {
-        $listItems = $this->userListItemService->create($userListItems);
+        $listItems = $this->userListItemCrudService->create($userListItems);
 
         if(count($listItems) != count($userListItems)) {
             Log::alert("Userlistitems could not created.");

@@ -4,17 +4,17 @@ namespace App\Modules\UserList\Application\Manager;
 
 use App\Models\UserList;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
-use App\Modules\UserList\Domain\Services\UserListService;
+use App\Modules\UserList\Domain\Services\UserListCrudService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class UserListManager
 {
-    private UserListService $userListService;
+    private UserListCrudService $userListCrudService;
 
-    public function __construct(UserListService $userListService)
+    public function __construct(UserListCrudService $userListCrudService)
     {
-        $this->userListService = $userListService;
+        $this->userListCrudService = $userListCrudService;
     }
 
     /**
@@ -27,7 +27,7 @@ class UserListManager
      */
     public function create(UserListDTO $userListDTO): ?UserList
     {
-        $userList = $this->userListService->create($userListDTO);
+        $userList = $this->userListCrudService->create($userListDTO);
 
         if(!$userList) {
             Log::alert("Userlist could not created.");

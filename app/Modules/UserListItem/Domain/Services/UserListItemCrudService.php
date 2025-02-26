@@ -4,7 +4,7 @@ namespace App\Modules\UserListItem\Domain\Services;
 
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
 
-class UserListItemService
+class UserListItemCrudService
 {
     public IUserListItemRepository $userListItemRepo;
     

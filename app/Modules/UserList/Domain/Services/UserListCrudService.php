@@ -6,7 +6,7 @@ use App\Models\UserList;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 
-class UserListService
+class UserListCrudService
 {
     public IUserListRepository $userListRepo;
     
