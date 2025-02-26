@@ -43,6 +43,14 @@ interface IBaseEloquentRepository
     public function findByAttributes(array $attributes): ?Model;
 
     /**
+     * Gets a data set according to attributes
+     * 
+     * @param array $attributes
+     * @return Collection||null
+     */
+    public function getAllByAttributes(array $attributes): ?Collection;
+
+    /**
      * Create a record according to given array data
      * 
      * @param array $data

@@ -112,6 +112,17 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     }
 
     /**
+     * Gets a data set according to attributes
+     * 
+     * @param array $attributes
+     * @return Collection||null
+     */
+    public function getAllByAttributes(array $attributes): ?Collection
+    {
+        return $this->model->where($attributes)->get();
+    }
+
+    /**
      * Create a record according to given array data
      * 
      * @param array $data
