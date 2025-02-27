@@ -34,9 +34,11 @@ class AuthController extends Controller
             $token = $user->createToken("auth_token")->plainTextToken;
 
             return response()->json([
-                'message' => 'User created successfully.',
-                'user' => $user,
-                'token' => $token
+                "message" => "User created successfully.",
+                "result" => [
+                    "user" => $user,
+                    "token" => $token
+                ]
             ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -64,9 +66,11 @@ class AuthController extends Controller
             $token = $user->createToken("auth_token")->plainTextToken;
 
             return response()->json([
-                'message' => 'User logined successfully.',
-                'user' => $user,
-                'token' => $token
+                "message" => "User logined successfully.",
+                "result" => [
+                    "user" => $user,
+                    "token" => $token
+                ]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -81,7 +85,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::user()->tokens()->delete();
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(["message" => "Successfully logged out"]);
     }
 
     /**
@@ -91,6 +95,9 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json([
+            "message" => "User got successfully",
+            "result" => ["user" => auth()->user()]
+        ]);
     }
 }

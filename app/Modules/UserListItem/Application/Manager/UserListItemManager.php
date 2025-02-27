@@ -21,7 +21,7 @@ class UserListItemManager
     public function getAllForGivenList(int $listId): ?array
     {
         $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
-
+        
         if (!$userListsItems) {
             Log::alert("Userlist sub lists could not find for {$listId} user.");
             throw new Exception("Userlists sub lists could not find.", 400);

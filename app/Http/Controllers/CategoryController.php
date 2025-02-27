@@ -28,7 +28,10 @@ class CategoryController extends Controller
     {
         try {
             $categories = $this->categoryManager->getAll();
-            return response()->json($categories, 200);
+            return response()->json([
+                "message" => "Categories got successfully.",
+                "result" => ["categories" => $categories]
+            ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
@@ -46,7 +49,10 @@ class CategoryController extends Controller
     {
         try {
             $category = $this->categoryManager->getById($request->id);
-            return response()->json($category, 200);
+            return response()->json([
+                "message" => "Category got successfully.",
+                "result" => ["category" => $category]
+            ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
@@ -65,7 +71,10 @@ class CategoryController extends Controller
         try {
             $categoryDTO = CategoryDTO::fromCreateRequest($request);
             $category = $this->categoryManager->create($categoryDTO);
-            return response()->json($category, 201);
+            return response()->json([
+                "message" => "Category created successfully.",
+                "result" => ["category" => $category]
+            ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
@@ -84,7 +93,10 @@ class CategoryController extends Controller
         try {
             $categoryDTO = CategoryDTO::fromCreateRequest($request);
             $category = $this->categoryManager->update($request->id, $categoryDTO);
-            return response()->json($category, 201);
+            return response()->json([
+                "message" => "Category updated successfully.",
+                "result" => ["category" => $category]
+            ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }

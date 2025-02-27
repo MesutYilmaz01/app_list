@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserListItem\Domain\Services;
 
+use App\Modules\UserListItem\Domain\Enums\StatusType;
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
 
 class UserListItemCrudService
@@ -18,7 +19,7 @@ class UserListItemCrudService
      */
     public function getAllForLists(int $listId): ?array
     {
-        return $this->userListItemRepo->getAllByAttributes(['id' => $listId])->toArray();
+        return $this->userListItemRepo->getAllByAttributes(['user_list_id' => $listId, 'status' => StatusType::ACTIVE->value])->toArray();
     }
 
 
