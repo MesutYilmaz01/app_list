@@ -4,7 +4,6 @@ namespace App\Modules\UserListItem\Application\Manager;
 
 use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class UserListItemManager
@@ -17,9 +16,9 @@ class UserListItemManager
      * Gets all lists sub lists for given id
      * 
      * @param int $listId
-     * @return Collection||null
+     * @return array||null
      */
-    public function getAllForGivenList(int $listId): ?Collection
+    public function getAllForGivenList(int $listId): ?array
     {
         $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
 
