@@ -4,6 +4,7 @@ namespace App\Modules\UserListItem\Application\Manager;
 
 use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class UserListItemManager
@@ -13,6 +14,25 @@ class UserListItemManager
     public function __construct(UserListItemCrudService $userListItemCrudService)
     {
         $this->userListItemCrudService = $userListItemCrudService;
+    }
+
+    /**
+     * Gets all lists sub lists for given id
+     * 
+     * @param int $listId
+     * @return Collection||null
+     */
+    public function getAllForGivenList(int $listId): ?Collection
+    {
+        $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
+        
+        if (!$userListsItems) {
+            Log::alert("Userlist sub lists could not find for {$listId} user.");
+            throw new Exception("Userlists sub lists could not find.", 400);
+        }
+
+        Log::info("Userlist sub lists are searched for {$listId} lists.");
+        return $userListsItems;
     }
 
     /**

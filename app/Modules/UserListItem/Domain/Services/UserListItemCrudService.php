@@ -3,6 +3,7 @@
 namespace App\Modules\UserListItem\Domain\Services;
 
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserListItemCrudService
 {
@@ -12,6 +13,18 @@ class UserListItemCrudService
     {
         $this->userListItemRepo = $userListItemRepo;
     }
+
+    /**
+     * Gets all user lists sub lists for given list id
+     * 
+     * @param int $listId
+     * @return Collection||null
+     */
+    public function getAllForLists(int $listId): ?Collection
+    {
+        return $this->userListItemRepo->getAllByAttributes(['id' => $listId]);
+    }
+
 
     /**
      * Creates user list items according to given array

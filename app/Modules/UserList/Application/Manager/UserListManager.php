@@ -3,20 +3,21 @@
 namespace App\Modules\UserList\Application\Manager;
 
 use App\Models\UserList;
+use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
+use App\Modules\UserList\Domain\DTO\UserListEntity;
 use App\Modules\UserList\Domain\Services\UserListCrudService;
+use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class UserListManager
 {
-    private UserListCrudService $userListCrudService;
-
-    public function __construct(UserListCrudService $userListCrudService)
-    {
-        $this->userListCrudService = $userListCrudService;
-    }
+    public function __construct(
+        private UserListCrudService $userListCrudService, 
+        private UserListItemManager $userListItemManager, 
+        private UserListAggregate $userListAggregate) {}
 
     /**
      * Gets all user lists for given id
@@ -40,21 +41,29 @@ class UserListManager
     /**
      * Gets a user list for given id
      * 
-     * @param int $userId
      * @param int $listId
-     * @return UserList||null
+     * @return UserListAggregate||null
      */
-    public function get(int $userId, int $listId): ?UserList
+    public function get(int $listId): ?UserListAggregate
     {
-        $userList = $this->userListCrudService->get($userId, $listId);
-
+        $userList = $this->userListCrudService->get($listId);
+        
         if (!$userList) {
-            Log::alert("Userlist could not find for {$listId} list for {$userId} user.");
+            Log::alert("Userlist could not find for {$listId} list.");
             throw new Exception("Userlist could not find.", 400);
         }
 
-        Log::info("Userlist {$listId} is searched for {$userId} user.");
-        return $userList;
+        $userListsItems = $this->userListItemManager->getAllForGivenList($listId);
+        
+        if (!$userListsItems) {
+            Log::alert("Userlist sub items could not find for {$listId} list.");
+            throw new Exception("Userlist sub items could not find.", 400);
+        }
+
+        $this->userListAggregate->setUserLitsItems($userListsItems->toArray());
+        
+        Log::info("Userlist {$listId} is searched.");
+        return $this->userListAggregate;
     }
 
     /**

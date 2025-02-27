@@ -11,6 +11,7 @@ use App\Modules\User\Application\Manager\AuthManager;
 use App\Modules\User\Domain\IRepository\IUserRepository;
 use App\Modules\User\Infrastructure\Repository\UserRepository;
 use App\Modules\UserList\Application\Manager\UserListManager;
+use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
@@ -33,6 +34,7 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->singleton(UserListAggregate::class);
         $this->app->bind(IBaseEloquentRepository::class, BaseEloquentRepository::class);
         $this->app->bind(CategoryManager::class, CategoryManager::class);
         $this->app->bind(ICategoryRepository::class, CategoryRepository::class);
@@ -42,5 +44,6 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
+        
     }
 }

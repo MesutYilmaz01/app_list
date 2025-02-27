@@ -3,18 +3,16 @@
 namespace App\Modules\UserList\Domain\Services;
 
 use App\Models\UserList;
+use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
+use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserListCrudService
 {
-    public IUserListRepository $userListRepo;
 
-    public function __construct(IUserListRepository $userListRepo)
-    {
-        $this->userListRepo = $userListRepo;
-    }
+    public function __construct(private IUserListRepository $userListRepo, private UserListAggregate $userListAggregate) {}
 
     /**
      * Gets all user lists for given id
@@ -30,13 +28,15 @@ class UserListCrudService
     /**
      * Gets a user list for given id
      * 
-     * @param int $userId
      * @param int $listId
-     * @return UserList||null
+     * @return UserListEntity||null
      */
-    public function get(int $userId, int $listId): ?UserList
+    public function get(int $listId): ?UserListEntity
     {
-        return $this->userListRepo->getAllByAttributes(['id' => $listId, 'user_id' => $userId]);
+        $userList = $this->userListRepo->findByAttributes(['id' => $listId]);
+        $userListEntity = new UserListEntity($userList);
+        $this->userListAggregate->setUserListEntity($userListEntity);
+        return $this->userListAggregate->getUserListEntity();
     }
 
     /**

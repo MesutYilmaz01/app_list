@@ -33,7 +33,7 @@ Route::group([
     'controller' => UserListController::class
 ], function ($router) {
     Route::get('/{user_id}','getAllForUser');
-    //Route::get('/{id}', 'show');
+    Route::get('/show/{list_id}', 'get');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
         //Route::put('/{id}', 'update');

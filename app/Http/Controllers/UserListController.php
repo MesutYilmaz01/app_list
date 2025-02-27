@@ -36,9 +36,17 @@ class UserListController extends Controller
         }
     }
 
-    // public function get(UserListGetOneForUserRequest $request) {
-    //     return $request;
-    // }
+    public function get(UserListGetOneForUserRequest $request) {
+        try {
+            $userListsAggregate = $this->userListManager->get($request->list_id);
+            return response()->json([
+                "message" => "List got successfully.",
+                "user_lists" => $userListsAggregate->toArray(),
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
+    }
 
     public function create(UserListCreateRequest $request)
     {
