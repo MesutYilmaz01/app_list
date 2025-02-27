@@ -8,12 +8,9 @@ use App\Modules\User\Domain\IRepository\IUserRepository;
 
 class AuthService
 {
-    public IUserRepository $userRepo;
-
-    public function __construct(IUserRepository $userRepo)
-    {
-        $this->userRepo = $userRepo;
-    }
+    public function __construct(
+        private IUserRepository $userRepo
+    ) {}
 
     /**
      * Creates a new user
@@ -33,7 +30,7 @@ class AuthService
      * @return User||null
      * 
      */
-    public function getByEmail(string $email): ?User 
+    public function getByEmail(string $email): ?User
     {
         return $this->userRepo->findByAttributes(['email' => $email]);
     }

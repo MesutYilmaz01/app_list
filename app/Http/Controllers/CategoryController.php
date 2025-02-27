@@ -13,12 +13,9 @@ use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    private CategoryManager $categoryManager;
-
-    public function __construct(CategoryManager $categoryManager)
-    {
-        $this->categoryManager = $categoryManager;
-    }
+    public function __construct(
+        private CategoryManager $categoryManager
+    ) {}
 
     /**
      * Gets all category data
@@ -77,7 +74,7 @@ class CategoryController extends Controller
     /**
      * Updates a category according to given id
      * 
-     * @param CategoryDTO $request
+     * @param CategoryUpdateRequest $request
      * @return JsonRespone
      * 
      * @throws Exception

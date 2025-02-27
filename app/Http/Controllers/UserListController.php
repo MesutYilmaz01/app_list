@@ -14,14 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class UserListController extends Controller
 {
-    private UserListManager $userListManager;
-    private UserListItemManager $userListItemManager;
-
-    public function __construct(UserListManager $userListManager, UserListItemManager $userListItemManager)
-    {
-        $this->userListManager = $userListManager;
-        $this->userListItemManager = $userListItemManager;
-    }
+    public function __construct(
+        private UserListManager $userListManager,
+        private UserListItemManager $userListItemManager
+    ) {}
 
     public function getAllForUser(UserListGetAllForUserRequest $request)
     {
@@ -29,22 +25,25 @@ class UserListController extends Controller
             $userLists = $this->userListManager->getAllForUser($request->user_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "user_lists" => $userLists,
+                "result" => [
+                    "user_lists" => $userLists
+                ],
             ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
     }
 
-    public function get(UserListGetOneForUserRequest $request) {
+    public function get(UserListGetOneForUserRequest $request)
+    {
         try {
             $userListsAggregate = $this->userListManager->get($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "user_lists" => $userListsAggregate->toArray(),
+                "result" => $userListsAggregate->toArray(),
             ], 201);
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], $e->getCode());
+            return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
         }
     }
 
@@ -62,8 +61,9 @@ class UserListController extends Controller
 
             return response()->json([
                 "message" => "List item added with it's item successfully.",
-                "user_list" => $userList,
-                "user_list_items" => $userListItems
+                "result" => [
+                    "user_list" => array_merge($userList, ["items" => $userListItems]),
+                ],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();

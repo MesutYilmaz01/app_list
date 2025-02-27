@@ -11,12 +11,9 @@ use Illuminate\Support\Facades\Log;
 
 class CategoryManager
 {
-    private CategoryCrudService $categoryCrudService;
-
-    public function __construct(CategoryCrudService $categoryCrudService)
-    {
-        $this->categoryCrudService = $categoryCrudService;
-    }
+    public function __construct(
+        private CategoryCrudService $categoryCrudService
+    ) {}
 
     /**
      * Returns all category data

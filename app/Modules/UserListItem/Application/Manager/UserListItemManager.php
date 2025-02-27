@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Log;
 
 class UserListItemManager
 {
-    private UserListItemCrudService $userListItemCrudService;
-
-    public function __construct(UserListItemCrudService $userListItemCrudService)
-    {
-        $this->userListItemCrudService = $userListItemCrudService;
-    }
+    public function __construct(
+        private UserListItemCrudService $userListItemCrudService
+    ) {}
 
     /**
      * Gets all lists sub lists for given id
@@ -25,7 +22,7 @@ class UserListItemManager
     public function getAllForGivenList(int $listId): ?Collection
     {
         $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
-        
+
         if (!$userListsItems) {
             Log::alert("Userlist sub lists could not find for {$listId} user.");
             throw new Exception("Userlists sub lists could not find.", 400);

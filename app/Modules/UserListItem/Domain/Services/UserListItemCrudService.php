@@ -7,12 +7,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserListItemCrudService
 {
-    public IUserListItemRepository $userListItemRepo;
-    
-    public function __construct(IUserListItemRepository $userListItemRepo)
-    {
-        $this->userListItemRepo = $userListItemRepo;
-    }
+    public function __construct(
+        private IUserListItemRepository $userListItemRepo
+    ) {}
 
     /**
      * Gets all user lists sub lists for given list id
@@ -36,8 +33,8 @@ class UserListItemCrudService
     public function create(array $userListItems): array
     {
         $tempUserListItems = [];
-        
-        foreach($userListItems as $userListItem) {
+
+        foreach ($userListItems as $userListItem) {
             array_push($tempUserListItems, $this->userListItemRepo->create($userListItem->toArray()));
         }
 

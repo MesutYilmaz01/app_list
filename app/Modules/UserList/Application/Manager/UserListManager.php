@@ -2,30 +2,29 @@
 
 namespace App\Modules\UserList\Application\Manager;
 
-use App\Models\UserList;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
-use App\Modules\UserList\Domain\DTO\UserListEntity;
+use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\Services\UserListCrudService;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class UserListManager
 {
     public function __construct(
-        private UserListCrudService $userListCrudService, 
-        private UserListItemManager $userListItemManager, 
-        private UserListAggregate $userListAggregate) {}
+        private UserListCrudService $userListCrudService,
+        private UserListItemManager $userListItemManager,
+        private UserListAggregate $userListAggregate
+    ) {}
 
     /**
      * Gets all user lists for given id
      * 
      * @param int $userId
-     * @return Collection||null
+     * @return array||null
      */
-    public function getAllForUser(int $userId): ?Collection
+    public function getAllForUser(int $userId): ?array
     {
         $userLists = $this->userListCrudService->getAllForUser($userId);
 
@@ -47,21 +46,21 @@ class UserListManager
     public function get(int $listId): ?UserListAggregate
     {
         $userList = $this->userListCrudService->get($listId);
-        
+
         if (!$userList) {
             Log::alert("Userlist could not find for {$listId} list.");
             throw new Exception("Userlist could not find.", 400);
         }
 
         $userListsItems = $this->userListItemManager->getAllForGivenList($listId);
-        
+
         if (!$userListsItems) {
             Log::alert("Userlist sub items could not find for {$listId} list.");
             throw new Exception("Userlist sub items could not find.", 400);
         }
 
         $this->userListAggregate->setUserLitsItems($userListsItems->toArray());
-        
+
         Log::info("Userlist {$listId} is searched.");
         return $this->userListAggregate;
     }
@@ -70,11 +69,11 @@ class UserListManager
      * Creates a userlist according to given data
      * 
      * @param UserListDTO $userListDTO
-     * @return UserList||null
+     * @return UserListEntity||null
      * 
      * @throws Exception
      */
-    public function create(UserListDTO $userListDTO): ?UserList
+    public function create(UserListDTO $userListDTO): ?UserListEntity
     {
         $userList = $this->userListCrudService->create($userListDTO);
 

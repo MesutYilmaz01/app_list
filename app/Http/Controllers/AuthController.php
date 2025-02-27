@@ -14,12 +14,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    private AuthManager $authManager;
-    
-    public function __construct(AuthManager $authManager)
-    {
-        $this->authManager = $authManager;
-    }
+    public function __construct(
+        private AuthManager $authManager
+    ) {}
 
     /**
      * Create a user via given credentials and returns a token.
@@ -71,7 +68,6 @@ class AuthController extends Controller
                 'user' => $user,
                 'token' => $token
             ], 200);
-
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }

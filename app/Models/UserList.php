@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserList extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $table = 'user_lists';
     
     /**
      * The attributes that are mass assignable.

@@ -9,12 +9,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryCrudService
 {
-    public ICategoryRepository $categoryRepo;
-    
-    public function __construct(ICategoryRepository $categoryRepo)
-    {
-        $this->categoryRepo = $categoryRepo;
-    }
+    public function __construct(
+        private ICategoryRepository $categoryRepo
+    ) {}
 
     /**
      * Returns all category data
@@ -59,8 +56,7 @@ class CategoryCrudService
     {
         $category = $this->categoryRepo->getById($id);
 
-        if(!$category)
-        {
+        if (!$category) {
             return null;
         }
         return $this->categoryRepo->update($category, $categoryDTO->toArray());
@@ -75,9 +71,8 @@ class CategoryCrudService
     public function delete(int $id): bool
     {
         $category = $this->categoryRepo->getById($id);
-        
-        if(!$category)
-        {
+
+        if (!$category) {
             return false;
         }
         return $this->categoryRepo->delete($category);

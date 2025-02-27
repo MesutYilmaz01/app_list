@@ -2,27 +2,28 @@
 
 namespace App\Modules\UserList\Domain\Services;
 
-use App\Models\UserList;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserListCrudService
 {
 
-    public function __construct(private IUserListRepository $userListRepo, private UserListAggregate $userListAggregate) {}
+    public function __construct(
+        private IUserListRepository $userListRepo,
+        private UserListAggregate $userListAggregate
+    ) {}
 
     /**
      * Gets all user lists for given id
      * 
      * @param int $userId
-     * @return Collection||null
+     * @return array||null
      */
-    public function getAllForUser(int $userId): ?Collection
+    public function getAllForUser(int $userId): ?array
     {
-        return $this->userListRepo->getAllByAttributes(['user_id' => $userId]);
+        return $this->userListRepo->getAllByAttributes(['user_id' => $userId])->toArray();
     }
 
     /**
@@ -34,8 +35,7 @@ class UserListCrudService
     public function get(int $listId): ?UserListEntity
     {
         $userList = $this->userListRepo->findByAttributes(['id' => $listId]);
-        $userListEntity = new UserListEntity($userList);
-        $this->userListAggregate->setUserListEntity($userListEntity);
+        $this->userListAggregate->setUserListEntity($userList);
         return $this->userListAggregate->getUserListEntity();
     }
 
@@ -43,9 +43,9 @@ class UserListCrudService
      * Creates a userlist according to given data
      * 
      * @param UserListDTO $userListDTO
-     * @return UserList||null
+     * @return UserListEntity||null
      */
-    public function create(UserListDTO $userListDTO): ?UserList
+    public function create(UserListDTO $userListDTO): ?UserListEntity
     {
         return $this->userListRepo->create($userListDTO->toArray());
     }

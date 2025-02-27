@@ -37,8 +37,7 @@ class UserListAggregate
     public function toArray(): array
     {
         return [
-            'userList' => $this->getUserListEntity()->toArray(),
-            'userListItems' => $this->getUserLitsItems(),
+            "userList" => array_merge($this->getUserListEntity()->toArray(), ["items" => $this->getUserLitsItems()]),
         ];
     }
 }
