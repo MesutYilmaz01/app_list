@@ -2,8 +2,8 @@
 
 namespace App\Modules\User\Application\Manager;
 
-use App\Models\User;
 use App\Modules\User\Domain\DTO\UserDTO;
+use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\User\Domain\Services\AuthService;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -18,11 +18,11 @@ class AuthManager
      * Creates a new user
      * 
      * @param UserDTO $userDTO
-     * @return User||null
+     * @return UserEntity||null
      * 
      * @throws Exception
      */
-    public function register(UserDTO $userDTO): ?User
+    public function register(UserDTO $userDTO): ?UserEntity
     {
         $user = $this->authService->register($userDTO);
 
@@ -39,11 +39,11 @@ class AuthManager
      * Gets a user according to mail
      * 
      * @param string $email
-     * @return User||null
+     * @return UserEntity||null
      * 
      * @throws Exception
      */
-    public function getByEmail(string $email): ?User
+    public function getByEmail(string $email): ?UserEntity
     {
         $user = $this->authService->getByEmail($email);
 

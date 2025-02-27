@@ -19,6 +19,14 @@ class UserListController extends Controller
         private UserListItemManager $userListItemManager
     ) {}
 
+    /**
+     * Gets all lists according to given user id
+     * 
+     * @param UserListGetAllForUserRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
     public function getAllForUser(UserListGetAllForUserRequest $request)
     {
         try {
@@ -34,6 +42,14 @@ class UserListController extends Controller
         }
     }
 
+    /**
+     * Gets a list with sub items according to given list id
+     * 
+     * @param UserListGetOneForUserRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
     public function get(UserListGetOneForUserRequest $request)
     {
         try {
@@ -47,6 +63,14 @@ class UserListController extends Controller
         }
     }
 
+    /**
+     * Creates a list with sub items according to given data
+     * 
+     * @param UserListCreateRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
     public function create(UserListCreateRequest $request)
     {
         try {

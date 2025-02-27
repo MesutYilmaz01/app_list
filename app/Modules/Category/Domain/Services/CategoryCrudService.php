@@ -2,10 +2,9 @@
 
 namespace App\Modules\Category\Domain\Services;
 
-use App\Models\Category;
 use App\Modules\Category\Domain\DTO\CategoryDTO;
+use App\Modules\Category\Domain\Entities\CategoryEntity;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 class CategoryCrudService
 {
@@ -16,20 +15,20 @@ class CategoryCrudService
     /**
      * Returns all category data
      * 
-     * @return Collection||null
+     * @return array||null
      */
-    public function getAll(): ?Collection
+    public function getAll(): ?array
     {
-        return $this->categoryRepo->getAll();
+        return $this->categoryRepo->getAll()->toArray();
     }
 
     /**
      * Returns category according to given id
      * 
      * @param int $id
-     * @return Category||null
+     * @return CategoryEntity||null
      */
-    public function getById(int $id): ?Category
+    public function getById(int $id): ?CategoryEntity
     {
         return $this->categoryRepo->getById($id);
     }
@@ -38,9 +37,9 @@ class CategoryCrudService
      * Creates a category according to given data
      * 
      * @param CategoryDTO $categoryDTO
-     * @return Category||null
+     * @return CategoryEntity||null
      */
-    public function create(CategoryDTO $categoryDTO): ?Category
+    public function create(CategoryDTO $categoryDTO): ?CategoryEntity
     {
         return $this->categoryRepo->create($categoryDTO->toArray());
     }
@@ -50,9 +49,9 @@ class CategoryCrudService
      * 
      * @param int $id
      * @param CategoryDTO $categoryDTO
-     * @return Category||null
+     * @return CategoryEntity||null
      */
-    public function update(int $id, CategoryDTO $categoryDTO): ?Category
+    public function update(int $id, CategoryDTO $categoryDTO): ?CategoryEntity
     {
         $category = $this->categoryRepo->getById($id);
 

@@ -2,8 +2,8 @@
 
 namespace App\Modules\User\Domain\Services;
 
-use App\Models\User;
 use App\Modules\User\Domain\DTO\UserDTO;
+use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\User\Domain\IRepository\IUserRepository;
 
 class AuthService
@@ -16,9 +16,9 @@ class AuthService
      * Creates a new user
      * 
      * @param UserDTO $userDTO
-     * @return User||null
+     * @return UserEntity||null
      */
-    public function register(UserDTO $userDTO): ?User
+    public function register(UserDTO $userDTO): ?UserEntity
     {
         return $this->userRepo->create($userDTO->toArray());
     }
@@ -27,10 +27,10 @@ class AuthService
      * Gets user according to mail
      * 
      * @param string $email
-     * @return User||null
+     * @return UserEntity||null
      * 
      */
-    public function getByEmail(string $email): ?User
+    public function getByEmail(string $email): ?UserEntity
     {
         return $this->userRepo->findByAttributes(['email' => $email]);
     }

@@ -2,11 +2,10 @@
 
 namespace App\Modules\Category\Application\Manager;
 
-use App\Models\Category;
 use App\Modules\Category\Domain\DTO\CategoryDTO;
+use App\Modules\Category\Domain\Entities\CategoryEntity;
 use App\Modules\Category\Domain\Services\CategoryCrudService;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class CategoryManager
@@ -18,31 +17,32 @@ class CategoryManager
     /**
      * Returns all category data
      * 
-     * @return Collection||null
+     * @return array||null
      * 
      * @throws Exception
      */
-    public function getAll(): ?Collection
+    public function getAll(): ?array
     {
-        try {
-            $categories = $this->categoryCrudService->getAll();
-            Log::info("Categories are listed.");
-            return $categories;
-        } catch (Exception $e) {
-            Log::alert("Categories could not listed.", ["message" => $e->getMessage(), $e->getCode()]);
-            throw $e;
+        $categories = $this->categoryCrudService->getAll();
+        
+        if (!$categories) {
+            Log::alert("Categories could not listed.");
+            throw new Exception("Categories are not listed.", 404);
         }
+
+        Log::info("Categories are listed.");
+        return $categories;
     }
 
     /**
-     * Returns category according to given id
+     * Returns CategoryEntity according to given id
      * 
      * @param int $id
-     * @return Category||null
+     * @return CategoryEntity||null
      * 
      * @throws Exception
      */
-    public function getById(int $id): ?Category
+    public function getById(int $id): ?CategoryEntity
     {
         $category = $this->categoryCrudService->getById($id);
 
@@ -60,11 +60,11 @@ class CategoryManager
      * Creates a category according to given data
      * 
      * @param CategoryDTO $categoryDTO
-     * @return Category||null
+     * @return CategoryEntity||null
      * 
      * @throws Exception
      */
-    public function create(CategoryDTO $categoryDTO): ?Category
+    public function create(CategoryDTO $categoryDTO): ?CategoryEntity
     {
         $category = $this->categoryCrudService->create($categoryDTO);
 
@@ -82,11 +82,11 @@ class CategoryManager
      * 
      * @param int $id
      * @param CategoryDTO $categoryDTO
-     * @return Category||null
+     * @return CategoryEntity||null
      * 
      * @throws Exception
      */
-    public function update(int $id, CategoryDTO $categoryDTO): ?Category
+    public function update(int $id, CategoryDTO $categoryDTO): ?CategoryEntity
     {
         $category = $this->categoryCrudService->update($id, $categoryDTO);
 
