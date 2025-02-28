@@ -38,7 +38,7 @@ class UserListCrudService
      * @param int $listId
      * @return UserListEntity||null
      */
-    public function get(int $listId): ?UserListEntity
+    public function show(int $listId): ?UserListEntity
     {
         $userList = $this->userListRepo->findByAttributes([
             'id' => $listId,

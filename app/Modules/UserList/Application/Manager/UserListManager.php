@@ -44,9 +44,9 @@ class UserListManager
      * @param int $listId
      * @return UserListAggregate||null
      */
-    public function get(int $listId): ?UserListAggregate
+    public function show(int $listId): ?UserListAggregate
     {
-        $userList = $this->userListCrudService->get($listId);
+        $userList = $this->userListCrudService->show($listId);
 
         if (!$userList) {
             $this->logger->alert("Userlist could not find for {$listId} list.");

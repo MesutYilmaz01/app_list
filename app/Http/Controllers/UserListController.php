@@ -50,10 +50,10 @@ class UserListController extends Controller
      * 
      * @throws Exception
      */
-    public function get(UserListGetOneForUserRequest $request)
+    public function show(UserListGetOneForUserRequest $request)
     {
         try {
-            $userListsAggregate = $this->userListManager->get($request->list_id);
+            $userListsAggregate = $this->userListManager->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
                 "result" => $userListsAggregate->toArray(),

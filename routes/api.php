@@ -19,11 +19,11 @@ Route::group([
     'controller' => CategoryController::class
 ], function ($router) {
     Route::get('/','getAll');
-    Route::get('/{id}', 'show');
+    Route::get('/{category_id}', 'show');
     Route::middleware('auth:sanctum', 'is_admin')->group(function () {
         Route::post('/', 'create');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'delete');
+        Route::put('/{category_id}', 'update');
+        Route::delete('/{category_id}', 'delete');
     });
 });
 
@@ -32,7 +32,7 @@ Route::group([
     'controller' => UserListController::class
 ], function ($router) {
     Route::get('/{user_id}','getAllForUser');
-    Route::get('/show/{list_id}', 'get');
+    Route::get('/show/{list_id}', 'show');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
         //Route::put('/{id}', 'update');

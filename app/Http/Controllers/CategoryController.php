@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function show(CategoryShowRequest $request): JsonResponse
     {
         try {
-            $category = $this->categoryManager->getById($request->id);
+            $category = $this->categoryManager->getById($request->category_id);
             return response()->json([
                 "message" => "Category got successfully.",
                 "result" => ["category" => $category]
@@ -92,7 +92,7 @@ class CategoryController extends Controller
     {
         try {
             $categoryDTO = CategoryDTO::fromCreateRequest($request);
-            $category = $this->categoryManager->update($request->id, $categoryDTO);
+            $category = $this->categoryManager->update($request->category_id, $categoryDTO);
             return response()->json([
                 "message" => "Category updated successfully.",
                 "result" => ["category" => $category]
@@ -113,7 +113,7 @@ class CategoryController extends Controller
     public function delete(CategoryDeleteRequest $request): JsonResponse
     {
         try {
-            $this->categoryManager->delete($request->id);
+            $this->categoryManager->delete($request->category_id);
             return response()->json(["message" => "Category deletion is successfuly completed."], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
