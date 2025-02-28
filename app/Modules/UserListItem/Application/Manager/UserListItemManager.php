@@ -4,12 +4,13 @@ namespace App\Modules\UserListItem\Application\Manager;
 
 use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class UserListItemManager
 {
     public function __construct(
-        private UserListItemCrudService $userListItemCrudService
+        private UserListItemCrudService $userListItemCrudService,
+        private LoggerInterface $logger
     ) {}
 
     /**
@@ -23,11 +24,11 @@ class UserListItemManager
         $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
         
         if (!$userListsItems) {
-            Log::alert("Userlist sub lists could not find for {$listId} user.");
+            $this->logger->alert("Userlist sub lists could not find for {$listId} user.");
             throw new Exception("Userlists sub lists could not find.", 400);
         }
 
-        Log::info("Userlist sub lists are searched for {$listId} lists.");
+        $this->logger->info("Userlist sub lists are searched for {$listId} lists.");
         return $userListsItems;
     }
 
@@ -44,11 +45,11 @@ class UserListItemManager
         $listItems = $this->userListItemCrudService->create($userListItems);
 
         if (count($listItems) != count($userListItems)) {
-            Log::alert("Userlistitems could not created.");
+            $this->logger->alert("Userlistitems could not created.");
             throw new Exception("An error occured while adding new item list.", 400);
         }
 
-        Log::info("UserlistItems are created.");
+        $this->logger->info("UserlistItems are created.");
         return $listItems;
     }
 }

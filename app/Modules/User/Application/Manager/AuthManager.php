@@ -6,12 +6,13 @@ use App\Modules\User\Domain\DTO\UserDTO;
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\User\Domain\Services\AuthService;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class AuthManager
 {
     public function __construct(
-        private AuthService $authService
+        private AuthService $authService,
+        private LoggerInterface $logger
     ) {}
 
     /**
@@ -27,11 +28,11 @@ class AuthManager
         $user = $this->authService->register($userDTO);
 
         if (!$user) {
-            Log::alert("User could not created.");
+            $this->logger->alert("User could not created.");
             throw new Exception("User could not created.", 400);
         }
 
-        Log::info("User {$user->id} is created.");
+        $this->logger->info("User {$user->id} is created.");
         return $user;
     }
 
@@ -48,11 +49,11 @@ class AuthManager
         $user = $this->authService->getByEmail($email);
 
         if (!$user) {
-            Log::alert("User could not find with this email.");
+            $this->logger->alert("User could not find with this email.");
             throw new Exception("User could not find with this email.", 400);
         }
 
-        Log::info("User {$user->id} is finded.");
+        $this->logger->info("User {$user->id} is finded.");
         return $user;
     }
 }

@@ -8,14 +8,15 @@ use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\Services\UserListCrudService;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class UserListManager
 {
     public function __construct(
         private UserListCrudService $userListCrudService,
         private UserListItemManager $userListItemManager,
-        private UserListAggregate $userListAggregate
+        private UserListAggregate $userListAggregate,
+        private LoggerInterface $logger
     ) {}
 
     /**
@@ -29,11 +30,11 @@ class UserListManager
         $userLists = $this->userListCrudService->getAllForUser($userId);
 
         if (!$userLists) {
-            Log::alert("Userlist could not find for {$userId} user.");
+            $this->logger->alert("Userlist could not find for {$userId} user.");
             throw new Exception("Userlists could not find.", 400);
         }
 
-        Log::info("Userlist is searched for {$userId} user.");
+        $this->logger->info("Userlist is searched for {$userId} user.");
         return $userLists;
     }
 
@@ -48,20 +49,20 @@ class UserListManager
         $userList = $this->userListCrudService->get($listId);
 
         if (!$userList) {
-            Log::alert("Userlist could not find for {$listId} list.");
+            $this->logger->alert("Userlist could not find for {$listId} list.");
             throw new Exception("Userlist could not find.", 400);
         }
 
         $userListsItems = $this->userListItemManager->getAllForGivenList($listId);
 
         if (!$userListsItems) {
-            Log::alert("Userlist sub items could not find for {$listId} list.");
+            $this->logger->alert("Userlist sub items could not find for {$listId} list.");
             throw new Exception("Userlist sub items could not find.", 400);
         }
 
         $this->userListAggregate->setUserLitsItems($userListsItems);
 
-        Log::info("Userlist {$listId} is searched.");
+        $this->logger->info("Userlist {$listId} is searched.");
         return $this->userListAggregate;
     }
 
@@ -78,11 +79,11 @@ class UserListManager
         $userList = $this->userListCrudService->create($userListDTO);
 
         if (!$userList) {
-            Log::alert("Userlist could not created.");
+            $this->logger->alert("Userlist could not created.");
             throw new Exception("Userlist could not created.", 400);
         }
 
-        Log::info("Userlist {$userList->id} is created.");
+        $this->logger->info("Userlist {$userList->id} is created.");
         return $userList;
     }
 }

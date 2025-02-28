@@ -17,7 +17,9 @@ use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
 use App\Modules\UserListItem\Infrastructure\Repository\UserListItemRepository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,9 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->singleton(UserListAggregate::class);
+        $this->app->bind(LoggerInterface::class, function() {
+            return Log::getLogger();
+        });
         $this->app->bind(IBaseEloquentRepository::class, BaseEloquentRepository::class);
         $this->app->bind(CategoryManager::class, CategoryManager::class);
         $this->app->bind(ICategoryRepository::class, CategoryRepository::class);
@@ -44,6 +49,5 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
-        
     }
 }

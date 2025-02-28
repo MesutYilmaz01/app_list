@@ -6,12 +6,13 @@ use App\Modules\Category\Domain\DTO\CategoryDTO;
 use App\Modules\Category\Domain\Entities\CategoryEntity;
 use App\Modules\Category\Domain\Services\CategoryCrudService;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class CategoryManager
 {
     public function __construct(
-        private CategoryCrudService $categoryCrudService
+        private CategoryCrudService $categoryCrudService,
+        private LoggerInterface $logger
     ) {}
 
     /**
@@ -26,11 +27,11 @@ class CategoryManager
         $categories = $this->categoryCrudService->getAll();
         
         if (!$categories) {
-            Log::alert("Categories could not listed.");
+            $this->logger->alert("Categories could not listed.");
             throw new Exception("Categories are not listed.", 404);
         }
 
-        Log::info("Categories are listed.");
+        $this->logger->info("Categories are listed.");
         return $categories;
     }
 
@@ -48,11 +49,11 @@ class CategoryManager
 
         if (!$category) {
 
-            Log::alert("Category {$id} could not listed.");
+            $this->logger->alert("Category {$id} could not listed.");
             throw new Exception("Category could not found.", 404);
         }
 
-        Log::info("Category {$id} is listed.");
+        $this->logger->info("Category {$id} is listed.");
         return $category;
     }
 
@@ -69,11 +70,11 @@ class CategoryManager
         $category = $this->categoryCrudService->create($categoryDTO);
 
         if (!$category) {
-            Log::alert("Category could not created.");
+            $this->logger->alert("Category could not created.");
             throw new Exception("Category could not created.", 400);
         }
 
-        Log::info("Category {$category->id} is created.");
+        $this->logger->info("Category {$category->id} is created.");
         return $category;
     }
 
@@ -91,11 +92,11 @@ class CategoryManager
         $category = $this->categoryCrudService->update($id, $categoryDTO);
 
         if (!$category) {
-            Log::alert("Category {$id} could not updated.");
+            $this->logger->alert("Category {$id} could not updated.");
             throw new Exception("Category could not updated.", 400);
         }
 
-        Log::info("Category {$id} is updated.");
+        $this->logger->info("Category {$id} is updated.");
         return $category;
     }
 
@@ -112,11 +113,11 @@ class CategoryManager
         $isDeleted = $this->categoryCrudService->delete($id);
 
         if (!$isDeleted) {
-            Log::alert("Category {$id} could not deleted.");
+            $this->logger->alert("Category {$id} could not deleted.");
             throw new Exception("Category could not deleted.", 400);
         }
 
-        Log::info("Category {$id} is deleted.");
+        $this->logger->info("Category {$id} is deleted.");
         return $isDeleted;
     }
 }
