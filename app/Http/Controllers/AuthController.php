@@ -85,7 +85,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::user()->tokens()->delete();
-        return response()->json(["message" => "Successfully logged out"]);
+        return response()->json(["message" => "Successfully logged out"], 200);
     }
 
     /**
@@ -98,6 +98,6 @@ class AuthController extends Controller
         return response()->json([
             "message" => "User got successfully",
             "result" => ["user" => auth()->user()]
-        ]);
+        ], 200);
     }
 }

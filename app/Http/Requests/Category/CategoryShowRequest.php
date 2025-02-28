@@ -22,12 +22,12 @@ class CategoryShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required','exists:categories,id'],
+            'category_id' => ['required','exists:categories,id'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['id' => $this->route('id')]);
+        $this->merge(['category_id' => $this->route('category_id')]);
     }
 }

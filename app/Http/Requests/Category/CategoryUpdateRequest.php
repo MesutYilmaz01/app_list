@@ -22,12 +22,13 @@ class CategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category_id' => ['required','exists:categories,id'],
             'name' => ['required','unique:categories','max:50'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['id' => $this->route('id')]);
+        $this->merge(['category_id' => $this->route('category_id')]);
     }
 }

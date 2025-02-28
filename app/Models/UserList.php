@@ -18,6 +18,7 @@ class UserList extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'category_id',
         'user_id',
         'header',
         'description',

@@ -4,14 +4,14 @@ namespace App\Http\Requests\UserList;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListUpdateeRequest extends FormRequest
+class UserListUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,10 +22,17 @@ class UserListUpdateeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'header' => ['required','max:100'],
-            'description' => ['required','max:500'],
+            'list_id' => ['exists:user_lists,id'],
+            'category_id' => ['exists:categories,id'],
+            'header' => ['max:100'],
+            'description' => ['max:500'],
             'status' => ['in:0,1'],
             'is_public' => ['in:0,1'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['list_id' => $this->route('list_id')]);
     }
 }

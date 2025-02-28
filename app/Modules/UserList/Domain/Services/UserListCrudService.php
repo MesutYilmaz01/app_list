@@ -64,4 +64,42 @@ class UserListCrudService
     {
         return $this->userListRepo->create($userListDTO->toArray());
     }
+
+    /**
+     * Updates a userlist according to given data
+     * 
+     * @param int $listId
+     * @param userListDTO $userListDTO
+     * @return UserListEntity||null
+     */
+    public function update(int $listId, UserListDTO $userListDTO): ?UserListEntity
+    {
+        $userList = $this->userListRepo->findByAttributes([
+            'id' => $listId,
+            'status' => StatusType::ACTIVE->value,
+            'is_public' => ShareType::PUBLIC->value
+        ]);
+
+        if(!$userList) {
+            return null;
+        }
+
+        return $this->userListRepo->update($userList, $userListDTO->toArray());
+    }
+
+    /**
+     * Deletes a user list according to given id
+     * 
+     * @param int $listId
+     * @return bool
+     */
+    public function delete(int $listId): bool
+    {
+        $category = $this->userListRepo->getById($listId);
+
+        if (!$category) {
+            return false;
+        }
+        return $this->userListRepo->delete($category);
+    }
 }

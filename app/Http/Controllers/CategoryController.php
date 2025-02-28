@@ -96,7 +96,7 @@ class CategoryController extends Controller
             return response()->json([
                 "message" => "Category updated successfully.",
                 "result" => ["category" => $category]
-            ], 201);
+            ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
@@ -114,7 +114,7 @@ class CategoryController extends Controller
     {
         try {
             $this->categoryManager->delete($request->category_id);
-            return response()->json(["message" => "Category deletion is successfuly completed."], 201);
+            return response()->json(["message" => "Category deletion is successfuly completed."], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }

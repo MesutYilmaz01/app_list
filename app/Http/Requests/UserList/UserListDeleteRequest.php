@@ -4,7 +4,7 @@ namespace App\Http\Requests\UserList;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListCreateRequest extends FormRequest
+class UserListDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,12 @@ class UserListCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'exists:categories,id'],
-            'header' => ['required','max:100'],
-            'description' => ['required','max:500'],
-            'status' => ['in:0,1'],
-            'is_public' => ['in:0,1'],
-            'user_list_items' => ['required','array'],
-            'user_list_items.*.header' => ['required', 'max:100'],
-            'user_list_items.*.description' => ['required', 'max:500'],
+            'list_id' => ['required','exists:user_lists,id'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['list_id' => $this->route('list_id')]);
     }
 }

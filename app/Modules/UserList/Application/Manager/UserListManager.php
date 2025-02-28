@@ -86,4 +86,45 @@ class UserListManager
         $this->logger->info("Userlist {$userList->id} is created.");
         return $userList;
     }
+
+    /**
+     * Updates a userlist according to given data
+     * 
+     * @param int $listId
+     * @param userListDTO $userListDTO
+     * @return UserListEntity||null
+     */
+    public function update(int $listId, UserListDTO $userListDTO): ?UserListEntity
+    {
+        $userList = $this->userListCrudService->update($listId, $userListDTO);
+
+        if(!$userList) {
+            $this->logger->alert("Userlist {$listId} could not updated.");
+            throw new Exception("Userlist could not updated.", 400);
+        }
+
+        $this->logger->info("Userlist {$userList->id} is updated.");
+        return $userList;
+    }
+
+    /**
+     * Deletes a user list according to given id
+     * 
+     * @param int $listId
+     * @return bool
+     * 
+     * @throws Exception
+     */
+    public function delete(int $listId): bool
+    {
+        $isDeleted = $this->userListCrudService->delete($listId);
+
+        if (!$isDeleted) {
+            $this->logger->alert("Userlist {$listId} could not deleted.");
+            throw new Exception("Userlist could not deleted.", 400);
+        }
+
+        $this->logger->info("Userlist {$listId} is deleted.");
+        return $isDeleted;
+    }
 }

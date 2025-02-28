@@ -35,7 +35,7 @@ Route::group([
     Route::get('/show/{list_id}', 'show');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
-        //Route::put('/{id}', 'update');
-        //Route::delete('/{id}', 'delete');
+        Route::put('/{list_id}', 'update');
+        Route::delete('/{list_id}', 'delete');
     });
 });

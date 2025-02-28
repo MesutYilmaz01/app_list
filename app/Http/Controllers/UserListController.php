@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserList\UserListCreateRequest;
+use App\Http\Requests\UserList\UserListDeleteRequest;
 use App\Http\Requests\UserList\UserListGetAllForUserRequest;
 use App\Http\Requests\UserList\UserListGetOneForUserRequest;
+use App\Http\Requests\UserList\UserListUpdateRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class UserListController extends Controller
@@ -36,7 +39,7 @@ class UserListController extends Controller
                 "result" => [
                     "user_lists" => $userLists
                 ],
-            ], 201);
+            ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
@@ -57,7 +60,7 @@ class UserListController extends Controller
             return response()->json([
                 "message" => "List got successfully.",
                 "result" => $userListsAggregate->toArray(),
-            ], 201);
+            ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
         }
@@ -86,11 +89,52 @@ class UserListController extends Controller
             return response()->json([
                 "message" => "List item added with it's item successfully.",
                 "result" => [
-                    "user_list" => array_merge($userList, ["items" => $userListItems]),
+                    "user_list" => array_merge($userList->toArray(), ["items" => $userListItems]),
                 ],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    
+    /**
+     * Updates a user list according to given id
+     * 
+     * @param UserListUpdateRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function update(UserListUpdateRequest $request): JsonResponse
+    {
+        try {
+            $userListDTO = UserListDTO::fromUpdateRequest($request);
+            $userList = $this->userListManager->update($request->list_id, $userListDTO);
+            return response()->json([
+                "message" => "User list updated successfully.",
+                "result" => ["user_list" => $userList]
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    /**
+     * Deletes a user list according to given id
+     * 
+     * @param UserListDeleteRequest $request
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function delete(UserListDeleteRequest $request): JsonResponse
+    {
+        try {
+            $this->userListManager->delete($request->list_id);
+            return response()->json(["message" => "User list deletion is successfuly completed."], 200);
+        } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
     }
