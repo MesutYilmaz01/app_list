@@ -22,4 +22,9 @@ class UserListEntity extends UserList
     {
         $this->public = ShareType::PUBLIC->value;
     }
+
+    public function isOwner()
+    {
+        return $this->user_id == auth()->user()->id;
+    }
 }
