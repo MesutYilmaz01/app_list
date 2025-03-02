@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserListItem\Domain\DTO;
 
+use App\Http\Requests\UserListsItem\UserListsItemCreateRequest;
+use App\Http\Requests\UserListsItem\UserListsItemUpdateRequest;
 use App\Modules\UserListItem\Domain\Enums\StatusType;
 use Illuminate\Http\Request;
 
@@ -52,14 +54,28 @@ class UserListItemDTO
         return $this->status;
     }
 
-    public static function fromRequest(Request $request, int $userListId)
+    public static function fromRequest(UserListsItemCreateRequest $request)
     {
         $userListItemDTO = new self();
 
-        $userListItemDTO->setUserListId($userListId);
+        $userListItemDTO->setUserListId($request->user_list_id);
         $userListItemDTO->setHeader($request->header);
         $userListItemDTO->setDescription($request->description);
         $userListItemDTO->setStatus($request->status ?? StatusType::ACTIVE->value);
+
+        return $userListItemDTO;
+    }
+
+    public static function fromUpdateRequest(UserListsItemUpdateRequest $request)
+    {
+        $userListItemDTO = new self();
+
+        if($request->header)
+            $userListItemDTO->setHeader($request->header);
+        if($request->description)
+            $userListItemDTO->setDescription($request->description);
+        if($request->status)
+            $userListItemDTO->setStatus($request->status);
 
         return $userListItemDTO;
     }

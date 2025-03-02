@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserListController;
+use App\Http\Controllers\UserListsItemController;
 
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [AuthController::class, 'register']);
@@ -18,7 +19,7 @@ Route::group([
     'prefix' => 'categories',
     'controller' => CategoryController::class
 ], function ($router) {
-    Route::get('/','getAll');
+    Route::get('/', 'getAll');
     Route::get('/{category_id}', 'show');
     Route::middleware('auth:sanctum', 'is_admin')->group(function () {
         Route::post('/', 'create');
@@ -31,7 +32,7 @@ Route::group([
     'prefix' => 'lists',
     'controller' => UserListController::class
 ], function ($router) {
-    Route::get('/{user_id}','getAllForUser');
+    Route::get('/{user_id}', 'getAllForUser');
     Route::get('/show/{list_id}', 'show');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'create');
@@ -39,5 +40,16 @@ Route::group([
             Route::put('/{list_id}', 'update');
             Route::delete('/{list_id}', 'delete');
         });
+    });
+});
+
+Route::group([
+    'prefix' => 'list-items',
+    'controller' => UserListsItemController::class
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', 'create');
+        Route::put('/{list_item_id}', 'update');
+        Route::delete('/{list_item_id}', 'delete');
     });
 });

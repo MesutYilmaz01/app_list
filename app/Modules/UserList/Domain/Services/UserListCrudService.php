@@ -95,11 +95,11 @@ class UserListCrudService
      */
     public function delete(int $listId): bool
     {
-        $category = $this->userListRepo->getById($listId);
+        $userList = $this->userListRepo->getById($listId);
 
-        if (!$category) {
+        if (!$userList) {
             return false;
         }
-        return $this->userListRepo->delete($category);
+        return $this->userListRepo->delete($userList);
     }
 }

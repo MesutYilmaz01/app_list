@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserListItem\Domain\Services;
 
+use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
+use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
 use App\Modules\UserListItem\Domain\Enums\StatusType;
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
 
@@ -30,7 +32,7 @@ class UserListItemCrudService
      * 
      * @return array
      */
-    public function create(array $userListItems): array
+    public function createMultiple(array $userListItems): array
     {
         $tempUserListItems = [];
 
@@ -39,5 +41,53 @@ class UserListItemCrudService
         }
 
         return $tempUserListItems;
+    }
+
+    /**
+     * Creates a userlist item according to given dto
+     * 
+     * @param UserListItemDTO $userListItemDTO
+     * @return UserListsItemEntity||null
+     */
+    public function create(UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    {
+        return $this->userListItemRepo->create($userListItemDTO->toArray());
+    }
+
+    /**
+     * Updates a user list item according to given data
+     * 
+     * @param int $listItemId
+     * @param userListDTO $userListDTO
+     * @return UserListsItemEntity||null
+     */
+    public function update(int $listItemId, UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    {
+        $userListItem = $this->userListItemRepo->findByAttributes([
+            'id' => $listItemId,
+            'status' => StatusType::ACTIVE->value,
+        ]);
+
+        if(!$userListItem) {
+            return null;
+        }
+
+        return $this->userListItemRepo->update($userListItem, $userListItemDTO->toArray());
+    }
+
+    /**
+     * Deletes a user list item according to given id
+     * 
+     * @param int $listItemId
+     * @return bool
+     */
+    public function delete(int $listItemId): bool
+    {
+        $userListItemRepo = $this->userListItemRepo->getById($listItemId);
+
+        if (!$userListItemRepo) {
+            return false;
+        }
+        return $this->userListItemRepo->delete($userListItemRepo);
     }
 }

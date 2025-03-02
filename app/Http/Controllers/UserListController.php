@@ -30,7 +30,7 @@ class UserListController extends Controller
      * 
      * @throws Exception
      */
-    public function getAllForUser(UserListGetAllForUserRequest $request)
+    public function getAllForUser(UserListGetAllForUserRequest $request): JsonResponse
     {
         try {
             $userLists = $this->userListManager->getAllForUser($request->user_id);
@@ -53,7 +53,7 @@ class UserListController extends Controller
      * 
      * @throws Exception
      */
-    public function show(UserListGetOneForUserRequest $request)
+    public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
         try {
             $userListsAggregate = $this->userListManager->show($request->list_id);
@@ -74,7 +74,7 @@ class UserListController extends Controller
      * 
      * @throws Exception
      */
-    public function create(UserListCreateRequest $request)
+    public function create(UserListCreateRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -82,12 +82,12 @@ class UserListController extends Controller
             $userListDTO = UserListDTO::fromCreateRequest($request);
             $userList = $this->userListManager->create($userListDTO);
             $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request, $userList->id);
-            $userListItems = $this->userListItemManager->create($userListItemDTOs);
+            $userListItems = $this->userListItemManager->createMultiple($userListItemDTOs);
 
             DB::commit();
 
             return response()->json([
-                "message" => "List item added with it's item successfully.",
+                "message" => "List added with it's item successfully.",
                 "result" => [
                     "user_list" => array_merge($userList->toArray(), ["items" => $userListItems]),
                 ],
