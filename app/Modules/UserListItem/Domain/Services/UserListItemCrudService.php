@@ -14,6 +14,17 @@ class UserListItemCrudService
     ) {}
 
     /**
+     * Gets list item given id
+     * 
+     * @param int $listId
+     * @return UserListsItemEntity||null
+     */
+    public function getById(int $listId): ?UserListsItemEntity
+    {
+        return $this->userListItemRepo->getById($listId);
+    }
+
+    /**
      * Gets all user lists sub lists for given list id
      * 
      * @param int $listId
@@ -67,7 +78,7 @@ class UserListItemCrudService
             'id' => $listItemId,
             'status' => StatusType::ACTIVE->value,
         ]);
-
+        
         if(!$userListItem) {
             return null;
         }

@@ -16,6 +16,25 @@ class UserListItemManager
     ) {}
 
     /**
+     * Gets list item given id
+     * 
+     * @param int $listId
+     * @return UserListsItemEntity||null
+     */
+    public function getById(int $listId): ?UserListsItemEntity
+    {
+        $userListsItem = $this->userListItemCrudService->getById($listId);
+        
+        if (!$userListsItem) {
+            $this->logger->alert("List item could not find for {$listId}");
+            throw new Exception("List item could not find.", 400);
+        }
+
+        $this->logger->info("List item searched for {$listId}");
+        return $userListsItem;
+    }
+
+    /**
      * Gets all lists sub lists for given id
      * 
      * @param int $listId

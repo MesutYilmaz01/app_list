@@ -9,11 +9,13 @@ use App\Http\Requests\UserList\UserListGetOneForUserRequest;
 use App\Http\Requests\UserList\UserListUpdateRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
+use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserListController extends Controller
 {
@@ -109,6 +111,8 @@ class UserListController extends Controller
      */
     public function update(UserListUpdateRequest $request): JsonResponse
     {
+        Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
+        
         try {
             $userListDTO = UserListDTO::fromUpdateRequest($request);
             $userList = $this->userListManager->update($request->list_id, $userListDTO);
@@ -131,6 +135,8 @@ class UserListController extends Controller
      */
     public function delete(UserListDeleteRequest $request): JsonResponse
     {
+        Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
+        
         try {
             $this->userListManager->delete($request->list_id);
             return response()->json(["message" => "User list deletion is successfuly completed."], 200);
