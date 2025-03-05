@@ -74,6 +74,14 @@ interface IBaseEloquentRepository
      * @return bool||null
      */
     public function delete(Model $model): ?bool;
+
+    /**
+     * Soft deletes records according to given conditions
+     * 
+     * @param Model $model
+     * @return bool||null
+     */
+    public function deleteMany(array $attributes): ?bool;
     
     /**
      * Restores a record according to given model
