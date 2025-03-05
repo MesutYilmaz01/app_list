@@ -158,6 +158,17 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     }
 
     /**
+     * Soft deletes records according to given conditions
+     * 
+     * @param Model $model
+     * @return bool||null
+     */
+    public function deleteMany(array $attributes): ?bool
+    {
+        return $this->model->where($attributes)->delete();
+    }
+
+    /**
      * Restores a record according to given model
      * 
      * @param Model $model

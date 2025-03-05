@@ -135,4 +135,25 @@ class UserListItemManager
         $this->logger->info("User list item {$listItemId} is deleted.");
         return $isDeleted;
     }
+
+    /**
+     * Deletes user list items according to given id
+     * 
+     * @param int $userListItemId
+     * @return bool
+     * 
+     * @throws Exception
+     */
+    public function deleteMany(int $userListItemId): bool
+    {
+        $isDeleted = $this->userListItemCrudService->deleteMany($userListItemId);
+        
+        if (!$isDeleted) {
+            $this->logger->alert("User list items for {$userListItemId} could not deleted.");
+            throw new Exception("User list items could not deleted.", 400);
+        }
+
+        $this->logger->info("User list items for  {$userListItemId} is deleted.");
+        return $isDeleted;
+    }
 }

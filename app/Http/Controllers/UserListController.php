@@ -7,6 +7,8 @@ use App\Http\Requests\UserList\UserListDeleteRequest;
 use App\Http\Requests\UserList\UserListGetAllForUserRequest;
 use App\Http\Requests\UserList\UserListGetOneForUserRequest;
 use App\Http\Requests\UserList\UserListUpdateRequest;
+use App\Modules\Shared\Events\UserList\UserListCreatedEvent;
+use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
@@ -82,16 +84,16 @@ class UserListController extends Controller
             DB::beginTransaction();
 
             $userListDTO = UserListDTO::fromCreateRequest($request);
-            $userList = $this->userListManager->create($userListDTO);
-            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request, $userList->id);
-            $userListItems = $this->userListItemManager->createMultiple($userListItemDTOs);
+            $userListsAggregate = $this->userListManager->create($userListDTO);
+            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request, $userListsAggregate->getUserListEntity()->id);
+            UserListCreatedEvent::dispatch($userListItemDTOs);
 
             DB::commit();
 
             return response()->json([
                 "message" => "List added with it's item successfully.",
                 "result" => [
-                    "user_list" => array_merge($userList->toArray(), ["items" => $userListItems]),
+                    "user_list" => $userListsAggregate->toArray(),
                 ],
             ], 201);
         } catch (Exception $e) {
@@ -139,6 +141,7 @@ class UserListController extends Controller
         
         try {
             $this->userListManager->delete($request->list_id);
+            UserListDeletedEvent::dispatch($request->list_id);
             return response()->json(["message" => "User list deletion is successfuly completed."], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
