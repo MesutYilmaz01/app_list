@@ -62,7 +62,9 @@ class UserListCrudService
      */
     public function create(UserListDTO $userListDTO): ?UserListEntity
     {
-        return $this->userListRepo->create($userListDTO->toArray());
+        $userList = $this->userListRepo->create($userListDTO->toArray());
+        $this->userListAggregate->setUserListEntity($userList);
+        return $this->userListAggregate->getUserListEntity();
     }
 
     /**

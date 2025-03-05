@@ -70,11 +70,11 @@ class UserListManager
      * Creates a userlist according to given data
      * 
      * @param UserListDTO $userListDTO
-     * @return UserListEntity||null
+     * @return UserListAggregate||null
      * 
      * @throws Exception
      */
-    public function create(UserListDTO $userListDTO): ?UserListEntity
+    public function create(UserListDTO $userListDTO): ?UserListAggregate
     {
         $userList = $this->userListCrudService->create($userListDTO);
 
@@ -84,7 +84,7 @@ class UserListManager
         }
 
         $this->logger->info("Userlist {$userList->id} is created.");
-        return $userList;
+        return $this->userListAggregate;
     }
 
     /**
