@@ -20,10 +20,10 @@ class UserListDeletedListener
      */
     public function handle(UserListDeletedEvent $event): void
     {
-        $isDeleted = $this->userListItemManager->deleteMany($event->userListId);
-        
-        if(!$isDeleted) {
-            throw new Exception("There is a problem while deleting user list sub items", 400);
+        try {
+            $this->userListItemManager->deleteMany($event->userListId);
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 }
