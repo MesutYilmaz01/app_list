@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\UserListItem\Infrastructure\Policies;
+namespace App\Modules\UserListItem\Domain\Policies;
 
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Application\Manager\UserListManager;
