@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Modules\Shared\Events\UserList\UserListCreatedEvent;
+use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
 use App\Modules\UserList\Application\Listeners\UserListCreatedListener;
+use App\Modules\UserList\Application\Listeners\UserListDeletedListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +27,11 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             UserListCreatedEvent::class,
             [UserListCreatedListener::class, 'handle'],
+        );
+
+        Event::listen(
+            UserListDeletedEvent::class,
+            [UserListDeletedListener::class, 'handle'],
         );
     }
 }

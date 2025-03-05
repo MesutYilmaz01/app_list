@@ -94,11 +94,29 @@ class UserListItemCrudService
      */
     public function delete(int $listItemId): bool
     {
-        $userListItemRepo = $this->userListItemRepo->getById($listItemId);
+        $userListItem = $this->userListItemRepo->getById($listItemId);
 
-        if (!$userListItemRepo) {
+        if (!$userListItem) {
             return false;
         }
-        return $this->userListItemRepo->delete($userListItemRepo);
+
+        return $this->userListItemRepo->delete($userListItem);
+    }
+
+    /**
+     * Deletes user list items according to given id
+     * 
+     * @param int $userListItemId
+     * @return bool
+     */
+    public function deleteMany(int $userListItemId): bool
+    {
+        $userListItems = $this->userListItemRepo->getAllByAttributes(["user_list_id" => $userListItemId]);
+        
+        if (!$userListItems) {
+            return false;
+        }
+
+        return $this->userListItemRepo->deleteMany(["user_list_id"=> $userListItemId]);
     }
 }
