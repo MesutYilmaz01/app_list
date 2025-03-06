@@ -28,7 +28,6 @@ class CreateUserRequest extends FormRequest
             'name' => ['required', 'max:50'],
             'surname' => ['required', 'max:50'],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'user_type' => ['in:0,1'],
         ];
     }
 }
