@@ -9,6 +9,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface IBaseEloquentRepository 
 {
     /**
+     * Parses given array for builder to shape it.
+     * 
+     * @return BaseEloquentRepository
+     */
+    public function parseRequest(array $requestArray): BaseEloquentRepository;
+
+    /**
      * Gets a record according to id
      * 
      
@@ -98,4 +105,12 @@ interface IBaseEloquentRepository
      * @return bool||null
      */
     public function forceDelete(Model $model): ?bool;
+
+    /**
+     * Adds given filter to query. Like 'category_id' -> 1, 'user_id' -> 2
+     * 
+     * @param array $filterAttributes
+     * @return BaseEloquentRepository
+     */
+    public function withFilters(array $filterAttributes): BaseEloquentRepository;
 }

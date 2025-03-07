@@ -15,6 +15,11 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     protected $model;
 
     /**
+     * Filter which is going to use. That is gibven by each repository
+     */
+    protected $filter;
+
+    /**
      * Relationships which is going to use when model getting if thhat is given
      */
     protected array $relationShips = [];
@@ -46,19 +51,27 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     private int $perPage = 30;
     
     /**
-     * Get the model from the IoC container
+     * Get the model from the IoC container and get the filter.
      * @throws BindingResolutionException
      */
     public function __construct()
     {
         $this->model = app()->make($this->model);
+        $this->filter = app($this->filter);
     }
 
-    public function parseRequest(array $requestArray): void
+    /**
+     * Declare given attributes to realted variables like order and paginaiton.
+     * 
+     * @return BaseEloquentRepository
+     */
+    public function parseRequest(array $requestArray): BaseEloquentRepository
     {
         $this->setOrder($requestArray);
 
         $this->setPagination($requestArray);
+
+        return $this;
     }
 
     /**
@@ -195,6 +208,19 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     public function forceDelete(Model $model): ?bool
     {
         return $model->forceDelete();
+    }
+
+    /**
+     * Adds given filter to query. Like 'category_id' -> 1, 'user_id' -> 2
+     * 
+     * @param array $filterAttributes
+     * @return BaseEloquentRepository
+     */
+    public function withFilters(array $filterAttributes): BaseEloquentRepository
+    {
+        $this->filter->setFilters($filterAttributes);
+        $this->model = $this->model->filter($this->filter);
+        return $this;
     }
 
     /**
