@@ -39,6 +39,25 @@ class UserListManager
     }
 
     /**
+     * Gets all lists according to given filter attributes.
+     * 
+     * @param array $filterParams
+     * @return array||null
+     */
+    public function get(array $filterParams)
+    {
+        $lists = $this->userListCrudService->get($filterParams);
+
+        if (!$lists) {
+            $this->logger->alert("List could not found for this attributes.");
+            throw new Exception("List could not found for this attributes.", 400);
+        }
+
+        $this->logger->info("List found for this attributes.");
+        return $lists;
+    }
+
+    /**
      * Gets a user list for given id
      * 
      * @param int $listId

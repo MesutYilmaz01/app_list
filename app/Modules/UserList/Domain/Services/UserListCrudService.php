@@ -33,6 +33,21 @@ class UserListCrudService
     }
 
     /**
+     * Gets all lists according to given filter attributes.
+     * 
+     * @param array $filterParams
+     * @return array||null
+     */
+    public function get(array $filterParams): ?array
+    {
+        return $this->userListRepo
+            ->parseRequest($filterParams)
+            ->withFilters($filterParams)
+            ->getAll()
+            ->toArray();
+    }
+
+    /**
      * Gets a user list for given id
      * 
      * @param int $listId
@@ -49,7 +64,7 @@ class UserListCrudService
         if (!$userList) {
             return null;
         }
-        
+
         $this->userListAggregate->setUserListEntity($userList);
         return $this->userListAggregate->getUserListEntity();
     }
@@ -82,7 +97,7 @@ class UserListCrudService
             'is_public' => ShareType::PUBLIC->value
         ]);
 
-        if(!$userList) {
+        if (!$userList) {
             return null;
         }
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListsItemController;
 
@@ -39,6 +40,13 @@ Route::group([
         Route::put('/{list_id}', 'update');
         Route::delete('/{list_id}', 'delete');
     });
+});
+
+Route::group([
+    'prefix' => 'lists',
+    'controller' => ListController::class
+], function ($router) {
+    Route::get('/', 'get');
 });
 
 Route::group([

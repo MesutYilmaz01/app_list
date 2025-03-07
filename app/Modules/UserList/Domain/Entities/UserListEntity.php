@@ -3,11 +3,14 @@
 namespace App\Modules\UserList\Domain\Entities;
 
 use App\Models\UserList;
+use App\Modules\Shared\Traits\Filterable;
 use App\Modules\UserList\Domain\Enums\ShareType;
 use App\Modules\UserList\Domain\Enums\StatusType;
 
 class UserListEntity extends UserList
 {
+    use Filterable;
+    
     public function isPublic()
     {
         return $this->is_public == ShareType::PUBLIC->value;
