@@ -54,6 +54,13 @@ class BaseEloquentRepository implements IBaseEloquentRepository
         $this->model = app()->make($this->model);
     }
 
+    public function parseRequest(array $requestArray): void
+    {
+        $this->setOrder($requestArray);
+
+        $this->setPagination($requestArray);
+    }
+
     /**
      * Gets a record according to id
      * 
@@ -188,6 +195,40 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     public function forceDelete(Model $model): ?bool
     {
         return $model->forceDelete();
+    }
+
+    /**
+     * Sets order by and order type if they are exist.
+     * 
+     * @param array $requestArray
+     * @return void
+     */
+    private function setOrder(array $requestArray): void
+    {
+        if (isset($requestArray["order_by"])) {
+            $this->orderBy = $requestArray["order_by"];
+        }
+
+        if (isset($requestArray["order_type"])) {
+            $this->orderType = $requestArray["order_type"];
+        }
+    }
+
+    /**
+     * Sets pagination and per page if they are exist.
+     * 
+     * @param array $requestArray
+     * @return void
+     */
+    private function setPagination(array $requestArray): void
+    {
+        if (isset($requestArray["with_pagination"]) && boolval($requestArray["with_pagination"])) {
+            $this->withPagination = true;
+        }
+
+        if (isset($requestArray["per_page"]) && is_numeric($requestArray["per_page"])) {
+            $this->perPage = (int)$requestArray["per_page"];
+        }
     }
 
     /**
