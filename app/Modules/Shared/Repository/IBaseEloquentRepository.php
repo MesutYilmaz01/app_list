@@ -113,4 +113,12 @@ interface IBaseEloquentRepository
      * @return BaseEloquentRepository
      */
     public function withFilters(array $filterAttributes): BaseEloquentRepository;
+
+        /**
+     * Adds given relationships to query. To use this function, you must add relationships array to related repository and full it with relations.
+     * 
+     * @param string|array $relationships
+     * @return BaseEloquentRepository
+     */
+    public function with(array|string $relationships): BaseEloquentRepository;
 }

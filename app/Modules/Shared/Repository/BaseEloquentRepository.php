@@ -11,7 +11,7 @@ class BaseEloquentRepository implements IBaseEloquentRepository
 {
     /**
      * Model which is going to use. That is given by each repository
-     */ 
+     */
     protected $model;
 
     /**
@@ -20,12 +20,12 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     protected $filter;
 
     /**
-     * Relationships which is going to use when model getting if thhat is given
+     * Relationships which is given each repository individually. For example userrepository may have $relationships = ['user_lists','messages']
      */
-    protected array $relationShips = [];
+    protected array $relationships = [];
 
     /**
-     * Array of relationships to include in next query
+     * Array of relationships to include in next query if its assigned anywhere.
      * @var array
      */
     protected array $requiredRelationships = [];
@@ -34,7 +34,7 @@ class BaseEloquentRepository implements IBaseEloquentRepository
      * Default orderBy
      */
     private string $orderBy = 'id';
-    
+
     /**
      * Default orderType
      */
@@ -49,7 +49,7 @@ class BaseEloquentRepository implements IBaseEloquentRepository
      * Default pagination count
      */
     private int $perPage = 30;
-    
+
     /**
      * Get the model from the IoC container and get the filter.
      * @throws BindingResolutionException
@@ -104,9 +104,9 @@ class BaseEloquentRepository implements IBaseEloquentRepository
         $orderType = $orderType ?? $this->orderType;
 
         return $this->model
-                ->with($this->requiredRelationships)
-                ->orderBy($orderBy, $orderType)
-                ->paginate($paged);
+            ->with($this->requiredRelationships)
+            ->orderBy($orderBy, $orderType)
+            ->paginate($paged);
     }
 
     /**
@@ -220,6 +220,29 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     {
         $this->filter->setFilters($filterAttributes);
         $this->model = $this->model->filter($this->filter);
+        return $this;
+    }
+
+    /**
+     * Adds given relationships to query. To use this function, you must add relationships array to related repository and full it with relations.
+     * 
+     * @param string||array $relationships
+     * @return BaseEloquentRepository
+     */
+    public function with(array|string $relationships): BaseEloquentRepository
+    {
+        $this->requiredRelationships = [];
+
+        if ($relationships == 'all') {
+            $this->requiredRelationships = $this->relationships;
+        } elseif (is_array($relationships)) {
+            $this->requiredRelationships = array_filter($relationships, function ($value) {
+                return in_array($value, $this->relationships);
+            });
+        } elseif (is_string($relationships)) {
+            array_push($this->requiredRelationships, $relationships);
+        }
+
         return $this;
     }
 
