@@ -55,7 +55,7 @@ class UserListCrudService
      */
     public function show(int $listId): ?UserListEntity
     {
-        $userList = $this->userListRepo->findByAttributes([
+        $userList = $this->userListRepo->with(['userListsItems'])->findByAttributes([
             'id' => $listId,
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
@@ -64,8 +64,10 @@ class UserListCrudService
         if (!$userList) {
             return null;
         }
-
+        
         $this->userListAggregate->setUserListEntity($userList);
+        $this->userListAggregate->setUserLitsItems($userList->userListsItems->toArray());
+        unset($userList["userListsItems"]);
         return $this->userListAggregate->getUserListEntity();
     }
 

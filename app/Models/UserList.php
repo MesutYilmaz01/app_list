@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserList extends Model
@@ -25,4 +26,9 @@ class UserList extends Model
         'status',
         'is_public'
     ];
+
+    public function userListsItems(): HasMany
+    {
+        return $this->hasMany(UserListsItem::class, 'user_list_id', 'id');
+    }
 }

@@ -72,15 +72,6 @@ class UserListManager
             throw new Exception("Userlist could not find.", 400);
         }
 
-        $userListsItems = $this->userListItemManager->getAllForGivenList($listId);
-
-        if (!$userListsItems) {
-            $this->logger->alert("Userlist sub items could not find for {$listId} list.");
-            throw new Exception("Userlist sub items could not find.", 400);
-        }
-
-        $this->userListAggregate->setUserLitsItems($userListsItems);
-
         $this->logger->info("Userlist {$listId} is searched.");
         return $this->userListAggregate;
     }

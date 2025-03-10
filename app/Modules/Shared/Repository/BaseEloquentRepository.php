@@ -128,7 +128,7 @@ class BaseEloquentRepository implements IBaseEloquentRepository
      */
     public function findByAttributes(array $attributes): ?Model
     {
-        return $this->model->where($attributes)->first();
+        return $this->model->with($this->requiredRelationships)->where($attributes)->first();
     }
 
     /**
@@ -139,7 +139,7 @@ class BaseEloquentRepository implements IBaseEloquentRepository
      */
     public function getAllByAttributes(array $attributes): ?Collection
     {
-        return $this->model->where($attributes)->get();
+        return $this->model->with($this->requiredRelationships)->where($attributes)->get();
     }
 
     /**
