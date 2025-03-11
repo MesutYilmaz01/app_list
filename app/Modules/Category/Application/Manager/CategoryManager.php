@@ -36,6 +36,27 @@ class CategoryManager
     }
 
     /**
+     * Returns popular category data
+     * 
+     * 
+     * @return array||null
+     * 
+     * @throws Exception
+     */
+    public function getPopulars(): ?array
+    {
+        $categories = $this->categoryCrudService->getPopulars(5);
+        
+        if (!$categories) {
+            $this->logger->alert("Categories could not listed.");
+            throw new Exception("Categories are not listed.", 404);
+        }
+
+        $this->logger->info("Categories are listed.");
+        return $categories;
+    }
+
+    /**
      * Returns CategoryEntity according to given id
      * 
      * @param int $id

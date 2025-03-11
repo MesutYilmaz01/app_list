@@ -23,6 +23,17 @@ class CategoryCrudService
     }
 
     /**
+     * Returns popular category data
+     * 
+     * @param int $count
+     * @return array||null
+     */
+    public function getPopulars(int $count): ?array
+    {
+        return $this->categoryRepo->getAllWithCount($count);
+    }
+    
+    /**
      * Returns category according to given id
      * 
      * @param int $id

@@ -36,6 +36,27 @@ class CategoryController extends Controller
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
     }
+    
+    /**
+     * Gets popular categories data
+     * 
+     * @return JsonRespone
+     * 
+     * @throws Exception
+     */
+    public function getPopulars(): JsonResponse
+    {
+        $categories = $this->categoryManager->getPopulars();
+        try {
+           
+            return response()->json([
+                "message" => "Categories got successfully.",
+                "result" => ["categories" => $categories]
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], $e->getCode());
+        }
+    }
 
     /**
      * Gets category according to id
