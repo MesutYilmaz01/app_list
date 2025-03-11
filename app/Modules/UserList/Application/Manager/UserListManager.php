@@ -44,7 +44,7 @@ class UserListManager
      * @param array $filterParams
      * @return array||null
      */
-    public function get(array $filterParams)
+    public function get(array $filterParams): ?array
     {
         $lists = $this->userListCrudService->get($filterParams);
 

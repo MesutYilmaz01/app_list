@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\List;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListRequest extends FormRequest
+class ListLatestRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,7 @@ class ListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'integer|exists:user_lists,id',
-            'category_id' => 'integer|exists:categories,id',
-            'date' => 'date|date_format:Y-m-d',
-            'before_date' => 'date|date_format:Y-m-d',
-            'after_date' => 'date|date_format:Y-m-d',
-            'starts_with' => 'string',
+            'start_date' => 'date|date_format:Y-m-d',
             'with_pagination' => 'boolean',
             'page' => 'integer|min:1',
             'per_page' => 'integer|max:100'
@@ -43,7 +39,10 @@ class ListRequest extends FormRequest
             $this->merge(['page' => 1]);
         }
         if (!$this->has('per_page')) {
-            $this->merge(['per_page' => 50]);
+            $this->merge(['per_page' => 20]);
         }
+        $this->merge(['start_date' => (string)Carbon::today()->toDateString()]);
+        $this->merge(['order_by' => 'created_at']);
+        $this->merge(['limit' => 20]);
     }
 }

@@ -26,12 +26,9 @@ interface IBaseEloquentRepository
     /**
      * Get paged items
      *
-     * @param integer $paged Items per page
-     * @param string $orderBy Column to sort by
-     * @param string $sort Sort direction
      * @return Paginator
      */
-    public function getAllPaginated($paged = 15, $orderBy = null, $orderType = null): LengthAwarePaginator;
+    public function getAllPaginated(): LengthAwarePaginator;
 
     /**
      * Gets a record according to id

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Shared\Repository;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -51,6 +52,11 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     private int $perPage = 30;
 
     /**
+     * Limit for given query
+     */
+    private int $limit = 0;
+
+    /**
      * Get the model from the IoC container and get the filter.
      * @throws BindingResolutionException
      */
@@ -71,6 +77,8 @@ class BaseEloquentRepository implements IBaseEloquentRepository
 
         $this->setPagination($requestArray);
 
+        $this->setLimit($requestArray);
+
         return $this;
     }
 
@@ -84,7 +92,14 @@ class BaseEloquentRepository implements IBaseEloquentRepository
         $orderBy = $orderBy ?? $this->orderBy;
         $orderType = $orderType ?? $this->orderType;
 
+        if ($this->withPagination) {
+            $this->getAllPaginated();
+        }
+
         return $this->model
+            ->when($this->limit, function (Builder $query, int $limit) {
+                $query->take($limit);
+            })
             ->with($this->requiredRelationships)
             ->orderBy($orderBy, $orderType)
             ->get($columns);
@@ -93,20 +108,17 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     /**
      * Get paged items
      *
-     * @param integer $paged Items per page
-     * @param string $orderBy Column to sort by
-     * @param string $sort Sort direction
      * @return Paginator
      */
-    public function getAllPaginated($paged = 15, $orderBy = null, $orderType = null): LengthAwarePaginator
+    public function getAllPaginated(): LengthAwarePaginator
     {
-        $orderBy = $orderBy ?? $this->orderBy;
-        $orderType = $orderType ?? $this->orderType;
-
         return $this->model
+            ->when($this->limit, function (Builder $query, int $limit) {
+                $query->take($limit);
+            })
             ->with($this->requiredRelationships)
-            ->orderBy($orderBy, $orderType)
-            ->paginate($paged);
+            ->orderBy($this->orderBy, $this->orderType)
+            ->paginate($this->perPage);
     }
 
     /**
@@ -277,6 +289,19 @@ class BaseEloquentRepository implements IBaseEloquentRepository
 
         if (isset($requestArray["per_page"]) && is_numeric($requestArray["per_page"])) {
             $this->perPage = (int)$requestArray["per_page"];
+        }
+    }
+
+    /**
+     * Sets limit if exists.
+     * 
+     * @param array $requestArray
+     * @return void
+     */
+    private function setLimit(array $requestArray): void
+    {
+        if (isset($requestArray["limit"])) {
+            $this->limit = $requestArray["limit"];
         }
     }
 

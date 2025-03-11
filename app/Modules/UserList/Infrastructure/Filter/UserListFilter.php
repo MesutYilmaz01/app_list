@@ -44,7 +44,7 @@ class UserListFilter extends QueryFilter
      */
     public function filterByDate(string $date): Builder
     {
-        return $this->builder->where('created_at', '=', $date);
+        return $this->builder->whereDate('created_at', $date);
     }
 
     /**
@@ -55,7 +55,7 @@ class UserListFilter extends QueryFilter
      */
     public function filterByBeforeDate(string $date): Builder
     {
-        return $this->builder->where('created_at', '<', $date);
+        return $this->builder->whereDate('created_at', '<=', $date);
     }
 
     /**
@@ -66,6 +66,6 @@ class UserListFilter extends QueryFilter
      */
     public function filterByAfterDate(string $date): Builder
     {
-        return $this->builder->where('created_at', '>', $date);
+        return $this->builder->whereDate('created_at', '>=', $date);
     }
 }

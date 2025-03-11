@@ -22,6 +22,7 @@ Route::group([
 ], function ($router) {
     Route::get('/', 'getAll');
     Route::get('/{category_id}', 'show');
+    Route::get('/popular/categories', 'getPopulars');
     Route::middleware('auth:sanctum', 'is_admin')->group(function () {
         Route::post('/', 'create');
         Route::put('/{category_id}', 'update');
@@ -46,7 +47,8 @@ Route::group([
     'prefix' => 'lists',
     'controller' => ListController::class
 ], function ($router) {
-    Route::get('/', 'get');
+    Route::get('/', 'getOrdinary');
+    Route::get('/latests', 'getForLatest');
 });
 
 Route::group([
