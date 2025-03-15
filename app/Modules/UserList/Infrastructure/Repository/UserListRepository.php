@@ -12,6 +12,7 @@ class UserListRepository extends BaseEloquentRepository implements IUserListRepo
     protected $model = UserListEntity::class;
     protected $filter = UserListFilter::class;
     protected array $relationships = [
-        'userListsItems'
+        'userListsItems',
+        'categories'
     ];
 }
