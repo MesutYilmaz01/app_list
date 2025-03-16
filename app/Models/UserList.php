@@ -33,7 +33,7 @@ class UserList extends Model
         return $this->hasMany(UserListsItem::class, 'user_list_id', 'id');
     }
 
-    public function categories(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
