@@ -2,6 +2,9 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ListController;
+use App\Http\Controllers\Admin\UserListController;
+use App\Http\Controllers\Admin\UserListsItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -16,4 +19,36 @@ Route::group([
         Route::put('/{category_id}', 'update');
         Route::delete('/{category_id}', 'delete');
     });
+});
+
+Route::group([
+    'prefix' => 'lists',
+    'controller' => UserListController::class
+], function ($router) {
+    Route::get('/user/{user_id}', 'getAllForUser');
+    Route::get('/show/{list_id}', 'show');
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', 'create');
+        Route::put('/{list_id}', 'update');
+        Route::delete('/{list_id}', 'delete');
+    });
+});
+
+Route::group([
+    'prefix' => 'list-items',
+    'controller' => UserListsItemController::class
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', 'create');
+        Route::put('/{list_item_id}', 'update');
+        Route::delete('/{list_item_id}', 'delete');
+    });
+});
+
+Route::group([
+    'prefix' => 'lists',
+    'controller' => ListController::class
+], function ($router) {
+    Route::get('/', 'getOrdinary');
+    Route::get('/latests', 'getForLatest');
 });

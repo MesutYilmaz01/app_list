@@ -70,39 +70,6 @@ class UserListController extends Controller
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
         }
     }
-
-    /**
-     * Creates a list with sub items according to given data
-     * 
-     * @param UserListCreateRequest $request
-     * @return JsonRespone
-     * 
-     * @throws Exception
-     */
-    public function create(UserListCreateRequest $request): JsonResponse
-    {
-        try {
-            DB::beginTransaction();
-
-            $userListDTO = UserListDTO::fromCreateRequest($request);
-            $userListsAggregate = $this->userListManager->create($userListDTO);
-            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request, $userListsAggregate->getUserListEntity()->id);
-            UserListCreatedEvent::dispatch($userListItemDTOs);
-
-            DB::commit();
-
-            return response()->json([
-                "message" => "List added with it's item successfully.",
-                "result" => [
-                    "user_list" => $userListsAggregate->toArray(),
-                ],
-            ], 201);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(["message" => $e->getMessage()], $e->getCode());
-        }
-    }
-
     
     /**
      * Updates a user list according to given id
