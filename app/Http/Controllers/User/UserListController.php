@@ -84,9 +84,9 @@ class UserListController extends Controller
         try {
             DB::beginTransaction();
 
-            $userListDTO = UserListDTO::fromCreateRequest($request);
+            $userListDTO = UserListDTO::fromCreateRequest($request->validated());
             $userListsAggregate = $this->userListManager->create($userListDTO);
-            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request, $userListsAggregate->getUserListEntity()->id);
+            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request->validated(), $userListsAggregate->getUserListEntity()->id);
             UserListCreatedEvent::dispatch($userListItemDTOs);
 
             DB::commit();
@@ -117,7 +117,7 @@ class UserListController extends Controller
         Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
         
         try {
-            $userListDTO = UserListDTO::fromUpdateRequest($request);
+            $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
             $userList = $this->userListManager->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",

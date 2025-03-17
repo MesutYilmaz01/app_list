@@ -2,7 +2,6 @@
 
 namespace App\Modules\User\Domain\DTO;
 
-use App\Http\Requests\Auth\CreateUserRequest;
 use App\Modules\User\Domain\Enums\UserType;
 use Illuminate\Support\Facades\Hash;
 
@@ -75,16 +74,16 @@ class UserDTO
         return $this->userType;
     }
 
-    public static function fromCreateRequest(CreateUserRequest $request)
+    public static function fromCreateRequest(array $request)
     {
         $userDTO = new self();
 
-        $userDTO->setName($request->name);
-        $userDTO->setSurname($request->surname);
-        $userDTO->setUsername($request->username);
-        $userDTO->setEmail($request->email);
-        $userDTO->setPassword(Hash::make($request->password));
-        $userDTO->setUserType($request->userType ?? UserType::USER->value);
+        $userDTO->setName($request["name"]);
+        $userDTO->setSurname($request["surname"]);
+        $userDTO->setUsername($request["username"]);
+        $userDTO->setEmail($request["email"]);
+        $userDTO->setPassword(Hash::make($request["password"]));
+        $userDTO->setUserType($request["userType"] ?? UserType::USER->value);
 
         return $userDTO;
     }

@@ -78,9 +78,8 @@ class UserListController extends Controller
     public function update(UserListUpdateRequest $request): JsonResponse
     {
         Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-        
         try {
-            $userListDTO = UserListDTO::fromUpdateRequest($request);
+            $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
             $userList = $this->userListManager->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",

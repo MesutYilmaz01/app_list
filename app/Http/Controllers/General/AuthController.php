@@ -29,7 +29,7 @@ class AuthController extends Controller
     public function register(CreateUserRequest $request): JsonResponse
     {
         try {
-            $userDto = UserDTO::fromCreateRequest($request);
+            $userDto = UserDTO::fromCreateRequest($request->validated());
             $user = $this->authManager->register($userDto);
             $token = $user->createToken("auth_token")->plainTextToken;
 

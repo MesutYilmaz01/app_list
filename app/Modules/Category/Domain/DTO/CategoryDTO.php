@@ -2,8 +2,6 @@
 
 namespace App\Modules\Category\Domain\DTO;
 
-use Illuminate\Http\Request;
-
 class CategoryDTO
 {
     private string $name;
@@ -18,11 +16,11 @@ class CategoryDTO
         return $this->name;
     }
 
-    public static function fromCreateRequest(Request $request)
+    public static function fromCreateRequest(array $request)
     {
         $categoryDTO = new self();
 
-        $categoryDTO->setName($request->name);
+        $categoryDTO->setName($request["name"]);
 
         return $categoryDTO;
     }

@@ -91,7 +91,7 @@ class CategoryController extends Controller
     public function create(CategoryCreateRequest $request): JsonResponse
     {
         try {
-            $categoryDTO = CategoryDTO::fromCreateRequest($request);
+            $categoryDTO = CategoryDTO::fromCreateRequest($request->validated());
             $category = $this->categoryManager->create($categoryDTO);
             return response()->json([
                 "message" => "Category created successfully.",
@@ -113,7 +113,7 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request): JsonResponse
     {
         try {
-            $categoryDTO = CategoryDTO::fromCreateRequest($request);
+            $categoryDTO = CategoryDTO::fromCreateRequest($request->validated());
             $category = $this->categoryManager->update($request->category_id, $categoryDTO);
             return response()->json([
                 "message" => "Category updated successfully.",

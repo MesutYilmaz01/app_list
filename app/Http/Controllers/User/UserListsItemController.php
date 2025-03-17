@@ -33,7 +33,7 @@ class UserListsItemController extends Controller
         try {
             DB::beginTransaction();
 
-            $userListItemDTO = UserListItemDTO::fromRequest($request);
+            $userListItemDTO = UserListItemDTO::fromRequest($request->validated());
             $userListItem = $this->userListItemManager->create($userListItemDTO);
 
             DB::commit();
@@ -64,7 +64,7 @@ class UserListsItemController extends Controller
         Gate::authorize('isOwner', [new UserListsItemEntity(), $request->list_item_id]);
 
         try {
-            $userListDTO = UserListItemDTO::fromUpdateRequest($request);
+            $userListDTO = UserListItemDTO::fromUpdateRequest($request->validated());
             $userListItem = $this->userListItemManager->update($request->list_item_id, $userListDTO);
             return response()->json([
                 "message" => "User list item updated successfully.",

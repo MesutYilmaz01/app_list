@@ -42,7 +42,7 @@ class ListController extends Controller
     public function getForLatest(ListLatestRequest $request)
     {
         try {
-            $lists = $this->get($request->all());
+            $lists = $this->get($request->validated());
             return response()->json([
                 "message" => "List got successfully.",
                 "result" => [
@@ -65,7 +65,7 @@ class ListController extends Controller
     public function getOrdinary(ListRequest $request)
     {
         try {
-            $lists = $this->get($request->all());
+            $lists = $this->get($request->validated());
             return response()->json([
                 "message" => "List got successfully.",
                 "result" => [

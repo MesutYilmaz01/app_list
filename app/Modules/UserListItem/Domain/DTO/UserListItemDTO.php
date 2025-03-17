@@ -2,11 +2,7 @@
 
 namespace App\Modules\UserListItem\Domain\DTO;
 
-use App\Http\Requests\Admin\UserListsItem\UserListsItemUpdateRequest as AdminUserListsItemUpdate;
-use App\Http\Requests\User\UserListsItem\UserListsItemUpdateRequest as UserUserListsItemUpdate;
-use App\Http\Requests\User\UserListsItem\UserListsItemCreateRequest;
 use App\Modules\UserListItem\Domain\Enums\StatusType;
-use Illuminate\Http\Request;
 
 class UserListItemDTO
 {
@@ -55,37 +51,37 @@ class UserListItemDTO
         return $this->status;
     }
 
-    public static function fromRequest(UserListsItemCreateRequest $request)
+    public static function fromRequest(array $request)
     {
         $userListItemDTO = new self();
 
-        $userListItemDTO->setUserListId($request->user_list_id);
-        $userListItemDTO->setHeader($request->header);
-        $userListItemDTO->setDescription($request->description);
-        $userListItemDTO->setStatus($request->status ?? StatusType::ACTIVE->value);
+        $userListItemDTO->setUserListId($request["user_list_id"]);
+        $userListItemDTO->setHeader($request["header"]);
+        $userListItemDTO->setDescription($request["description"]);
+        $userListItemDTO->setStatus($request["status"] ?? StatusType::ACTIVE->value);
 
         return $userListItemDTO;
     }
 
-    public static function fromUpdateRequest(AdminUserListsItemUpdate|UserUserListsItemUpdate $request)
+    public static function fromUpdateRequest(array $request)
     {
         $userListItemDTO = new self();
 
-        if($request->header)
-            $userListItemDTO->setHeader($request->header);
-        if($request->description)
-            $userListItemDTO->setDescription($request->description);
-        if($request->status)
-            $userListItemDTO->setStatus($request->status);
+        if($request["header"])
+            $userListItemDTO->setHeader($request["header"]);
+        if($request["description"])
+            $userListItemDTO->setDescription($request["description"]);
+        if($request["status"])
+            $userListItemDTO->setStatus($request["status"]);
 
         return $userListItemDTO;
     }
 
-    public static function forMultiplefromRequest(Request $request, int $userListId)
+    public static function forMultiplefromRequest(array $request, int $userListId)
     {
         $userListItemDTOs = [];
 
-        foreach($request->user_list_items as $userListItem) {
+        foreach($request["user_list_items"] as $userListItem) {
             
             $userListItemDTO = new self();
             $userListItemDTO->setUserListId($userListId);

@@ -2,9 +2,6 @@
 
 namespace App\Modules\UserList\Domain\DTO;
 
-use App\Http\Requests\Admin\UserList\UserListUpdateRequest as AdminUserListUpdate;
-use App\Http\Requests\User\UserList\UserListUpdateRequest as UserUserListUpdate;
-use App\Http\Requests\User\UserList\UserListCreateRequest;
 use App\Modules\UserList\Domain\Enums\ShareType;
 use App\Modules\UserList\Domain\Enums\StatusType;
 
@@ -77,34 +74,34 @@ class UserListDTO
         return $this->isPublic;
     }
 
-    public static function fromCreateRequest(UserListCreateRequest $request)
+    public static function fromCreateRequest(array $request)
     {
         $userListDTO = new self();
 
-        $userListDTO->setCategoryId($request->category_id);
+        $userListDTO->setCategoryId($request["category_id"]);
         $userListDTO->setUserId(auth()->user()->id);
-        $userListDTO->setHeader($request->header);
-        $userListDTO->setDescription($request->description);
-        $userListDTO->setStatus($request->status ?? StatusType::ACTIVE->value);
-        $userListDTO->setIsPublic($request->is_public ?? ShareType::PUBLIC->value);
+        $userListDTO->setHeader($request["header"]);
+        $userListDTO->setDescription($request["description"]);
+        $userListDTO->setStatus($request["status"] ?? StatusType::ACTIVE->value);
+        $userListDTO->setIsPublic($request["is_public"] ?? ShareType::PUBLIC->value);
 
         return $userListDTO;
     }
 
-    public static function fromUpdateRequest(AdminUserListUpdate|UserUserListUpdate $request)
+    public static function fromUpdateRequest(array $request)
     {
         $userListDTO = new self();
 
-        if($request->category_id)
-            $userListDTO->setCategoryId($request->category_id);
-        if($request->header)
-            $userListDTO->setHeader($request->header);
-        if($request->description)
-            $userListDTO->setDescription($request->description);
-        if($request->status)
-            $userListDTO->setStatus($request->status);
-        if($request->is_public)
-            $userListDTO->setIsPublic($request->is_public);
+        if($request["category_id"])
+            $userListDTO->setCategoryId($request["category_id"]);
+        if($request["header"])
+            $userListDTO->setHeader($request["header"]);
+        if($request["description"])
+            $userListDTO->setDescription($request["description"]);
+        if($request["status"])
+            $userListDTO->setStatus($request["status"]);
+        if($request["is_public"])
+            $userListDTO->setIsPublic($request["is_public"]);
 
         return $userListDTO;
     }
