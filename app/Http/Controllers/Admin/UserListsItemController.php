@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserListsItem\UserListsItemCreateRequest;
 use App\Http\Requests\UserListsItem\UserListsItemDeleteRequest;
 use App\Http\Requests\UserListsItem\UserListsItemUpdateRequest;
-use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;

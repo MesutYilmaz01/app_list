@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\General;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\List\ListLatestRequest;
 use App\Http\Requests\List\ListRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;

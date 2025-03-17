@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserList\UserListCreateRequest;
 use App\Http\Requests\UserList\UserListDeleteRequest;
 use App\Http\Requests\UserList\UserListGetAllForUserRequest;
