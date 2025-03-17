@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\General\CategoryController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListsItemController;
@@ -21,13 +21,7 @@ Route::group([
     'controller' => CategoryController::class
 ], function ($router) {
     Route::get('/', 'getAll');
-    Route::get('/{category_id}', 'show');
     Route::get('/popular/categories', 'getPopulars');
-    Route::middleware('auth:sanctum', 'is_admin')->group(function () {
-        Route::post('/', 'create');
-        Route::put('/{category_id}', 'update');
-        Route::delete('/{category_id}', 'delete');
-    });
 });
 
 Route::group([
