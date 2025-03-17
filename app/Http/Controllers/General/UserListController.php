@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserList\UserListGetAllForUserRequest;
-use App\Http\Requests\UserList\UserListGetOneForUserRequest;
+use App\Http\Requests\Common\UserList\UserListGetAllForUserRequest;
+use App\Http\Requests\Common\UserList\UserListGetOneForUserRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;

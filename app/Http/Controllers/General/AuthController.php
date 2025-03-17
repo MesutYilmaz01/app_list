@@ -4,8 +4,8 @@ namespace App\Http\Controllers\General;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\CreateUserRequest;
-use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\General\Auth\CreateUserRequest;
+use App\Http\Requests\General\Auth\UserLoginRequest;
 use App\Modules\User\Application\Manager\AuthManager;
 use App\Modules\User\Domain\DTO\UserDTO;
 use Exception;

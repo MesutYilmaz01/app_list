@@ -2,8 +2,9 @@
 
 namespace App\Modules\UserListItem\Domain\DTO;
 
-use App\Http\Requests\UserListsItem\UserListsItemCreateRequest;
-use App\Http\Requests\UserListsItem\UserListsItemUpdateRequest;
+use App\Http\Requests\Admin\UserListsItem\UserListsItemUpdateRequest as AdminUserListsItemUpdate;
+use App\Http\Requests\User\UserListsItem\UserListsItemUpdateRequest as UserUserListsItemUpdate;
+use App\Http\Requests\User\UserListsItem\UserListsItemCreateRequest;
 use App\Modules\UserListItem\Domain\Enums\StatusType;
 use Illuminate\Http\Request;
 
@@ -66,7 +67,7 @@ class UserListItemDTO
         return $userListItemDTO;
     }
 
-    public static function fromUpdateRequest(UserListsItemUpdateRequest $request)
+    public static function fromUpdateRequest(AdminUserListsItemUpdate|UserUserListsItemUpdate $request)
     {
         $userListItemDTO = new self();
 

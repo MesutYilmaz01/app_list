@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\CategoryCreateRequest;
-use App\Http\Requests\Category\CategoryDeleteRequest;
-use App\Http\Requests\Category\CategoryShowRequest;
-use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Requests\Admin\Category\CategoryCreateRequest;
+use App\Http\Requests\Admin\Category\CategoryDeleteRequest;
+use App\Http\Requests\Admin\Category\CategoryShowRequest;
+use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\DTO\CategoryDTO;
 use Exception;

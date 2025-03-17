@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserList\UserListCreateRequest;
-use App\Http\Requests\UserList\UserListDeleteRequest;
-use App\Http\Requests\UserList\UserListGetAllForUserRequest;
-use App\Http\Requests\UserList\UserListGetOneForUserRequest;
-use App\Http\Requests\UserList\UserListUpdateRequest;
+use App\Http\Requests\Common\UserList\UserListDeleteRequest;
+use App\Http\Requests\Common\UserList\UserListGetAllForUserRequest;
+use App\Http\Requests\Common\UserList\UserListGetOneForUserRequest;
+use App\Http\Requests\User\UserList\UserListCreateRequest;
+use App\Http\Requests\User\UserList\UserListUpdateRequest;
 use App\Modules\Shared\Events\UserList\UserListCreatedEvent;
 use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
 use App\Modules\UserList\Application\Manager\UserListManager;

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User\UserListsItem;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class UserLoginRequest extends FormRequest
+class UserListsItemCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +22,10 @@ class UserLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required','email','exists:users,email','max:50'],
-            'password' => ['required', Password::defaults()]
+            'user_list_id' => ['required', 'exists:user_lists,id'],
+            'header' => ['required','max:100'],
+            'description' => ['required','max:500'],
+            'status' => ['in:0,1'],
         ];
     }
 }

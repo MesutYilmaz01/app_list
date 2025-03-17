@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\User\UserListsItem;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryShowRequest extends FormRequest
+class UserListsItemUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,15 @@ class CategoryShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required','exists:categories,id'],
+            'list_item_id' => ['required','exists:user_lists_items,id'],
+            'header' => ['max:100'],
+            'description' => ['max:500'],
+            'status' => ['in:0,1'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['category_id' => $this->route('category_id')]);
+        $this->merge(['list_item_id' => $this->route('list_item_id')]);
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Modules\UserList\Domain\DTO;
 
-use App\Http\Requests\UserList\UserListCreateRequest;
-use App\Http\Requests\UserList\UserListUpdateRequest;
+use App\Http\Requests\Admin\UserList\UserListUpdateRequest as AdminUserListUpdate;
+use App\Http\Requests\User\UserList\UserListUpdateRequest as UserUserListUpdate;
+use App\Http\Requests\User\UserList\UserListCreateRequest;
 use App\Modules\UserList\Domain\Enums\ShareType;
 use App\Modules\UserList\Domain\Enums\StatusType;
 
@@ -90,7 +91,7 @@ class UserListDTO
         return $userListDTO;
     }
 
-    public static function fromUpdateRequest(UserListUpdateRequest $request)
+    public static function fromUpdateRequest(AdminUserListUpdate|UserUserListUpdate $request)
     {
         $userListDTO = new self();
 

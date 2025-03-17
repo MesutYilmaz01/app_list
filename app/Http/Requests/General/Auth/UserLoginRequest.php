@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\UserList;
+namespace App\Http\Requests\General\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class UserListGetAllForUserRequest extends FormRequest
+class UserLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,8 @@ class UserListGetAllForUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required','exists:users,id'],
+            'email' => ['required','email','exists:users,email','max:50'],
+            'password' => ['required', Password::defaults()]
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge(['user_id' => $this->route('user_id')]);
     }
 }

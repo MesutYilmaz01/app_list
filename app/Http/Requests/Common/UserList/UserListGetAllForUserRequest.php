@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\UserListsItem;
+namespace App\Http\Requests\Common\UserList;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListsItemCreateRequest extends FormRequest
+class UserListGetAllForUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,12 @@ class UserListsItemCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_list_id' => ['required', 'exists:user_lists,id'],
-            'header' => ['required','max:100'],
-            'description' => ['required','max:500'],
-            'status' => ['in:0,1'],
+            'user_id' => ['required','exists:users,id'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['user_id' => $this->route('user_id')]);
     }
 }

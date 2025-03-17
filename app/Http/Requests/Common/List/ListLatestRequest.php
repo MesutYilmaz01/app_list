@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\List;
+namespace App\Http\Requests\Common\List;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;

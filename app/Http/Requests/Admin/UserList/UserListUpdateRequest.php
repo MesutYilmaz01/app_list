@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\UserList;
+namespace App\Http\Requests\Admin\UserList;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListGetOneForUserRequest extends FormRequest
+class UserListUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class UserListGetOneForUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'list_id' => ['required','exists:user_lists,id'],
+            'list_id' => ['exists:user_lists,id'],
+            'status' => ['in:0,1'],
         ];
     }
 

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\UserList;
+namespace App\Http\Requests\General\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class UserListDeleteRequest extends FormRequest
+class CreateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,11 @@ class UserListDeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'list_id' => ['required','exists:user_lists,id'],
+            'username' => ['required','unique:users','max:21'],
+            'email' => ['required','email','unique:users','max:50'],
+            'name' => ['required', 'max:50'],
+            'surname' => ['required', 'max:50'],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge(['list_id' => $this->route('list_id')]);
     }
 }

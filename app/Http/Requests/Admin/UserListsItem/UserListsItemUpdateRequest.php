@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Admin\UserListsItem;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class CreateUserRequest extends FormRequest
+class UserListsItemUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +22,13 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required','unique:users','max:21'],
-            'email' => ['required','email','unique:users','max:50'],
-            'name' => ['required', 'max:50'],
-            'surname' => ['required', 'max:50'],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'list_item_id' => ['required','exists:user_lists_items,id'],
+            'status' => ['in:0,1'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['list_item_id' => $this->route('list_item_id')]);
     }
 }

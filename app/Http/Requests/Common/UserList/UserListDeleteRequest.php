@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Common\UserList;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryUpdateRequest extends FormRequest
+class UserListDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,12 @@ class CategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required','exists:categories,id'],
-            'name' => ['required','unique:categories','max:50'],
+            'list_id' => ['required','exists:user_lists,id'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['category_id' => $this->route('category_id')]);
+        $this->merge(['list_id' => $this->route('list_id')]);
     }
 }

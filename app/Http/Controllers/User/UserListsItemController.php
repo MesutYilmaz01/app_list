@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserListsItem\UserListsItemCreateRequest;
-use App\Http\Requests\UserListsItem\UserListsItemDeleteRequest;
-use App\Http\Requests\UserListsItem\UserListsItemUpdateRequest;
+use App\Http\Requests\Common\UserListsItem\UserListsItemDeleteRequest;
+use App\Http\Requests\User\UserListsItem\UserListsItemCreateRequest;
+use App\Http\Requests\User\UserListsItem\UserListsItemUpdateRequest;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
