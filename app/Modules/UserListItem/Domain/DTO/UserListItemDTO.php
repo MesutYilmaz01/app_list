@@ -67,11 +67,11 @@ class UserListItemDTO
     {
         $userListItemDTO = new self();
 
-        if($request["header"])
+        if(isset($request["header"]))
             $userListItemDTO->setHeader($request["header"]);
-        if($request["description"])
+        if(isset($request["description"]))
             $userListItemDTO->setDescription($request["description"]);
-        if($request["status"])
+        if(isset($request["status"]))
             $userListItemDTO->setStatus($request["status"]);
 
         return $userListItemDTO;

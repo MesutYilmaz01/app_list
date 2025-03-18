@@ -82,8 +82,8 @@ class UserListDTO
         $userListDTO->setUserId(auth()->user()->id);
         $userListDTO->setHeader($request["header"]);
         $userListDTO->setDescription($request["description"]);
-        $userListDTO->setStatus($request["status"] ?? StatusType::ACTIVE->value);
-        $userListDTO->setIsPublic($request["is_public"] ?? ShareType::PUBLIC->value);
+        $userListDTO->setStatus(isset($request["status"] )?? StatusType::ACTIVE->value);
+        $userListDTO->setIsPublic(isset($request["is_public"]) ?? ShareType::PUBLIC->value);
 
         return $userListDTO;
     }
@@ -92,15 +92,15 @@ class UserListDTO
     {
         $userListDTO = new self();
 
-        if($request["category_id"])
+        if(isset($request["category_id"]))
             $userListDTO->setCategoryId($request["category_id"]);
-        if($request["header"])
+        if(isset($request["header"]))
             $userListDTO->setHeader($request["header"]);
-        if($request["description"])
+        if(isset($request["description"]))
             $userListDTO->setDescription($request["description"]);
-        if($request["status"])
+        if(isset($request["status"]))
             $userListDTO->setStatus($request["status"]);
-        if($request["is_public"])
+        if(isset($request["is_public"]))
             $userListDTO->setIsPublic($request["is_public"]);
 
         return $userListDTO;
