@@ -3,9 +3,9 @@
 namespace App\Modules\Shared\Responses\General\UserLists;
 
 use App\Modules\Shared\Interfaces\Entities\IEntity;
-use App\Modules\Shared\Responses\Interface\IResponseType;
+use App\Modules\Shared\Responses\Interface\IEntityResponse;
 
-class UserListsEntityResponse implements IResponseType
+class UserListsEntityResponse implements IEntityResponse
 {
     /**
      * Takes a IEntity and add it response.

@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserList\Application\Manager;
 
-use App\Modules\Shared\Responses\Interface\IResponseType;
+use App\Modules\Shared\Responses\Interface\IEntityResponse;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
@@ -62,10 +62,10 @@ class UserListManager
      * Gets a user list for given id
      * 
      * @param int $listId
-     * @param IResponseType $responseType
+     * @param IEntityResponse $responseType
      * @return UserListAggregate||null
      */
-    public function show(int $listId, IResponseType $responseType): ?UserListAggregate
+    public function show(int $listId, IEntityResponse $responseType): ?UserListAggregate
     {
         $userList = $this->userListCrudService->show($listId);
 

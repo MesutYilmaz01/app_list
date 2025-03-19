@@ -5,7 +5,7 @@ namespace App\Modules\UserList\Domain\Policies;
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
-use App\Modules\Shared\Responses\Interface\IResponseType;
+use App\Modules\Shared\Responses\Interface\IEntityResponse;
 use Exception;
 use Illuminate\Auth\Access\Response;
 use Psr\Log\LoggerInterface;
@@ -29,7 +29,7 @@ class UserListPolicy
     public function isOwner(UserEntity $user, UserListEntity $listsItem, int $listId): Response
     {
         try {
-            $userList = $this->userListManager->show($listId, new IResponseType());
+            $userList = $this->userListManager->show($listId, new IEntityResponse());
             if ($userList->getUserListEntity()->user_id != $user->id) {
                 return Response::deny("Unauthenticated.", 403);
             }

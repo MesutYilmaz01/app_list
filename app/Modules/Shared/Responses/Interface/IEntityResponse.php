@@ -4,7 +4,7 @@ namespace App\Modules\Shared\Responses\Interface;
 
 use App\Modules\Shared\Interfaces\Entities\IEntity;
 
-interface IResponseType
+interface IEntityResponse
 {
     /**
      * Takes a IEntity and add it response.
