@@ -7,9 +7,9 @@ use App\Modules\UserList\Domain\Entities\UserListEntity;
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private array $userLitsItems;
+    private array $userListItems;
 
-    public function setUserListEntity(UserListEntity $userListEntity) 
+    public function setUserListEntity(UserListEntity $userListEntity)
     {
         $this->userListEntity = $userListEntity;
     }
@@ -19,13 +19,13 @@ class UserListAggregate
         return $this->userListEntity;
     }
 
-    public function setUserLitsItems(array $userLitsItems) 
+    public function setUserListItems(array $userListItems)
     {
-        $this->userLitsItems = $userLitsItems;
+        $this->userListItems = $userListItems;
     }
 
-    public function getUserLitsItems()
+    public function getUserListItems()
     {
-        return $this->userLitsItems;
+        return $this->userListItems;
     }
 }

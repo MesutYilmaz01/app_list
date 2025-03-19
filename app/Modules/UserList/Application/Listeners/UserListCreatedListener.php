@@ -24,7 +24,7 @@ class UserListCreatedListener
     {
         try {
             $userListItems = $this->userListItemManager->createMultiple($event->userListItems);
-            $this->userListAggregate->setUserLitsItems($userListItems);
+            $this->userListAggregate->setUserListItems($userListItems);
         } catch (Exception $e) {
             throw $e;
         }

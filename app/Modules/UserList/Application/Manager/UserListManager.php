@@ -6,6 +6,7 @@ use App\Modules\Shared\Responses\Interface\IResponseType;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
+use App\Modules\UserList\Domain\Response\BaseResponse;
 use App\Modules\UserList\Domain\Services\UserListCrudService;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
@@ -16,13 +17,15 @@ class UserListManager
     public function __construct(
         private UserListCrudService $userListCrudService,
         private UserListItemManager $userListItemManager,
-        private UserListAggregate $userListAggregate,
-        private LoggerInterface $logger
-    ) {}
+        private UserListAggregate   $userListAggregate,
+        private LoggerInterface     $logger
+    )
+    {
+    }
 
     /**
      * Gets all user lists for given id
-     * 
+     *
      * @param int $userId
      * @return array||null
      */
@@ -41,7 +44,7 @@ class UserListManager
 
     /**
      * Gets all lists according to given filter attributes.
-     * 
+     *
      * @param array $filterParams
      * @return array||null
      */
@@ -60,7 +63,7 @@ class UserListManager
 
     /**
      * Gets a user list for given id
-     * 
+     *
      * @param int $listId
      * @param IResponseType $responseType
      * @return UserListAggregate||null
@@ -82,10 +85,10 @@ class UserListManager
 
     /**
      * Creates a userlist according to given data
-     * 
+     *
      * @param UserListDTO $userListDTO
      * @return UserListEntity||null
-     * 
+     *
      * @throws Exception
      */
     public function create(UserListDTO $userListDTO): ?UserListEntity
@@ -104,7 +107,7 @@ class UserListManager
 
     /**
      * Updates a userlist according to given data
-     * 
+     *
      * @param int $listId
      * @param userListDTO $userListDTO
      * @return UserListEntity||null
@@ -124,10 +127,10 @@ class UserListManager
 
     /**
      * Deletes a user list according to given id
-     * 
+     *
      * @param int $listId
      * @return bool
-     * 
+     *
      * @throws Exception
      */
     public function delete(int $listId): bool
@@ -141,5 +144,19 @@ class UserListManager
 
         $this->logger->info("Userlist {$listId} is deleted.");
         return $isDeleted;
+    }
+
+    /**
+     * @param class-string<BaseResponse> $model
+     * @param $method
+     * @param array $parameters
+     * @return mixed
+     */
+    public function withResponseModel(string $model, $method, array $parameters)
+    {
+        call_user_func_array([$this, $method], $parameters);
+        /** @var BaseResponse $model */
+        $model = app($model);
+        return $model->fill()->getResponse();
     }
 }
