@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserList\Application\Manager;
 
+use App\Modules\Shared\Responses\Interface\IResponseType;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
@@ -61,9 +62,10 @@ class UserListManager
      * Gets a user list for given id
      * 
      * @param int $listId
+     * @param IResponseType $responseType
      * @return UserListAggregate||null
      */
-    public function show(int $listId): ?UserListAggregate
+    public function show(int $listId, IResponseType $responseType): ?UserListAggregate
     {
         $userList = $this->userListCrudService->show($listId);
 
@@ -73,6 +75,8 @@ class UserListManager
         }
 
         $this->logger->info("Userlist {$listId} is searched.");
+
+        $this->userListAggregate->setUserListEntity($responseType->fill($userList));
         return $this->userListAggregate;
     }
 
@@ -80,11 +84,11 @@ class UserListManager
      * Creates a userlist according to given data
      * 
      * @param UserListDTO $userListDTO
-     * @return UserListAggregate||null
+     * @return UserListEntity||null
      * 
      * @throws Exception
      */
-    public function create(UserListDTO $userListDTO): ?UserListAggregate
+    public function create(UserListDTO $userListDTO): ?UserListEntity
     {
         $userList = $this->userListCrudService->create($userListDTO);
 
@@ -94,7 +98,8 @@ class UserListManager
         }
 
         $this->logger->info("Userlist {$userList->id} is created.");
-        return $this->userListAggregate;
+
+        return $userList;
     }
 
     /**
@@ -108,7 +113,7 @@ class UserListManager
     {
         $userList = $this->userListCrudService->update($listId, $userListDTO);
 
-        if(!$userList) {
+        if (!$userList) {
             $this->logger->alert("Userlist {$listId} could not updated.");
             throw new Exception("Userlist could not updated.", 400);
         }

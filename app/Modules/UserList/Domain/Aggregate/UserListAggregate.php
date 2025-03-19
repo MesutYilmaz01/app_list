@@ -28,16 +28,4 @@ class UserListAggregate
     {
         return $this->userLitsItems;
     }
-
-        /**
-     * Return attributes as an array.
-     * 
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return [
-            "userList" => array_merge($this->getUserListEntity()->toArray(), ["items" => $this->getUserLitsItems()]),
-        ];
-    }
 }

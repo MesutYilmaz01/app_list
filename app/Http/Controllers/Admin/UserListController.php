@@ -8,6 +8,7 @@ use App\Http\Requests\Common\UserList\UserListDeleteRequest;
 use App\Http\Requests\Common\UserList\UserListGetAllForUserRequest;
 use App\Http\Requests\Common\UserList\UserListGetOneForUserRequest;
 use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
+use App\Modules\Shared\Responses\Admin\UserLists\UserListsEntityResponse;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
@@ -57,10 +58,10 @@ class UserListController extends Controller
     public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
         try {
-            $userListsAggregate = $this->userListManager->show($request->list_id);
+            $userListsAggregate = $this->userListManager->show($request->list_id, new UserListsEntityResponse());
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userListsAggregate->toArray(),
+                "result" => $userListsAggregate->getUserListEntity()->response,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());

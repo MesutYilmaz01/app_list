@@ -13,8 +13,7 @@ class UserListCrudService
 {
 
     public function __construct(
-        private IUserListRepository $userListRepo,
-        private UserListAggregate $userListAggregate
+        private IUserListRepository $userListRepo
     ) {}
 
     /**
@@ -60,15 +59,11 @@ class UserListCrudService
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
         ]);
-
+        
         if (!$userList) {
             return null;
         }
-        
-        $this->userListAggregate->setUserListEntity($userList);
-        $this->userListAggregate->setUserLitsItems($userList->userListsItems->toArray());
-        unset($userList["userListsItems"]);
-        return $this->userListAggregate->getUserListEntity();
+        return $userList;
     }
 
     /**
@@ -79,9 +74,7 @@ class UserListCrudService
      */
     public function create(UserListDTO $userListDTO): ?UserListEntity
     {
-        $userList = $this->userListRepo->create($userListDTO->toArray());
-        $this->userListAggregate->setUserListEntity($userList);
-        return $this->userListAggregate->getUserListEntity();
+        return $this->userListRepo->create($userListDTO->toArray());
     }
 
     /**
