@@ -5,7 +5,6 @@ namespace App\Http\Controllers\General;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\UserList\UserListGetAllForUserRequest;
 use App\Http\Requests\Common\UserList\UserListGetOneForUserRequest;
-use App\Modules\Shared\Responses\General\UserLists\UserListsEntityResponse;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\Response\UserListGeneralResponse;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
@@ -53,12 +52,10 @@ class UserListController extends Controller
     public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
         try {
-           $userListResponse = $this->userListManager
-               ->withResponseModel(UserListGeneralResponse::class, 'show', [$request->list_id]);
-            $userListsAggregate = $this->userListManager->show($request->list_id, new UserListsEntityResponse());
+            $userList = $this->userListManager->setResponseType(UserListGeneralResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userListsAggregate->getUserListEntity()->response,
+                "result" => $userList,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());

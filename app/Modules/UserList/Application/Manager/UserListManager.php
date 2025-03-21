@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserList\Application\Manager;
 
-use App\Modules\Shared\Responses\Interface\IResponseType;
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
-use App\Modules\UserList\Domain\Response\BaseResponse;
 use App\Modules\UserList\Domain\Services\UserListCrudService;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
@@ -19,9 +18,7 @@ class UserListManager
         private UserListItemManager $userListItemManager,
         private UserListAggregate   $userListAggregate,
         private LoggerInterface     $logger
-    )
-    {
-    }
+    ) {}
 
     /**
      * Gets all user lists for given id
@@ -65,10 +62,11 @@ class UserListManager
      * Gets a user list for given id
      *
      * @param int $listId
-     * @param IResponseType $responseType
-     * @return UserListAggregate||null
+     * @return array
+     * 
+     * @throws Exception
      */
-    public function show(int $listId, IResponseType $responseType): ?UserListAggregate
+    public function show(int $listId): array
     {
         $userList = $this->userListCrudService->show($listId);
 
@@ -79,8 +77,9 @@ class UserListManager
 
         $this->logger->info("Userlist {$listId} is searched.");
 
-        $this->userListAggregate->setUserListEntity($responseType->fill($userList));
-        return $this->userListAggregate;
+        $this->userListAggregate->setUserListEntity($userList);
+
+        return $this->userListAggregate->getResponseType()->fill();
     }
 
     /**
@@ -147,16 +146,14 @@ class UserListManager
     }
 
     /**
-     * @param class-string<BaseResponse> $model
-     * @param $method
-     * @param array $parameters
-     * @return mixed
+     * Sets response type of user list aggregate
+     * 
+     * @param class-string<IBaseResponse> $responseTypeName
+     * @return UserListManager
      */
-    public function withResponseModel(string $model, $method, array $parameters)
+    public function setResponseType(string $responseTypeName): UserListManager
     {
-        call_user_func_array([$this, $method], $parameters);
-        /** @var BaseResponse $model */
-        $model = app($model);
-        return $model->fill()->getResponse();
+        $this->userListAggregate->setResponseType(app($responseTypeName));
+        return $this;
     }
 }

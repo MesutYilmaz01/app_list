@@ -10,12 +10,12 @@ use App\Http\Requests\User\UserList\UserListCreateRequest;
 use App\Http\Requests\User\UserList\UserListUpdateRequest;
 use App\Modules\Shared\Events\UserList\UserListCreatedEvent;
 use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
-use App\Modules\Shared\Responses\User\UserLists\UserListsEntityResponse;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
+use App\Modules\UserList\Domain\Response\UserListUserResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -64,10 +64,10 @@ class UserListController extends Controller
         Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
 
         try {
-            $userListsAggregate = $this->userListManager->show($request->list_id, new UserListsEntityResponse());
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userListsAggregate->getUserListEntity()->response,
+                "result" => $userList,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -94,11 +94,11 @@ class UserListController extends Controller
 
             DB::commit();
 
-            $userListsAggregate = $this->userListManager->show($userList->id, new UserListsEntityResponse());
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($userList->id);
 
             return response()->json([
                 "message" => "List added with it's item successfully.",
-                "result" => $userListsAggregate->getUserListEntity()->response,
+                "result" => $userList
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();

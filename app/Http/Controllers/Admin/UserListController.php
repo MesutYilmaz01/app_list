@@ -8,14 +8,12 @@ use App\Http\Requests\Common\UserList\UserListDeleteRequest;
 use App\Http\Requests\Common\UserList\UserListGetAllForUserRequest;
 use App\Http\Requests\Common\UserList\UserListGetOneForUserRequest;
 use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
-use App\Modules\Shared\Responses\Admin\UserLists\UserListsEntityResponse;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
-use App\Modules\UserList\Domain\Entities\UserListEntity;
+use App\Modules\UserList\Domain\Response\UserListAdminResponse;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 
 class UserListController extends Controller
 {
@@ -58,16 +56,16 @@ class UserListController extends Controller
     public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
         try {
-            $userListsAggregate = $this->userListManager->show($request->list_id, new UserListsEntityResponse());
+            $userList = $this->userListManager->setResponseType(UserListAdminResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userListsAggregate->getUserListEntity()->response,
+                "result" => $userList,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
         }
     }
-    
+
     /**
      * Updates a user list according to given id
      * 
@@ -78,8 +76,6 @@ class UserListController extends Controller
      */
     public function update(UserListUpdateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-        
         try {
             $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
             $userList = $this->userListManager->update($request->list_id, $userListDTO);
@@ -102,8 +98,6 @@ class UserListController extends Controller
      */
     public function delete(UserListDeleteRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-        
         try {
             $this->userListManager->delete($request->list_id);
             UserListDeletedEvent::dispatch($request->list_id);

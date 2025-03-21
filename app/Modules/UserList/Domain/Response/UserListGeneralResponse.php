@@ -2,51 +2,40 @@
 
 namespace App\Modules\UserList\Domain\Response;
 
-use App\Modules\Shared\Interfaces\Entities\IEntity;
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 
-class UserListGeneralResponse extends BaseResponse
+class UserListGeneralResponse implements IBaseResponse
 {
-    public function __construct(private readonly UserListAggregate $aggregate)
-    {
-    }
-
-    private array $fill = [];
+    public function __construct(
+        private UserListAggregate $userListAggregate
+    ) {}
 
     /**
-     * Takes a IEntity and add it response.
+     * Fills userListAggregate according to this response type.
      *
-     * @param IEntity $entity
-     * @return IEntity
+     * @return array
      */
-    public function fill(): self
+    public function fill(): array
     {
         $response = [
-            "header" => $this->aggregate->getUserListItems()->header,
-            "description" => $this->aggregate->getUserListItems()->description,
-            "created_at" => $this->aggregate->getUserListItems()->created_at->toDateTimeString(),
+            "header" => $this->userListAggregate->getUserListEntity()->header,
+            "description" => $this->userListAggregate->getUserListEntity()->description,
+            "created_at" => $this->userListAggregate->getUserListEntity()->created_at->toDateTimeString(),
             "category" => [
-                "id" => $this->aggregate->getUserListItems()->category->id,
-                "name" => $this->aggregate->getUserListItems()->category->name,
+                "id" => $this->userListAggregate->getUserListEntity()->category->id,
+                "name" => $this->userListAggregate->getUserListEntity()->category->name,
             ],
             "items" => []
         ];
 
-        foreach ($this->aggregate->getUserListItems()->userListsItems as $userLitsItem) {
+        foreach ($this->userListAggregate->getUserListEntity()->userListsItems as $userListItem) {
             array_push($response["items"], [
-                "header" => $userLitsItem->header,
-                "description" => $userLitsItem->description,
+                "header" => $userListItem->header,
+                "description" => $userListItem->description,
             ]);
         }
 
-        $this->fill = $response;
-        return $this;
+        return $response;
     }
-
-    function getResponse(): array
-    {
-        return $this->fill;
-    }
-
-
 }

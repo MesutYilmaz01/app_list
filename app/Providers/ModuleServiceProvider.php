@@ -60,5 +60,9 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
+        app(UserListAggregate::class)->setCategory(function($categoryId){
+            $categoryRepo = app(ICategoryRepository::class);
+            return $categoryRepo->getById($categoryId);
+        });
     }
 }
