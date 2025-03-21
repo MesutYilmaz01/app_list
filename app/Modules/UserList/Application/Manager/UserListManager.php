@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserList\Application\Manager;
 
+use App\Modules\Shared\Responses\Interface\IArrayResponse;
 use App\Modules\Shared\Responses\Interface\IEntityResponse;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
@@ -24,9 +25,10 @@ class UserListManager
      * Gets all user lists for given id
      * 
      * @param int $userId
+     * @param IArrayResponse $arrayReseponse
      * @return array||null
      */
-    public function getAllForUser(int $userId): ?array
+    public function getAllForUser(int $userId, IArrayResponse $arrayReseponse): ?array
     {
         $userLists = $this->userListCrudService->getAllForUser($userId);
 
@@ -36,7 +38,7 @@ class UserListManager
         }
 
         $this->logger->info("Userlist is searched for {$userId} user.");
-        return $userLists;
+        return $arrayReseponse->fill($userLists);
     }
 
     /**
