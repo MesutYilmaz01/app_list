@@ -36,9 +36,7 @@ class UserListController extends Controller
             $userLists = $this->userListManager->getAllForUser($request->user_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => [
-                    "user_lists" => $userLists
-                ],
+                "result" => $userLists,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -78,10 +76,10 @@ class UserListController extends Controller
     {
         try {
             $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
-            $userList = $this->userListManager->update($request->list_id, $userListDTO);
+            $userList = $this->userListManager->setResponseType(UserListAdminResponse::class)->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",
-                "result" => ["user_list" => $userList]
+                "result" => $userList
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

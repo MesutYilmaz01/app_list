@@ -121,10 +121,10 @@ class UserListController extends Controller
 
         try {
             $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
-            $userList = $this->userListManager->update($request->list_id, $userListDTO);
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",
-                "result" => ["user_list" => $userList]
+                "result" => $userList
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
