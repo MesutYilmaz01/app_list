@@ -33,12 +33,12 @@ class UserListUserResponse implements IBaseResponse
             "items" => []
         ];
 
-        foreach ($this->userListAggregate->getUserListEntity()->userListsItems as $userListItem) {
+        foreach ($this->userListAggregate->getUserListItems() as $userListItem) {
             array_push($response["items"], [
-                "id" => $userListItem->id,
-                "header" => $userListItem->header,
-                "description" => $userListItem->description,
-                "status" => $userListItem->status,
+                "id" => $userListItem["id"],
+                "header" => $userListItem["header"],
+                "description" => $userListItem["description"],
+                "status" => $userListItem["status"]
             ]);
         }
 

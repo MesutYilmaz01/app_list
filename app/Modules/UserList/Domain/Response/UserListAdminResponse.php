@@ -35,15 +35,15 @@ class UserListAdminResponse implements IBaseResponse
             "items" => []
         ];
 
-        foreach ($this->userListAggregate->getUserListEntity()->userListsItems as $userListItem) {
+        foreach ($this->userListAggregate->getUserListItems() as $userListItem) {
             array_push($response["items"], [
-                "id" => $userListItem->id,
-                "header" => $userListItem->header,
-                "description" => $userListItem->description,
-                "status" => $userListItem->status,
-                "created_at" => $userListItem->created_at->toDateTimeString(),
-                "updated_at" => $userListItem->updated_at->toDateTimeString(),
-                "deleted_at" => $this->userListAggregate->getUserListEntity()->deleted_at ? $userListItem->deleted_at->toDateTimeString() : null,
+                "id" => $userListItem["id"],
+                "header" => $userListItem["header"],
+                "description" => $userListItem["description"],
+                "status" => $userListItem["status"],
+                "created_at" => $userListItem["created_at"],
+                "updated_at" => $userListItem["updated_at"],
+                "deleted_at" => isset($userListItem["deleted_at"]) ? $userListItem["deleted_at"] : null,
             ]);
         }
 

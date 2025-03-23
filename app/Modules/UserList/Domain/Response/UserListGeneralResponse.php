@@ -29,10 +29,10 @@ class UserListGeneralResponse implements IBaseResponse
             "items" => []
         ];
 
-        foreach ($this->userListAggregate->getUserListEntity()->userListsItems as $userListItem) {
+        foreach ($this->userListAggregate->getUserListItems() as $userListItem) {
             array_push($response["items"], [
-                "header" => $userListItem->header,
-                "description" => $userListItem->description,
+                "header" => $userListItem["header"],
+                "description" => $userListItem["description"]
             ]);
         }
 
