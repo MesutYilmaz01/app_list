@@ -17,6 +17,7 @@ use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use App\Modules\UserList\Domain\Policies\UserListPolicy;;
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
+use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
 use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
 use App\Modules\UserListItem\Domain\IRepository\IUserListItemRepository;
 use App\Modules\UserListItem\Domain\Policies\UserListsItemPolicy;
@@ -48,6 +49,7 @@ class ModuleServiceProvider extends ServiceProvider
 
         //Bindings
         $this->app->singleton(UserListAggregate::class);
+        $this->app->singleton(UserListItemAggregate::class);
         $this->app->bind(LoggerInterface::class, function() {
             return Log::getLogger();
         });

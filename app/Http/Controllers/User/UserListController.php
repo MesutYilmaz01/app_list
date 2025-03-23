@@ -61,8 +61,6 @@ class UserListController extends Controller
      */
     public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-
         try {
             $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($request->list_id);
             return response()->json([

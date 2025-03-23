@@ -4,9 +4,8 @@ namespace App\Modules\UserList\Domain\Policies;
 
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Application\Manager\UserListManager;
-use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
-use App\Modules\UserList\Domain\Response\UserListUserResponse;
+use App\Modules\UserList\Domain\Response\UserListAdminResponse;
 use Exception;
 use Illuminate\Auth\Access\Response;
 use Psr\Log\LoggerInterface;
@@ -22,17 +21,16 @@ class UserListPolicy
      * Determine if the given user list can be updated by the user.
      * 
      * @param UserEntity $user
-     * @param int $listItemId
+     * @param int $listId
      * @return bool
      * 
      * @throws Exception
      */
-    public function isOwner(UserEntity $user, UserListEntity $listsItem, int $listId): Response
+    public function isOwner(UserEntity $user, UserListEntity $lists, int $listId): Response
     {
         try {
-            $this->userListManager->setResponseType(UserListUserResponse::class)->show($listId);
-            $userListAggregate = app(UserListAggregate::class);
-            if ($userListAggregate->getUserListEntity()->user_id != $user->id) {
+            $userList = $this->userListManager->setResponseType(UserListAdminResponse::class)->show($listId);
+            if ($userList["user_id"] != $user->id) {
                 return Response::deny("Unauthenticated.", 403);
             }
 

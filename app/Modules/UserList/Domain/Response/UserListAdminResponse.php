@@ -20,6 +20,7 @@ class UserListAdminResponse implements IBaseResponse
     {
         $response = [
             "id" => $this->userListAggregate->getUserListEntity()->id,
+            "user_id" => $this->userListAggregate->getUserListEntity()->user_id,
             "header" => $this->userListAggregate->getUserListEntity()->header,
             "description" => $this->userListAggregate->getUserListEntity()->description,
             "status" => $this->userListAggregate->getUserListEntity()->status,

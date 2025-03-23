@@ -23,6 +23,7 @@ Route::group([
     'controller' => UserListsItemController::class
 ], function ($router) {
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/show/{list_item_id}', 'show');
         Route::post('/', 'create');
         Route::put('/{list_item_id}', 'update');
         Route::delete('/{list_item_id}', 'delete');

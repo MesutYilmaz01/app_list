@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         'prefix' => 'list-items',
         'controller' => UserListsItemController::class
     ], function ($router) {
-        Route::post('/', 'create');
+        Route::get('/show/{list_item_id}', 'show');
         Route::put('/{list_item_id}', 'update');
         Route::delete('/{list_item_id}', 'delete');
     });
