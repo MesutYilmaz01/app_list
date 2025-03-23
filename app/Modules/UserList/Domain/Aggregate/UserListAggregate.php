@@ -11,7 +11,7 @@ use Closure;
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private array $userListItems;
+    private array|Closure|null $userListItems;
     private ?UserEntity $userEntity = null;
     private IBaseResponse $responseType;
     private CategoryEntity|Closure|null $category = null;
@@ -26,13 +26,17 @@ class UserListAggregate
         return $this->userListEntity;
     }
 
-    public function setUserListItems(array $userListItems)
+    public function setUserListItems(array|Closure $userListItems)
     {
         $this->userListItems = $userListItems;
     }
 
     public function getUserListItems()
     {
+        if (is_callable($this->userListItems)) {
+            $callable = $this->userListItems;
+            $this->userListItems = $callable($this->getUserListEntity()->id);
+        }
         return $this->userListItems;
     }
 

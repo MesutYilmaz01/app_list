@@ -15,6 +15,7 @@ use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use App\Modules\UserList\Domain\Policies\UserListPolicy;;
+
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
@@ -50,7 +51,7 @@ class ModuleServiceProvider extends ServiceProvider
         //Bindings
         $this->app->singleton(UserListAggregate::class);
         $this->app->singleton(UserListItemAggregate::class);
-        $this->app->bind(LoggerInterface::class, function() {
+        $this->app->bind(LoggerInterface::class, function () {
             return Log::getLogger();
         });
         $this->app->bind(IBaseEloquentRepository::class, BaseEloquentRepository::class);
@@ -62,9 +63,21 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
-        app(UserListAggregate::class)->setCategory(function($categoryId){
+
+        $this->registerAggregates();
+    }
+
+    private function registerAggregates()
+    {
+        app(UserListAggregate::class)->setCategory(function ($categoryId) {
             $categoryRepo = app(ICategoryRepository::class);
             return $categoryRepo->getById($categoryId);
+        });
+        app(UserListAggregate::class)->setUserListItems(function ($userListId) {
+            $userListItemsRepo = app(IUserListItemRepository::class);
+            return $userListItemsRepo->getAllByAttributes([
+                "user_list_id" => $userListId
+            ])->toArray();
         });
     }
 }

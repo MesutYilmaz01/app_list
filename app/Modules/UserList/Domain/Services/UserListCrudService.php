@@ -2,7 +2,6 @@
 
 namespace App\Modules\UserList\Domain\Services;
 
-use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\Enums\ShareType;
@@ -54,7 +53,7 @@ class UserListCrudService
      */
     public function show(int $listId): ?UserListEntity
     {
-        $userList = $this->userListRepo->with(['userListsItems', 'category'])->findByAttributes([
+        $userList = $this->userListRepo->findByAttributes([
             'id' => $listId,
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
@@ -63,6 +62,7 @@ class UserListCrudService
         if (!$userList) {
             return null;
         }
+        
         return $userList;
     }
 
