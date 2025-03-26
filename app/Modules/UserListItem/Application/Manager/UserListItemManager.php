@@ -86,11 +86,11 @@ class UserListItemManager
      * Creates a user list according to given data
      * 
      * @param UserListItemDTO $userListItemDTO
-     * @return UserListsItemEntity||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function create(UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    public function create(UserListItemDTO $userListItemDTO): array
     {
         $userListItem = $this->userListItemCrudService->create($userListItemDTO);
 
@@ -100,7 +100,10 @@ class UserListItemManager
         }
 
         $this->logger->info("User list item {$userListItem->id} is created.");
-        return $userListItem;
+
+        $this->userListItemAggregate->setUserListItemEntity($userListItem);
+
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**
@@ -108,11 +111,11 @@ class UserListItemManager
      * 
      * @param int $listItemId
      * @param UserListItemDTO $userListItemDTO
-     * @return UserListsItemEntity||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function update(int $listItemId, UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    public function update(int $listItemId, UserListItemDTO $userListItemDTO): array
     {
         $userListItem = $this->userListItemCrudService->update($listItemId, $userListItemDTO);
 
@@ -122,7 +125,10 @@ class UserListItemManager
         }
 
         $this->logger->info("User list item {$userListItem->id} is updated.");
-        return $userListItem;
+
+        $this->userListItemAggregate->setUserListItemEntity($userListItem);
+
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**

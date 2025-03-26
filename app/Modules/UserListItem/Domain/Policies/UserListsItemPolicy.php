@@ -29,12 +29,12 @@ class UserListsItemPolicy
      * 
      * @throws Exception
      */
-    public function isOwner(UserEntity $user, UserListsItemEntity $listsItem, int $listItemId): Response
+    public function isOwnerListItem(UserEntity $user, UserListsItemEntity $listsItem, int $listItemId): Response
     {
         try {
-            $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->getById($listItemId);
+            $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->show($listItemId);
             $userList =  $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListItem["user_list_id"]);
-            
+
             if ($userList["user_id"] != $user->id) {
                 return Response::deny("Unauthenticated.", 403);
             }
@@ -42,6 +42,31 @@ class UserListsItemPolicy
             return Response::allow();
         } catch (Exception $e) {
             $this->logger->alert("Authentication policy problem for {$listItemId} user list item -> Message : " . $e->getMessage());
+            return Response::deny($e->getMessage(), 403);
+        }
+    }
+
+    /**
+     * Determine if the given user list item can be updated by the user.
+     * 
+     * @param UserEntity $user
+     * @param int $listItemId
+     * @return bool
+     * 
+     * @throws Exception
+     */
+    public function isOwnerUserList(UserEntity $user, UserListsItemEntity $listsItem, int $userListId): Response
+    {
+        try {
+            $userList =  $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListId);
+
+            if ($userList["user_id"] != $user->id) {
+                return Response::deny("Unauthenticated.", 403);
+            }
+
+            return Response::allow();
+        } catch (Exception $e) {
+            $this->logger->alert("Authentication policy problem for {$userListId} user list -> Message : " . $e->getMessage());
             return Response::deny($e->getMessage(), 403);
         }
     }

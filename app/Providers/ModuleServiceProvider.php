@@ -8,6 +8,7 @@ use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
 use App\Modules\Shared\Repository\BaseEloquentRepository;
 use App\Modules\Shared\Repository\IBaseEloquentRepository;
 use App\Modules\User\Application\Manager\AuthManager;
+use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\User\Domain\IRepository\IUserRepository;
 use App\Modules\User\Infrastructure\Repository\UserRepository;
 use App\Modules\UserList\Application\Manager\UserListManager;
@@ -69,6 +70,20 @@ class ModuleServiceProvider extends ServiceProvider
 
     private function registerAggregates()
     {
+        app(UserListAggregate::class)->setUserEntity(function () {
+            if (is_null(auth()->user())) {
+                $userEntity = new UserEntity();
+                $userEntity->fill([
+                    "name" => "Jhon",
+                    "surname" => "Doe",
+                    "username" => "JhonDoe",
+                    "email" => "jhon@doe"
+                ]);
+                return $userEntity;
+            } else {
+                return auth()->user();
+            }
+        });
         app(UserListAggregate::class)->setCategory(function ($categoryId) {
             $categoryRepo = app(ICategoryRepository::class);
             return $categoryRepo->getById($categoryId);

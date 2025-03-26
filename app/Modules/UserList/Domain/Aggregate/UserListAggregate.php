@@ -12,7 +12,7 @@ class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
     private array|Closure|null $userListItems;
-    private ?UserEntity $userEntity = null;
+    private Closure|null $userEntity = null;
     private IBaseResponse $responseType;
     private CategoryEntity|Closure|null $category = null;
 
@@ -40,14 +40,15 @@ class UserListAggregate
         return $this->userListItems;
     }
 
-    public function setUserEntity(UserEntity $userEntity)
+    public function setUserEntity(UserEntity|Closure $userEntity)
     {
         $this->userEntity = $userEntity;
     }
 
     public function getUserEntity()
     {
-        return $this->userEntity;
+        $callable = $this->userEntity;
+        return $callable();
     }
 
     public function setResponseType(IBaseResponse $responseType)
