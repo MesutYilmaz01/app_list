@@ -29,8 +29,8 @@ class UserListAdminResponse implements IBaseResponse
             "updated_at" => $this->userListAggregate->getUserListEntity()->updated_at->toDateTimeString(),
             "deleted_at" => $this->userListAggregate->getUserListEntity()->deleted_at ? $this->userListAggregate->getUserListEntity()->deleted_at->toDateTimeString() : null,
             "category" => [
-                "id" => $this->userListAggregate->getUserListEntity()->category->id,
-                "name" => $this->userListAggregate->getUserListEntity()->category->name,
+                "id" => $this->userListAggregate->getCategory()["id"],
+                "name" => $this->userListAggregate->getCategory()["name"],
             ],
             "items" => []
         ];

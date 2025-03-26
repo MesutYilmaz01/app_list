@@ -11,10 +11,8 @@ use Closure;
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private array|Closure|null $userListItems;
     private Closure|null $userEntity = null;
     private IBaseResponse $responseType;
-    private CategoryEntity|Closure|null $category = null;
 
     public function setUserListEntity(UserListEntity $userListEntity)
     {
@@ -26,18 +24,9 @@ class UserListAggregate
         return $this->userListEntity;
     }
 
-    public function setUserListItems(array|Closure $userListItems)
-    {
-        $this->userListItems = $userListItems;
-    }
-
     public function getUserListItems()
     {
-        if (is_callable($this->userListItems)) {
-            $callable = $this->userListItems;
-            $this->userListItems = $callable($this->getUserListEntity()->id);
-        }
-        return $this->userListItems;
+        return $this->userListEntity->userListsItems->toArray();
     }
 
     public function setUserEntity(UserEntity|Closure $userEntity)
@@ -61,18 +50,8 @@ class UserListAggregate
         return $this->responseType;
     }
 
-    public function setCategory(CategoryEntity|Closure $category)
-    {
-        $this->category = $category;
-    }
-
     public function getCategory()
     {
-        if (is_callable($this->category)) {
-            $callable = $this->category;
-            $this->category = $callable($this->getUserListEntity()->category_id);
-        }
-
-        return $this->category;
+        return $this->userListEntity->category->toArray();
     }
 }

@@ -26,8 +26,8 @@ class UserListUserResponse implements IBaseResponse
             "is_public" => $this->userListAggregate->getUserListEntity()->is_public,
             "created_at" => $this->userListAggregate->getUserListEntity()->created_at->toDateTimeString(),
             "category" => [
-                "id" => $this->userListAggregate->getUserListEntity()->category->id,
-                "name" => $this->userListAggregate->getUserListEntity()->category->name,
+                "id" => $this->userListAggregate->getCategory()["id"],
+                "name" => $this->userListAggregate->getCategory()["name"],
             ],
             "editable" => $this->userListAggregate->getUserListEntity()->user_id == $this->userListAggregate->getUserEntity()?->id,
             "items" => []

@@ -84,15 +84,5 @@ class ModuleServiceProvider extends ServiceProvider
                 return auth()->user();
             }
         });
-        app(UserListAggregate::class)->setCategory(function ($categoryId) {
-            $categoryRepo = app(ICategoryRepository::class);
-            return $categoryRepo->getById($categoryId);
-        });
-        app(UserListAggregate::class)->setUserListItems(function ($userListId) {
-            $userListItemsRepo = app(IUserListItemRepository::class);
-            return $userListItemsRepo->getAllByAttributes([
-                "user_list_id" => $userListId
-            ])->toArray();
-        });
     }
 }
