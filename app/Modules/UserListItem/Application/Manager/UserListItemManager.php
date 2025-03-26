@@ -5,7 +5,6 @@ namespace App\Modules\UserListItem\Application\Manager;
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
-use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
 use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
