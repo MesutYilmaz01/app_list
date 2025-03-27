@@ -2,14 +2,18 @@
 
 namespace App\Modules\UserList\Domain\Aggregate;
 
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
+use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
+use Closure;
 
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private array $userLitsItems;
+    private ?Closure $userEntity = null;
+    private IBaseResponse $responseType;
 
-    public function setUserListEntity(UserListEntity $userListEntity) 
+    public function setUserListEntity(UserListEntity $userListEntity)
     {
         $this->userListEntity = $userListEntity;
     }
@@ -19,25 +23,39 @@ class UserListAggregate
         return $this->userListEntity;
     }
 
-    public function setUserLitsItems(array $userLitsItems) 
+    public function getUserListItems()
     {
-        $this->userLitsItems = $userLitsItems;
+        return $this->userListEntity->userListsItems->toArray();
     }
 
-    public function getUserLitsItems()
+    public function setUserEntity(Closure $userEntity)
     {
-        return $this->userLitsItems;
+        $this->userEntity = $userEntity;
     }
 
-        /**
-     * Return attributes as an array.
-     * 
-     * @return array
-     */
-    public function toArray(): array
+    public function getUserEntity(int $userId = 0)
     {
-        return [
-            "userList" => array_merge($this->getUserListEntity()->toArray(), ["items" => $this->getUserLitsItems()]),
-        ];
+        $callable = $this->userEntity;
+        return $callable($userId);
+    }
+
+    public function setResponseType(IBaseResponse $responseType)
+    {
+        $this->responseType = $responseType;
+    }
+
+    public function getResponseType()
+    {
+        return $this->responseType;
+    }
+
+    public function getCategory()
+    {
+        return $this->userListEntity->category->toArray();
+    }
+
+    public function getOwner()
+    {
+        return $this->userListEntity->user->toArray();
     }
 }

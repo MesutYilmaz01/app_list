@@ -2,7 +2,6 @@
 
 namespace App\Modules\UserList\Domain\Services;
 
-use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\Enums\ShareType;
@@ -13,8 +12,7 @@ class UserListCrudService
 {
 
     public function __construct(
-        private IUserListRepository $userListRepo,
-        private UserListAggregate $userListAggregate
+        private IUserListRepository $userListRepo
     ) {}
 
     /**
@@ -55,20 +53,17 @@ class UserListCrudService
      */
     public function show(int $listId): ?UserListEntity
     {
-        $userList = $this->userListRepo->with(['userListsItems', 'category'])->findByAttributes([
+        $userList = $this->userListRepo->findByAttributes([
             'id' => $listId,
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
         ]);
-
+        
         if (!$userList) {
             return null;
         }
         
-        $this->userListAggregate->setUserListEntity($userList);
-        $this->userListAggregate->setUserLitsItems($userList->userListsItems->toArray());
-        unset($userList["userListsItems"]);
-        return $this->userListAggregate->getUserListEntity();
+        return $userList;
     }
 
     /**
@@ -79,9 +74,7 @@ class UserListCrudService
      */
     public function create(UserListDTO $userListDTO): ?UserListEntity
     {
-        $userList = $this->userListRepo->create($userListDTO->toArray());
-        $this->userListAggregate->setUserListEntity($userList);
-        return $this->userListAggregate->getUserListEntity();
+        return $this->userListRepo->create($userListDTO->toArray());
     }
 
     /**

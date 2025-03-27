@@ -4,11 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\UserListsItem\UserListsItemDeleteRequest;
+use App\Http\Requests\Common\UserListsItem\UserListsItemShowRequest;
 use App\Http\Requests\User\UserListsItem\UserListsItemCreateRequest;
 use App\Http\Requests\User\UserListsItem\UserListsItemUpdateRequest;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
+use App\Modules\UserListItem\Domain\Response\UserListItemUserResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +23,29 @@ class UserListsItemController extends Controller
     ) {}
 
     /**
+     * Gets a list item according to given id
+     *
+     * @param UserListsItemShowRequest $request
+     * @return JsonRespone
+     *
+     * @throws Exception
+     */
+    public function show(UserListsItemShowRequest $request): JsonResponse
+    {
+        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
+
+        try {
+            $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->show($request->list_item_id);
+            return response()->json([
+                "message" => "List item got successfully.",
+                "result" => $userListItem,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
+        }
+    }
+
+    /**
      * Creates a list with sub items according to given data
      * 
      * @param UserListsItemCreateRequest $request
@@ -30,19 +55,19 @@ class UserListsItemController extends Controller
      */
     public function create(UserListsItemCreateRequest $request): JsonResponse
     {
+        Gate::authorize('isOwnerUserList', [new UserListsItemEntity(), $request->user_list_id]);
+
         try {
             DB::beginTransaction();
 
             $userListItemDTO = UserListItemDTO::fromRequest($request->validated());
-            $userListItem = $this->userListItemManager->create($userListItemDTO);
+            $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->create($userListItemDTO);
 
             DB::commit();
 
             return response()->json([
                 "message" => "List item added successfully.",
-                "result" => [
-                    "list_item" => $userListItem->toArray(),
-                ],
+                "result" => $userListItem,
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -50,7 +75,7 @@ class UserListsItemController extends Controller
         }
     }
 
-    
+
     /**
      * Updates a user list according to given id
      * 
@@ -61,14 +86,14 @@ class UserListsItemController extends Controller
      */
     public function update(UserListsItemUpdateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserListsItemEntity(), $request->list_item_id]);
+        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
 
         try {
-            $userListDTO = UserListItemDTO::fromUpdateRequest($request->validated());
-            $userListItem = $this->userListItemManager->update($request->list_item_id, $userListDTO);
+            $userListItemDTO = UserListItemDTO::fromUpdateRequest($request->validated());
+            $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->update($request->list_item_id, $userListItemDTO);
             return response()->json([
                 "message" => "User list item updated successfully.",
-                "result" => ["list_item" => $userListItem]
+                "result" => $userListItem,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -85,7 +110,7 @@ class UserListsItemController extends Controller
      */
     public function delete(UserListsItemDeleteRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserListsItemEntity(), $request->list_item_id]);
+        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
 
         try {
             $this->userListItemManager->delete($request->list_item_id);

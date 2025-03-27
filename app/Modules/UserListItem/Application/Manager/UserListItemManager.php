@@ -2,8 +2,9 @@
 
 namespace App\Modules\UserListItem\Application\Manager;
 
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
+use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
-use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
 use App\Modules\UserListItem\Domain\Services\UserListItemCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -12,6 +13,7 @@ class UserListItemManager
 {
     public function __construct(
         private UserListItemCrudService $userListItemCrudService,
+        private UserListItemAggregate $userListItemAggregate,
         private LoggerInterface $logger
     ) {}
 
@@ -19,19 +21,24 @@ class UserListItemManager
      * Gets list item given id
      * 
      * @param int $listId
-     * @return UserListsItemEntity||null
+     * @return array
+     * 
+     * @throws Exception
      */
-    public function getById(int $listId): ?UserListsItemEntity
+    public function show(int $listId): array
     {
         $userListsItem = $this->userListItemCrudService->getById($listId);
-        
+
         if (!$userListsItem) {
             $this->logger->alert("List item could not find for {$listId}");
             throw new Exception("List item could not find.", 400);
         }
 
         $this->logger->info("List item searched for {$listId}");
-        return $userListsItem;
+
+        $this->userListItemAggregate->setUserListItemEntity($userListsItem);
+
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**
@@ -43,7 +50,7 @@ class UserListItemManager
     public function getAllForGivenList(int $listId): ?array
     {
         $userListsItems = $this->userListItemCrudService->getAllForLists($listId);
-        
+
         if (!$userListsItems) {
             $this->logger->alert("Userlist sub lists could not find for {$listId} user.");
             throw new Exception("Userlists sub lists could not find.", 400);
@@ -78,11 +85,11 @@ class UserListItemManager
      * Creates a user list according to given data
      * 
      * @param UserListItemDTO $userListItemDTO
-     * @return UserListsItemEntity||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function create(UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    public function create(UserListItemDTO $userListItemDTO): array
     {
         $userListItem = $this->userListItemCrudService->create($userListItemDTO);
 
@@ -92,7 +99,10 @@ class UserListItemManager
         }
 
         $this->logger->info("User list item {$userListItem->id} is created.");
-        return $userListItem;
+
+        $this->userListItemAggregate->setUserListItemEntity($userListItem);
+
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**
@@ -100,19 +110,24 @@ class UserListItemManager
      * 
      * @param int $listItemId
      * @param UserListItemDTO $userListItemDTO
-     * @return UserListsItemEntity||null
+     * @return array
+     * 
+     * @throws Exception
      */
-    public function update(int $listItemId, UserListItemDTO $userListItemDTO): ?UserListsItemEntity
+    public function update(int $listItemId, UserListItemDTO $userListItemDTO): array
     {
         $userListItem = $this->userListItemCrudService->update($listItemId, $userListItemDTO);
 
-        if(!$userListItem) {
+        if (!$userListItem) {
             $this->logger->alert("User list item {$listItemId} could not updated.");
             throw new Exception("User list item could not updated.", 400);
         }
 
         $this->logger->info("User list item {$userListItem->id} is updated.");
-        return $userListItem;
+
+        $this->userListItemAggregate->setUserListItemEntity($userListItem);
+
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**
@@ -147,7 +162,7 @@ class UserListItemManager
     public function deleteMany(int $userListItemId): bool
     {
         $isDeleted = $this->userListItemCrudService->deleteMany($userListItemId);
-        
+
         if (!$isDeleted) {
             $this->logger->alert("User list items for {$userListItemId} could not deleted.");
             throw new Exception("User list items could not deleted.", 400);
@@ -155,5 +170,17 @@ class UserListItemManager
 
         $this->logger->info("User list items for  {$userListItemId} is deleted.");
         return $isDeleted;
+    }
+
+    /**
+     * Sets response type of user list aggregate
+     * 
+     * @param class-string<IBaseResponse> $responseTypeName
+     * @return UserListManager
+     */
+    public function setResponseType(string $responseTypeName): UserListItemManager
+    {
+        $this->userListItemAggregate->setResponseType(app($responseTypeName));
+        return $this;
     }
 }

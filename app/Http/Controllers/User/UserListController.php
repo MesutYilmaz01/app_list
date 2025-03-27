@@ -15,6 +15,7 @@ use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
+use App\Modules\UserList\Domain\Response\UserListUserResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -61,10 +62,10 @@ class UserListController extends Controller
     public function show(UserListGetOneForUserRequest $request): JsonResponse
     {
         try {
-            $userListsAggregate = $this->userListManager->show($request->list_id);
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userListsAggregate->toArray(),
+                "result" => $userList,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -85,17 +86,17 @@ class UserListController extends Controller
             DB::beginTransaction();
 
             $userListDTO = UserListDTO::fromCreateRequest($request->validated());
-            $userListsAggregate = $this->userListManager->create($userListDTO);
-            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request->validated(), $userListsAggregate->getUserListEntity()->id);
+            $userList = $this->userListManager->create($userListDTO);
+            $userListItemDTOs = UserListItemDTO::forMultiplefromRequest($request->validated(), $userList->id);
             UserListCreatedEvent::dispatch($userListItemDTOs);
 
             DB::commit();
 
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($userList->id);
+
             return response()->json([
                 "message" => "List added with it's item successfully.",
-                "result" => [
-                    "user_list" => $userListsAggregate->toArray(),
-                ],
+                "result" => $userList
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -103,7 +104,7 @@ class UserListController extends Controller
         }
     }
 
-    
+
     /**
      * Updates a user list according to given id
      * 
@@ -115,13 +116,13 @@ class UserListController extends Controller
     public function update(UserListUpdateRequest $request): JsonResponse
     {
         Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-        
+
         try {
             $userListDTO = UserListDTO::fromUpdateRequest($request->validated());
-            $userList = $this->userListManager->update($request->list_id, $userListDTO);
+            $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",
-                "result" => ["user_list" => $userList]
+                "result" => $userList
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -139,7 +140,7 @@ class UserListController extends Controller
     public function delete(UserListDeleteRequest $request): JsonResponse
     {
         Gate::authorize('isOwner', [new UserListEntity(), $request->list_id]);
-        
+
         try {
             $this->userListManager->delete($request->list_id);
             UserListDeletedEvent::dispatch($request->list_id);
