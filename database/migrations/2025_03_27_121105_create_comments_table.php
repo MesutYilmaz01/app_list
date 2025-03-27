@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_comment_id',)->references('id')->on('comments')->constrained()->cascadeOnDelete()->nullable();
-            $table->foreignId('user_id',)->references('id')->on('users')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_list_id',)->references('id')->on('user_lists')->constrained()->cascadeOnDelete();
+            $table->foreignId('parent_comment_id')->nullable()->references('id')->on('comments')->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_list_id')->references('id')->on('user_lists')->constrained()->cascadeOnDelete();
             $table->string('comment', 500);
             $table->integer('status')->default(1);
             $table->timestamp('approved_at')->nullable();
