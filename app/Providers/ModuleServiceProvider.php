@@ -70,19 +70,22 @@ class ModuleServiceProvider extends ServiceProvider
 
     private function registerAggregates()
     {
-        app(UserListAggregate::class)->setUserEntity(function () {
-            if (is_null(auth()->user())) {
-                $userEntity = new UserEntity();
-                $userEntity->fill([
-                    "name" => "Jhon",
-                    "surname" => "Doe",
-                    "username" => "JhonDoe",
-                    "email" => "jhon@doe"
-                ]);
-                return $userEntity;
-            } else {
+        app(UserListAggregate::class)->setUserEntity(function (int $userId = 0) {
+            $userRepo = app(IUserRepository::class);
+            if ($userId == 0) {
+                if (is_null(auth()->user())) {
+                    $userEntity = new UserEntity();
+                    $userEntity->fill([
+                        "name" => "Jhon",
+                        "surname" => "Doe",
+                        "username" => "JhonDoe",
+                        "email" => "jhon@doe"
+                    ]);
+                    return $userEntity;
+                }
                 return auth()->user();
             }
+            return $userRepo->getById($userId);
         });
     }
 }

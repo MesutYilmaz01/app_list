@@ -2,7 +2,6 @@
 
 namespace App\Modules\UserList\Domain\Aggregate;
 
-use App\Modules\Category\Domain\Entities\CategoryEntity;
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
@@ -11,7 +10,7 @@ use Closure;
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private Closure|null $userEntity = null;
+    private ?Closure $userEntity = null;
     private IBaseResponse $responseType;
 
     public function setUserListEntity(UserListEntity $userListEntity)
@@ -29,15 +28,15 @@ class UserListAggregate
         return $this->userListEntity->userListsItems->toArray();
     }
 
-    public function setUserEntity(UserEntity|Closure $userEntity)
+    public function setUserEntity(Closure $userEntity)
     {
         $this->userEntity = $userEntity;
     }
 
-    public function getUserEntity()
+    public function getUserEntity(int $userId = 0)
     {
         $callable = $this->userEntity;
-        return $callable();
+        return $callable($userId);
     }
 
     public function setResponseType(IBaseResponse $responseType)
@@ -53,5 +52,10 @@ class UserListAggregate
     public function getCategory()
     {
         return $this->userListEntity->category->toArray();
+    }
+
+    public function getOwner()
+    {
+        return $this->userListEntity->user->toArray();
     }
 }
