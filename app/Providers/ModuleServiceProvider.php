@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
+use App\Modules\Comment\Domain\IRepository\ICommentRepository;
+use App\Modules\Comment\Infrastructure\Repository\CommentRepository;
 use App\Modules\Shared\Repository\BaseEloquentRepository;
 use App\Modules\Shared\Repository\IBaseEloquentRepository;
 use App\Modules\User\Application\Manager\AuthManager;
@@ -64,6 +66,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
+        $this->app->bind(ICommentRepository::class, CommentRepository::class);
 
         $this->registerAggregates();
     }
