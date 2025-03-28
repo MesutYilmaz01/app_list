@@ -70,8 +70,7 @@ class CommentCrudService
     public function update(int $commentId, CommentDTO $commentDTO): ?CommentEntity
     {
         $comment = $this->commentRepo->findByAttributes([
-            'id' => $commentId,
-            'status' => StatusType::ACTIVE->value,
+            'id' => $commentId
         ]);
 
         if (!$comment) {

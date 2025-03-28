@@ -50,7 +50,7 @@ class CommentController extends Controller
     public function update(CommentUpdateRequest $request): JsonResponse
     {
         try {
-            $commentDTO = CommentDTO::fromCreateRequest($request->validated());
+            $commentDTO = CommentDTO::fromUpdateRequest($request->validated());
             $comment = $this->commentManager->setResponseType(CommentAdminResponse::class)->update($request->comment_id, $commentDTO);
             return response()->json([
                 "message" => "Comment updated successfully.",

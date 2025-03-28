@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\UserList\Domain\Aggregate;
+namespace App\Modules\Comment\Domain\Aggregate;
 
 use App\Modules\Comment\Domain\Entities\CommentEntity;
 use App\Modules\Shared\Responses\Interface\IBaseResponse;

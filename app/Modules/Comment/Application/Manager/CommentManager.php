@@ -2,11 +2,11 @@
 
 namespace App\Modules\Comment\Application\Manager;
 
+use App\Modules\Comment\Domain\Aggregate\CommentAggregate;
 use App\Modules\Comment\Domain\DTO\CommentDTO;
 use App\Modules\Comment\Domain\Entities\CommentEntity;
 use App\Modules\Comment\Domain\Services\CommentCrudService;
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
-use App\Modules\UserList\Domain\Aggregate\CommentAggregate;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -35,7 +35,7 @@ class CommentManager
             $this->logger->alert("Comment {$commentId} could not listed.");
             throw new Exception("Comment could not found.", 404);
         }
-
+        
         $this->logger->info("Comment {$commentId} is listed.");
 
         $this->commentAggregate->setCommentEntity($comment);

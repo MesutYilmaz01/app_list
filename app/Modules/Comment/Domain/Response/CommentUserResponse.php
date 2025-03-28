@@ -3,7 +3,7 @@
 namespace App\Modules\Comment\Domain\Response;
 
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
-use App\Modules\UserList\Domain\Aggregate\CommentAggregate;
+use App\Modules\Comment\Domain\Aggregate\CommentAggregate;
 
 class CommentUserResponse implements IBaseResponse
 {

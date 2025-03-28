@@ -32,6 +32,8 @@ class CommentController extends Controller
      */
     public function show(CommentShowRequest $request): JsonResponse
     {
+        Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
+
         try {
             $comment = $this->commentManager->setResponseType(CommentUserResponse::class)->show($request->comment_id);
             return response()->json([
