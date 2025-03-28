@@ -23,23 +23,30 @@ class UserListGeneralResponse implements IBaseResponse
             "description" => $this->userListAggregate->getUserListEntity()->description,
             "created_at" => $this->userListAggregate->getUserListEntity()->created_at->toDateTimeString(),
             "category" => [
-                "id" => $this->userListAggregate->getCategory()["id"],
-                "name" => $this->userListAggregate->getCategory()["name"],
+                "id" => $this->userListAggregate->getCategory()->id,
+                "name" => $this->userListAggregate->getCategory()->name,
             ],
-            "items" => []
+            "items" => [],
+            "comments" => [],
         ];
 
         foreach ($this->userListAggregate->getUserListItems() as $userListItem) {
             array_push($response["items"], [
-                "header" => $userListItem["header"],
-                "description" => $userListItem["description"]
+                "header" => $userListItem->header,
+                "description" => $userListItem->description,
             ]);
         }
 
         foreach ($this->userListAggregate->getComments() as $comment) {
             array_push($response["comments"], [
-                "comment" => $comment["comment"],
-                "created_at" => $comment["created_at"]
+                "parent_comment_id" => isset($comment->parent_comment_id) ? $comment->parent_comment_id : null,
+                "comment" => $comment->comment,
+                "created_at" => $comment->created_at->toDateTimeString(),
+                "user" => [
+                    "name" => $comment->user->name,
+                    "surname" => $comment->user->surname,
+                    "username" => $comment->user->username,
+                ]
             ]);
         }
 

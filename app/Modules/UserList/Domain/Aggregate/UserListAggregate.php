@@ -24,7 +24,7 @@ class UserListAggregate
 
     public function getUserListItems()
     {
-        return $this->userListEntity->userListsItems->toArray();
+        return $this->userListEntity->userListsItems;
     }
 
     public function setUserEntity(Closure $userEntity)
@@ -50,16 +50,16 @@ class UserListAggregate
 
     public function getCategory()
     {
-        return $this->userListEntity->category->toArray();
+        return $this->userListEntity->category;
     }
 
     public function getOwner()
     {
-        return $this->userListEntity->user->toArray();
+        return $this->userListEntity->user;
     }
 
     public function getComments()
     {
-        return $this->userListEntity->comments->toArray();
+        return $this->userListEntity->comments;
     }
 }

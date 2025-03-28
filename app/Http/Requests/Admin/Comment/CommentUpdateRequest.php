@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User\Comment;
+namespace App\Http\Requests\Admin\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CommentShowRequest extends FormRequest
+class CommentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class CommentShowRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'status' => ['in:0,1'],
             'comment_id' => ['required', 'exists:comments,id'],
         ];
     }
