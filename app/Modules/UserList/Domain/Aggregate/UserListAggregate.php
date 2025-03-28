@@ -3,7 +3,6 @@
 namespace App\Modules\UserList\Domain\Aggregate;
 
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
-use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use Closure;
 
@@ -57,5 +56,10 @@ class UserListAggregate
     public function getOwner()
     {
         return $this->userListEntity->user->toArray();
+    }
+
+    public function getComments()
+    {
+        return $this->userListEntity->comments->toArray();
     }
 }

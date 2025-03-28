@@ -7,7 +7,7 @@ use App\Modules\Comment\Domain\Entities\CommentEntity;
 use App\Modules\Comment\Domain\IRepository\ICommentRepository;
 use App\Modules\Comment\Domain\Enums\StatusType;
 
-class UserListCrudService
+class CommentCrudService
 {
 
     public function __construct(

@@ -47,6 +47,17 @@ class UserListAdminResponse implements IBaseResponse
             ]);
         }
 
+        foreach ($this->userListAggregate->getComments() as $comment) {
+            array_push($response["comments"], [
+                "id" => $comment["id"],
+                "comment" => $comment["comment"],
+                "status" => $userListItem["status"],
+                "approved_at" => isset($comment["approved_at"]) ? $comment["approved_at"] : null,
+                "created_at" => $comment["created_at"],
+                "updated_at" => $comment["updated_at"],
+            ]);
+        }
+
         return $response;
     }
 }

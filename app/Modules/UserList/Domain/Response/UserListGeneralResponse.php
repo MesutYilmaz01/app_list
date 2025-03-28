@@ -36,6 +36,13 @@ class UserListGeneralResponse implements IBaseResponse
             ]);
         }
 
+        foreach ($this->userListAggregate->getComments() as $comment) {
+            array_push($response["comments"], [
+                "comment" => $comment["comment"],
+                "created_at" => $comment["created_at"]
+            ]);
+        }
+
         return $response;
     }
 }
