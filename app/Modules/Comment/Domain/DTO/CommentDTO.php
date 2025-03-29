@@ -6,40 +6,40 @@ use App\Modules\Comment\Domain\Enums\StatusType;
 
 class CommentDTO
 {
-    private string $userId;
-    private string $userListId;
-    private string $parentCommentId;
+    private string $user_id;
+    private string $user_list_id;
+    private string $parent_comment_id;
     private string $comment;
     private int $status;
 
     public function setUserId(int $userId) 
     {
-        $this->userId = $userId;
+        $this->user_id = $userId;
     }
 
     public function getUserId()
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function setParentCommentId(int $parentCommentId) 
     {
-        $this->parentCommentId = $parentCommentId;
+        $this->parent_comment_id = $parentCommentId;
     }
 
     public function getParentCommentId()
     {
-        return $this->parentCommentId;
+        return $this->parent_comment_id;
     }
 
     public function setUserListId(int $userListId) 
     {
-        $this->userListId = $userListId;
+        $this->user_list_id = $userListId;
     }
 
     public function getUserListId()
     {
-        return $this->userListId;
+        return $this->user_list_id;
     }
 
     public function setComment(string $comment) 
@@ -71,6 +71,7 @@ class CommentDTO
             $commentDTO->setParentCommentId($request["parent_comment_id"]);
         $commentDTO->setUserListId($request["user_list_id"]);
         $commentDTO->setComment($request["comment"]);
+        $commentDTO->setStatus(StatusType::PASSIVE->value);
 
         return $commentDTO;
     }

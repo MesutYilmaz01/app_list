@@ -60,7 +60,6 @@ class CommentController extends Controller
 
             $commentDTO = CommentDTO::fromCreateRequest($request->validated());
             $comment = $this->commentManager->create($commentDTO);
-
             DB::commit();
 
             $comment = $this->commentManager->setResponseType(CommentUserResponse::class)->show($comment->id);
@@ -89,7 +88,7 @@ class CommentController extends Controller
         Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
 
         try {
-            $commentDTO = CommentDTO::fromCreateRequest($request->validated());
+            $commentDTO = CommentDTO::fromUpdateRequest($request->validated());
             $comment = $this->commentManager->setResponseType(CommentUserResponse::class)->update($request->comment_id, $commentDTO);
             return response()->json([
                 "message" => "Comment updated successfully.",

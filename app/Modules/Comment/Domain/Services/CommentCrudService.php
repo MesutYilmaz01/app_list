@@ -39,7 +39,6 @@ class CommentCrudService
     {
         $comment = $this->commentRepo->findByAttributes([
             'id' => $commentId,
-            'status' => StatusType::ACTIVE->value,
         ]);
         
         if (!$comment) {

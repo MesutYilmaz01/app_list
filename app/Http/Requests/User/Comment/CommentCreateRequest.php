@@ -22,7 +22,6 @@ class CommentCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:users,id'],
             'user_list_id' => ['required', 'exists:user_lists,id'],
             'parent_comment_id' => ['exists:comments,id'],
             'comment' => ['required','max:500'],

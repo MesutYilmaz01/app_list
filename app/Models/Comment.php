@@ -19,8 +19,12 @@ class Comment extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'user_id',
+        'user_list_id',
+        'parent_comment_id',
         'comment',
-        'status'
+        'status',
+        'approved_at'
     ];
 
     public function user(): BelongsTo

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_list_id')->references('id')->on('user_lists')->constrained()->cascadeOnDelete();
             $table->string('comment', 500);
-            $table->integer('status')->default(1);
+            $table->integer('status')->default(0);
             $table->timestamp('approved_at')->nullable();
             $table->softDeletes(); 
             $table->timestamps();
