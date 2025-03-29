@@ -3,7 +3,6 @@
 namespace App\Modules\UserList\Domain\Aggregate;
 
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
-use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use Closure;
 
@@ -25,7 +24,7 @@ class UserListAggregate
 
     public function getUserListItems()
     {
-        return $this->userListEntity->userListsItems->toArray();
+        return $this->userListEntity->userListsItems;
     }
 
     public function setUserEntity(Closure $userEntity)
@@ -51,11 +50,16 @@ class UserListAggregate
 
     public function getCategory()
     {
-        return $this->userListEntity->category->toArray();
+        return $this->userListEntity->category;
     }
 
     public function getOwner()
     {
-        return $this->userListEntity->user->toArray();
+        return $this->userListEntity->user;
+    }
+
+    public function getComments()
+    {
+        return $this->userListEntity->comments;
     }
 }

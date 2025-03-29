@@ -5,6 +5,11 @@ namespace App\Providers;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
+use App\Modules\Comment\Domain\Aggregate\CommentAggregate;
+use App\Modules\Comment\Domain\Entities\CommentEntity;
+use App\Modules\Comment\Domain\IRepository\ICommentRepository;
+use App\Modules\Comment\Domain\Policies\CommentPolicy;
+use App\Modules\Comment\Infrastructure\Repository\CommentRepository;
 use App\Modules\Shared\Repository\BaseEloquentRepository;
 use App\Modules\Shared\Repository\IBaseEloquentRepository;
 use App\Modules\User\Application\Manager\AuthManager;
@@ -47,11 +52,13 @@ class ModuleServiceProvider extends ServiceProvider
         //Policies
         Gate::policy(UserListsItemEntity::class, UserListsItemPolicy::class);
         Gate::policy(UserListEntity::class, UserListPolicy::class);
+        Gate::policy(CommentEntity::class, CommentPolicy::class);
 
 
         //Bindings
         $this->app->singleton(UserListAggregate::class);
         $this->app->singleton(UserListItemAggregate::class);
+        $this->app->singleton(CommentAggregate::class);
         $this->app->bind(LoggerInterface::class, function () {
             return Log::getLogger();
         });
@@ -64,6 +71,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IUserListRepository::class, UserListRepository::class);
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
+        $this->app->bind(ICommentRepository::class, CommentRepository::class);
 
         $this->registerAggregates();
     }

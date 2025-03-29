@@ -12,7 +12,7 @@ class UserListDTO
     private string $header;
     private string $description;
     private int $status;
-    private int $isPublic;
+    private int $is_public;
 
     public function setCategoryId(int $categoryId) 
     {
@@ -66,12 +66,12 @@ class UserListDTO
 
     public function setIsPublic(int $isPublic) 
     {
-        $this->isPublic = $isPublic;
+        $this->is_public = $isPublic;
     }
 
     public function getIsPublic()
     {
-        return $this->isPublic;
+        return $this->is_public;
     }
 
     public static function fromCreateRequest(array $request)

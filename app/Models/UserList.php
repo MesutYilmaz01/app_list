@@ -42,4 +42,9 @@ class UserList extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'user_list_id', 'id');
+    }
 }

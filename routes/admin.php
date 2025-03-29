@@ -2,6 +2,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ListController;
 use App\Http\Controllers\Admin\UserListController;
 use App\Http\Controllers\Admin\UserListsItemController;
@@ -46,5 +47,16 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     ], function ($router) {
         Route::get('/', 'getOrdinary');
         Route::get('/latests', 'getForLatest');
+    });
+
+    Route::group([
+        'prefix' => 'comments',
+        'controller' => CommentController::class
+    ], function ($router) {
+        Route::get('/show/{comment_id}', 'show');
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::put('/{comment_id}', 'update');
+            Route::delete('/{comment_id}', 'delete');
+        });
     });
 });
