@@ -259,6 +259,28 @@ class BaseEloquentRepository implements IBaseEloquentRepository
     }
 
     /**
+     * Determines to get also soft deleted rows
+     * @return $this
+     */
+    public function withTrashed(): BaseEloquentRepository
+    {
+        $this->model = $this->model->withTrashed();
+        return $this;
+    }
+
+
+
+    /**
+     * Determines only to get soft deleted rows
+     * @return $this
+     */
+    public function onlyTrashed(): BaseEloquentRepository
+    {
+        $this->model = $this->model->onlyTrashed();
+        return $this;
+    }
+
+    /**
      * Sets order by and order type if they are exist.
      * 
      * @param array $requestArray

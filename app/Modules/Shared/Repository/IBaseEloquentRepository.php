@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface IBaseEloquentRepository 
+interface IBaseEloquentRepository
 {
     /**
      * Parses given array for builder to shape it.
@@ -70,7 +70,7 @@ interface IBaseEloquentRepository
      * @return Model||null
      */
     public function update(Model $model, array $data): ?Model;
-    
+
     /**
      * Soft deletes a record according to given model
      * 
@@ -86,7 +86,7 @@ interface IBaseEloquentRepository
      * @return bool||null
      */
     public function deleteMany(array $attributes): ?bool;
-    
+
     /**
      * Restores a record according to given model
      * 
@@ -111,11 +111,24 @@ interface IBaseEloquentRepository
      */
     public function withFilters(array $filterAttributes): BaseEloquentRepository;
 
-        /**
+    /**
      * Adds given relationships to query. To use this function, you must add relationships array to related repository and full it with relations.
      * 
      * @param string|array $relationships
      * @return BaseEloquentRepository
      */
     public function with(array|string $relationships): BaseEloquentRepository;
+
+    /**
+     * Determines to get also soft deleted rows
+     * @return $this
+     */
+    public function withTrashed(): BaseEloquentRepository;
+
+
+    /**
+     * Determines only to get soft deleted rows
+     * @return $this
+     */
+    public function onlyTrashed(): BaseEloquentRepository;
 }
