@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\General\AuthController;
 use App\Http\Controllers\General\CategoryController;
+use App\Http\Controllers\General\DislikeCommentController;
+use App\Http\Controllers\General\DislikeUserListController;
 use App\Http\Controllers\General\ListController;
 use App\Http\Controllers\General\UserListController;
 use App\Http\Controllers\General\LikeCommentController;
@@ -49,3 +51,13 @@ Route::group([
         Route::post('/user-list/{user_list_id}', [LikeUserListController::class, 'likeReverser']);
     });
 });
+
+Route::group([
+    'prefix' => 'dislikes',
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/comment/{comment_id}', [DislikeCommentController::class, 'dislikeReverser']);
+        Route::post('/user-list/{user_list_id}', [DislikeUserListController::class, 'dislikeReverser']);
+    });
+});
+
