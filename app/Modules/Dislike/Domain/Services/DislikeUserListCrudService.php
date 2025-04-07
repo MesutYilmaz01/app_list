@@ -3,8 +3,8 @@
 namespace App\Modules\Dislike\Domain\Services;
 
 use App\Modules\Dislike\Domain\DTO\DislikeUserListDTO;
+use App\Modules\Dislike\Domain\Entities\DislikeUserListEntity;
 use App\Modules\Dislike\Domain\IRepository\IDislikeUserListRepository;
-use App\Modules\Like\Domain\Entities\DislikeUserListEntity;
 
 class DislikeUserListCrudService
 {
