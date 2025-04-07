@@ -5,6 +5,8 @@ use App\Http\Controllers\General\AuthController;
 use App\Http\Controllers\General\CategoryController;
 use App\Http\Controllers\General\ListController;
 use App\Http\Controllers\General\UserListController;
+use App\Http\Controllers\General\LikeCommentController;
+use App\Http\Controllers\General\LikeUserListController;
 
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [AuthController::class, 'register']);
@@ -37,4 +39,13 @@ Route::group([
 ], function ($router) {
     Route::get('/', 'getOrdinary');
     Route::get('/latests', 'getForLatest');
+});
+
+Route::group([
+    'prefix' => 'likes',
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/comment/{comment_id}', [LikeCommentController::class, 'likeReverser']);
+        Route::post('/user-list/{user_list_id}', [LikeUserListController::class, 'likeReverser']);
+    });
 });

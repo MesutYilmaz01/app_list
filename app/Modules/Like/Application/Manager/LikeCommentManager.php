@@ -3,7 +3,6 @@
 namespace App\Modules\Like\Application\Manager;
 
 use App\Modules\Like\Domain\DTO\LikeCommentDTO;
-use App\Modules\Like\Domain\Entities\LikeCommentEntity;
 use App\Modules\Like\Domain\Services\LikeCommentCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -59,25 +58,5 @@ class LikeCommentManager
         }
 
         return true;
-    }
-
-    /**
-     * Returns a like comment for given attributes.
-     * 
-     * @param array $attributes
-     * @return LikeCommentEntity
-     * 
-     * @throws Exception
-     */
-    public function findByAttributes(array $attributes): LikeCommentEntity
-    {
-        $likeComment = $this->likeCommentCrudService->findByAttributes($attributes);
-
-        if (!$likeComment) {
-            $this->logger->alert("Like comment could not created.");
-            throw new Exception("Like comment could not created.", 400);
-        }
-
-        return $likeComment;
     }
 }

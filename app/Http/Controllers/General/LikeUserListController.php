@@ -1,41 +1,41 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Common\Like\LikeCommentRequest;
-use App\Modules\Like\Application\Manager\LikeCommentManager;
-use App\Modules\Like\Domain\DTO\LikeCommentDTO;
+use App\Http\Requests\Common\Like\LikeUserListRequest;
+use App\Modules\Like\Application\Manager\LikeUserListManager;
+use App\Modules\Like\Domain\DTO\LikeUserListDTO;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class LikeCommentController extends Controller
+class LikeUserListController extends Controller
 {
     public function __construct(
-        private LikeCommentManager $likeCommentManager,
+        private LikeUserListManager $likeUserListManager,
     ) {}
 
     /**
      * Likes or reverse like.
      * 
-     * @param LikeCommentRequest $request
+     * @param LikeUserListRequest $request
      * @return JsonRespone
      * 
      * @throws Exception
      */
-    public function likeReverser(LikeCommentRequest $request): JsonResponse
+    public function likeReverser(LikeUserListRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
 
-            $likeCommentDTO = LikeCommentDTO::fromCreateRequest($request->validated());
-            $isLiked = $this->likeCommentManager->likeReverser($likeCommentDTO);
+            $likeUserListDTO = LikeUserListDTO::fromCreateRequest($request->validated());
+            $isLiked = $this->likeUserListManager->likeReverser($likeUserListDTO);
 
             DB::commit();
 
             return response()->json([
-                "message" => "Like or reverse success.",
+                "message" => "Like user list or reverse success.",
                 "result" => [
                     "is_liked" => $isLiked
                 ],

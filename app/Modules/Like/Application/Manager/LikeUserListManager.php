@@ -3,7 +3,6 @@
 namespace App\Modules\Like\Application\Manager;
 
 use App\Modules\Like\Domain\DTO\LikeUserListDTO;
-use App\Modules\Like\Domain\Entities\LikeUserListEntity;
 use App\Modules\Like\Domain\Services\LikeUserListCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -59,25 +58,5 @@ class LikeUserListManager
         }
 
         return true;
-    }
-
-    /**
-     * Returns a like user list for given attributes.
-     * 
-     * @param array $attributes
-     * @return LikeUserListEntity
-     * 
-     * @throws Exception
-     */
-    public function findByAttributes(array $attributes): LikeUserListEntity
-    {
-        $likeUserList = $this->likeUserListCrudService->findByAttributes($attributes);
-
-        if (!$likeUserList) {
-            $this->logger->alert("Like user list could not created.");
-            throw new Exception("Like user list could not created.", 400);
-        }
-
-        return $likeUserList;
     }
 }

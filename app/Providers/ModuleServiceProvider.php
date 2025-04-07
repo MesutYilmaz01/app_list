@@ -12,8 +12,6 @@ use App\Modules\Comment\Domain\Policies\CommentPolicy;
 use App\Modules\Comment\Infrastructure\Repository\CommentRepository;
 use App\Modules\Like\Application\Manager\LikeCommentManager;
 use App\Modules\Like\Application\Manager\LikeUserListManager;
-use App\Modules\Like\Domain\Entities\LikeCommentEntity;
-use App\Modules\Like\Domain\Entities\LikeUserListEntity;
 use App\Modules\Like\Domain\IRepository\ILikeCommentRepository;
 use App\Modules\Like\Domain\IRepository\ILikeUserListRepository;
 use App\Modules\Like\Infrastructure\Repository\LikeCommentRepository;
@@ -28,10 +26,7 @@ use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
-use App\Modules\UserList\Domain\Policies\LikeCommentPolicy;
-use App\Modules\UserList\Domain\Policies\LikeUserListPolicy;
 use App\Modules\UserList\Domain\Policies\UserListPolicy;;
-
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
@@ -63,8 +58,6 @@ class ModuleServiceProvider extends ServiceProvider
         Gate::policy(UserListsItemEntity::class, UserListsItemPolicy::class);
         Gate::policy(UserListEntity::class, UserListPolicy::class);
         Gate::policy(CommentEntity::class, CommentPolicy::class);
-        Gate::policy(LikeCommentEntity::class, LikeCommentPolicy::class);
-        Gate::policy(LikeUserListEntity::class, LikeUserListPolicy::class);
 
 
         //Bindings
