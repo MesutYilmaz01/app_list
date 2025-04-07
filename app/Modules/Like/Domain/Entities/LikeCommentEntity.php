@@ -2,7 +2,7 @@
 
 namespace App\Modules\Like\Domain\Entities;
 
-use App\Models\Category;
+use App\Models\LikeComment;
 use App\Modules\Shared\Interfaces\Entities\IEntity;
 
-class LikeCommentEntity extends Category implements IEntity {}
+class LikeCommentEntity extends LikeComment implements IEntity {}
