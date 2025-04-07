@@ -18,15 +18,17 @@ class LikeUserListManager
      * Creates or recovers a like user list if its not exists. Deletes is otherwise according to given data.
      * 
      * @param LikeUserListDTO $LikeUserListDTO
+     * @return bool
      * 
      * @throws Exception
      */
-    public function likeReverser(LikeUserListDTO $LikeUserListDTO)
+    public function likeReverser(LikeUserListDTO $LikeUserListDTO): bool
     {
         $likeUserList = $this->likeUserListCrudService->findByAttributes($LikeUserListDTO->toArray());
 
         if ($likeUserList) {
             $this->likeUserListCrudService->delete($likeUserList->id);
+            return false;
         }
 
         if (!$likeUserList) {
@@ -54,5 +56,7 @@ class LikeUserListManager
                 //TO-DO Unlike is going to delete if is exist.
             }
         }
+
+        return true;
     }
 }

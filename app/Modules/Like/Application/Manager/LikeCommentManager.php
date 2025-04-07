@@ -18,15 +18,17 @@ class LikeCommentManager
      * Creates or recovers a like comment if its not exists. Deletes is otherwise according to given data.
      * 
      * @param LikeCommentDTO $likeCommentDTO
+     * @return bool
      * 
      * @throws Exception
      */
-    public function likeReverser(LikeCommentDTO $likeCommentDTO)
+    public function likeReverser(LikeCommentDTO $likeCommentDTO): bool
     {
         $likeComment = $this->likeCommentCrudService->findByAttributes($likeCommentDTO->toArray());
 
         if ($likeComment) {
             $this->likeCommentCrudService->delete($likeComment->id);
+            return false;
         }
 
         if (!$likeComment) {
@@ -54,5 +56,7 @@ class LikeCommentManager
                 //TO-DO Unlike is going to delete if is exist.
             }
         }
+
+        return true;
     }
 }
