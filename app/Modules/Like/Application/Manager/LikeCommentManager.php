@@ -2,7 +2,9 @@
 
 namespace App\Modules\Like\Application\Manager;
 
+use App\Modules\Dislike\Domain\Services\DislikeCommentCrudService;
 use App\Modules\Like\Domain\DTO\LikeCommentDTO;
+use App\Modules\Like\Domain\Entities\LikeCommentEntity;
 use App\Modules\Like\Domain\Services\LikeCommentCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -11,6 +13,7 @@ class LikeCommentManager
 {
     public function __construct(
         private LikeCommentCrudService $likeCommentCrudService,
+        private DislikeCommentCrudService $dislikeCommentCrudService,
         private LoggerInterface $logger
     ) {}
 
@@ -43,7 +46,6 @@ class LikeCommentManager
                 }
 
                 $this->logger->info("Like comment {$newLikeComment->id} is created.");
-                //TO-DO Unlike is going to delete if is exist.
             } else {
                 $isRecovered = $this->likeCommentCrudService->restore($trashedLikeComment->id);
 
@@ -53,10 +55,27 @@ class LikeCommentManager
                 }
 
                 $this->logger->info("Like comment {$trashedLikeComment->id} is recovered.");
-                //TO-DO Unlike is going to delete if is exist.
+            }
+
+            $dislikeComment = $this->dislikeCommentCrudService->findByAttributes($likeCommentDTO->toArray());
+
+            if ($dislikeComment) {
+                $this->dislikeCommentCrudService->delete($dislikeComment->id);
+                $this->logger->info("Dislike comment {$dislikeComment->id} is deleted.");
             }
         }
 
         return true;
+    }
+
+    /**
+     * Returns like comment according to attributes
+     * 
+     * @param array $attributes
+     * @return LikeCommentEntity||null
+     */
+    public function findByAttributes(array $attributes): ?LikeCommentEntity
+    {
+        return $this->likeCommentCrudService->findByAttributes($attributes);
     }
 }

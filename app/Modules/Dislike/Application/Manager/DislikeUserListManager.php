@@ -3,7 +3,9 @@
 namespace App\Modules\Dislike\Application\Manager;
 
 use App\Modules\Dislike\Domain\DTO\DislikeUserListDTO;
+use App\Modules\Dislike\Domain\Entities\DislikeUserListEntity;
 use App\Modules\Dislike\Domain\Services\DislikeUserListCrudService;
+use App\Modules\Like\Domain\Services\LikeUserListCrudService;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -11,6 +13,7 @@ class DislikeUserListManager
 {
     public function __construct(
         private DislikeUserListCrudService $dislikeUserListCrudService,
+        private LikeUserListCrudService $likeUserListCrudService,
         private LoggerInterface $logger
     ) {}
 
@@ -43,7 +46,6 @@ class DislikeUserListManager
                 }
 
                 $this->logger->info("Dislike user list {$newDislikeUserList->id} is created.");
-                //TO-DO Unlike is going to delete if is exist.
             } else {
                 $isRecovered = $this->dislikeUserListCrudService->restore($trashedDislikeUserList->id);
 
@@ -53,10 +55,27 @@ class DislikeUserListManager
                 }
 
                 $this->logger->info("Dislike user list {$trashedDislikeUserList->id} is recovered.");
-                //TO-DO Unlike is going to delete if is exist.
+            }
+
+            $likeUserList = $this->likeUserListCrudService->findByAttributes($dislikeUserListDTO->toArray());
+
+            if ($likeUserList) {
+                $this->likeUserListCrudService->delete($likeUserList->id);
+                $this->logger->info("Like user list {$likeUserList->id} is deleted.");
             }
         }
 
         return true;
+    }
+
+    /**
+     * Returns dislike user list according to attributes
+     * 
+     * @param array $attributes
+     * @return DislikeUserListEntity||null
+     */
+    public function findByAttributes(array $attributes): ?DislikeUserListEntity
+    {
+        return $this->dislikeUserListCrudService->findByAttributes($attributes);
     }
 }
