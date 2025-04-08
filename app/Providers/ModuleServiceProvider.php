@@ -10,6 +10,18 @@ use App\Modules\Comment\Domain\Entities\CommentEntity;
 use App\Modules\Comment\Domain\IRepository\ICommentRepository;
 use App\Modules\Comment\Domain\Policies\CommentPolicy;
 use App\Modules\Comment\Infrastructure\Repository\CommentRepository;
+use App\Modules\Dislike\Application\Manager\DislikeCommentManager;
+use App\Modules\Dislike\Application\Manager\DislikeUserListManager;
+use App\Modules\Dislike\Domain\IRepository\IDislikeCommentRepository;
+use App\Modules\Dislike\Domain\IRepository\IDislikeUserListRepository;
+use App\Modules\Dislike\Infrastructure\Repository\DislikeCommentRepository;
+use App\Modules\Dislike\Infrastructure\Repository\DislikeUserListRepository;
+use App\Modules\Like\Application\Manager\LikeCommentManager;
+use App\Modules\Like\Application\Manager\LikeUserListManager;
+use App\Modules\Like\Domain\IRepository\ILikeCommentRepository;
+use App\Modules\Like\Domain\IRepository\ILikeUserListRepository;
+use App\Modules\Like\Infrastructure\Repository\LikeCommentRepository;
+use App\Modules\Like\Infrastructure\Repository\LikeUserListRepository;
 use App\Modules\Shared\Repository\BaseEloquentRepository;
 use App\Modules\Shared\Repository\IBaseEloquentRepository;
 use App\Modules\User\Application\Manager\AuthManager;
@@ -21,7 +33,6 @@ use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use App\Modules\UserList\Domain\Policies\UserListPolicy;;
-
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
@@ -72,6 +83,14 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(UserListItemManager::class, UserListItemManager::class);
         $this->app->bind(IUserListItemRepository::class, UserListItemRepository::class);
         $this->app->bind(ICommentRepository::class, CommentRepository::class);
+        $this->app->bind(LikeCommentManager::class, LikeCommentManager::class);
+        $this->app->bind(LikeUserListManager::class, LikeUserListManager::class);
+        $this->app->bind(ILikeCommentRepository::class, LikeCommentRepository::class);
+        $this->app->bind(ILikeUserListRepository::class, LikeUserListRepository::class);
+        $this->app->bind(DislikeCommentManager::class, DislikeCommentManager::class);
+        $this->app->bind(DislikeUserListManager::class, DislikeUserListManager::class);
+        $this->app->bind(IDislikeCommentRepository::class, DislikeCommentRepository::class);
+        $this->app->bind(IDislikeUserListRepository::class, DislikeUserListRepository::class);
 
         $this->registerAggregates();
     }
