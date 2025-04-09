@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Modules\ArtificialIntelligence\Application\Manager\ArtificialIntelligenceManager;
+use App\Modules\ArtificialIntelligence\Domain\Interfaces\IArtificialIntelligence;
+use App\Modules\ArtificialIntelligence\Infrastructure\ThirdParty\Gemini;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
@@ -91,6 +94,8 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(DislikeUserListManager::class, DislikeUserListManager::class);
         $this->app->bind(IDislikeCommentRepository::class, DislikeCommentRepository::class);
         $this->app->bind(IDislikeUserListRepository::class, DislikeUserListRepository::class);
+        $this->app->bind(IArtificialIntelligence::class, Gemini::class);
+        $this->app->bind(ArtificialIntelligenceManager::class, ArtificialIntelligenceManager::class);
 
         $this->registerAggregates();
     }
