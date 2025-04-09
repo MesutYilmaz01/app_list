@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\General\ArtificialIntelligenceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\General\AuthController;
 use App\Http\Controllers\General\CategoryController;
@@ -59,5 +60,11 @@ Route::group([
         Route::post('/comment/{comment_id}', [DislikeCommentController::class, 'dislikeReverser']);
         Route::post('/user-list/{user_list_id}', [DislikeUserListController::class, 'dislikeReverser']);
     });
+});
+
+Route::group([
+    'prefix' => 'ai',
+], function ($router) {
+    Route::get('/', [ArtificialIntelligenceController::class, 'communicate']);
 });
 
