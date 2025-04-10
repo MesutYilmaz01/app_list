@@ -4,7 +4,7 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\ArtificialIntelligence\ArtificialIntelligenceShowRequest;
-use App\Modules\ArtificialIntelligence\Application\ArtificialIntelligenceManager;
+use App\Modules\ArtificialIntelligence\Application\Manager\ArtificialIntelligenceManager;
 use Illuminate\Http\JsonResponse;
 
 class ArtificialIntelligenceController extends Controller
