@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Authority;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthorityUpdateRequest extends FormRequest
+class AuthorityCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,8 @@ class AuthorityUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['unique:authorities', 'max:50'],
-            'authority_id' => ['exists:authorities,id'],
+            'name' => ['required', 'unique:authorities', 'max:50'],
+            'code' => ['required', 'unique:authorities', 'integer']
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge(['authority_id' => $this->route('authority_id')]);
     }
 }

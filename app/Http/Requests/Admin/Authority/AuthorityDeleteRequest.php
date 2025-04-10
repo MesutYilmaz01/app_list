@@ -22,12 +22,12 @@ class AuthorityDeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'authortiy_id' => ['required', 'exists:authorities,id'],
+            'authority_id' => ['required', 'exists:authorities,id'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['authortiy_id' => $this->route('authortiy_id')]);
+        $this->merge(['authority_id' => $this->route('authority_id')]);
     }
 }

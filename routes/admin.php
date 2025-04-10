@@ -66,9 +66,9 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         'controller' => AuthorityController::class
     ], function ($router) {
         Route::get('/', 'getAll');
-        Route::get('/{authorty_id}', 'show');
+        Route::get('/{authority_id}', 'show');
         Route::post('/', 'create');
-        Route::put('/{authorty_id}', 'update');
-        Route::delete('/{authorty_id}', 'delete');
+        Route::put('/{authority_id}', 'update');
+        Route::delete('/{authority_id}', 'delete');
     });
 });
