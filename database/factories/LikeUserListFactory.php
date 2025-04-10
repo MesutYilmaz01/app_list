@@ -6,9 +6,9 @@ use App\Models\UserList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LikeUserListFactory>
  */
-class CommentFactory extends Factory
+class LikeUserListFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +18,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_list_id' => UserList::query()->inRandomOrder()->limit(1)->first()->id,
-            'comment' => fake()->sentence(15),
+            'user_list_id' => UserList::query()->inRandomOrder()->limit(1)->first()->id
         ];
     }
 }

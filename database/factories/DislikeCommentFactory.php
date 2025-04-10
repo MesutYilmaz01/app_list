@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\UserList;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DislikeCommentFactory>
  */
-class CommentFactory extends Factory
+class DislikeCommentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +18,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_list_id' => UserList::query()->inRandomOrder()->limit(1)->first()->id,
-            'comment' => fake()->sentence(15),
+            'comment_id' => Comment::query()->inRandomOrder()->limit(1)->first()->id
         ];
     }
 }
