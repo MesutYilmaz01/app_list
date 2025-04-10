@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\Admin\AuthorityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ListController;
@@ -20,7 +21,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         Route::put('/{category_id}', 'update');
         Route::delete('/{category_id}', 'delete');
     });
-    
+
     Route::group([
         'prefix' => 'lists',
         'controller' => UserListController::class
@@ -31,7 +32,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         Route::put('/{list_id}', 'update');
         Route::delete('/{list_id}', 'delete');
     });
-    
+
     Route::group([
         'prefix' => 'list-items',
         'controller' => UserListsItemController::class
@@ -40,7 +41,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         Route::put('/{list_item_id}', 'update');
         Route::delete('/{list_item_id}', 'delete');
     });
-    
+
     Route::group([
         'prefix' => 'lists',
         'controller' => ListController::class
@@ -58,5 +59,16 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
             Route::put('/{comment_id}', 'update');
             Route::delete('/{comment_id}', 'delete');
         });
+    });
+
+    Route::group([
+        'prefix' => 'authorities',
+        'controller' => AuthorityController::class
+    ], function ($router) {
+        Route::get('/', 'getAll');
+        Route::get('/{authority_id}', 'show');
+        Route::post('/', 'create');
+        Route::put('/{authority_id}', 'update');
+        Route::delete('/{authority_id}', 'delete');
     });
 });

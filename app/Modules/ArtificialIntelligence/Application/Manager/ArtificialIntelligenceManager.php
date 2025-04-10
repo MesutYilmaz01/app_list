@@ -1,6 +1,6 @@
 <?
 
-namespace App\Modules\ArtificialIntelligence\Application;
+namespace App\Modules\ArtificialIntelligence\Application\Manager;
 
 use App\Modules\ArtificialIntelligence\Domain\Interfaces\IArtificialIntelligence;
 use Illuminate\Http\JsonResponse;
