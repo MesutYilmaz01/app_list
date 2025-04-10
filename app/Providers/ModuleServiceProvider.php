@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Modules\ArtificialIntelligence\Application\Manager\ArtificialIntelligenceManager;
 use App\Modules\ArtificialIntelligence\Domain\Interfaces\IArtificialIntelligence;
 use App\Modules\ArtificialIntelligence\Infrastructure\ThirdParty\Gemini;
+use App\Modules\Authority\Application\Manager\AuthorityManager;
+use App\Modules\Authority\Domain\IRepository\IAuthorityRepository;
+use App\Modules\Authority\Infrastructure\Repository\AuthorityRepository;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
@@ -36,6 +39,7 @@ use App\Modules\UserList\Domain\Aggregate\UserListAggregate;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use App\Modules\UserList\Domain\IRepository\IUserListRepository;
 use App\Modules\UserList\Domain\Policies\UserListPolicy;;
+
 use App\Modules\UserList\Infrastructure\Repository\UserListRepository;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\Aggregate\UserListItemAggregate;
@@ -96,6 +100,8 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IDislikeUserListRepository::class, DislikeUserListRepository::class);
         $this->app->bind(IArtificialIntelligence::class, Gemini::class);
         $this->app->bind(ArtificialIntelligenceManager::class, ArtificialIntelligenceManager::class);
+        $this->app->bind(AuthorityManager::class, AuthorityManager::class);
+        $this->app->bind(IAuthorityRepository::class, AuthorityRepository::class);
 
         $this->registerAggregates();
     }
