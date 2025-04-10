@@ -8,6 +8,8 @@ Install composer with following command.<br />
 **```composer install```**<br /><br />
 Create database<br />
 **```php artisan migrate```**<br />
+Seed database(Optinial) <br />
+**```php artisan db:seed ```**<br />
 
 **Project must work after these steps at [localhost](https://localhost:90/).**
 

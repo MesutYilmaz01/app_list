@@ -18,7 +18,6 @@ class CommentSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             Comment::factory()->count(3)->create([
                 'user_id' => $i,
-                'user_list_id' => UserList::query()->inRandomOrder()->limit(1)->first()->id
             ])->each(function ($comment) {
                 for ($i = 1; $i <= 3; $i++) {
                     Comment::factory()->count(1)->create([
