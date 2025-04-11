@@ -22,8 +22,7 @@ class UserAuthorityCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'owner_user_id' => ['required', 'exists:users,id'],
-            'authorized_user_id' => ['required', 'exists:users,id', 'different:owner_user_id'],
+            'authorized_user_id' => ['required', 'exists:users,id'],
             'user_list_id' => ['required', 'exists:user_lists,id'],
             'authority_id' => ['required', 'exists:authorities,id'],
         ];

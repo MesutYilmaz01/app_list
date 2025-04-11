@@ -46,6 +46,40 @@ class UserAuthorityManager
      */
     public function create(UserAuthorityDTO $userAuthorityDTO): ?UserAuthorityEntity
     {
+        if ($userAuthorityDTO->getAuthorizedUserId() == $userAuthorityDTO->getOwnerUserId()) {
+            $this->logger->info("User tried to give authority itself.");
+            throw new Exception("Users can't give authority itself.", 400);
+        }
+
+        $isExistUserAuthortiy = $this->userAuthorityCrudService->findByAttributesWithTrashed([
+            "authorized_user_id" => $userAuthorityDTO->getAuthorizedUserId(),
+            "user_list_id" => $userAuthorityDTO->getUserListId()
+        ]);
+        
+        if ($isExistUserAuthortiy && !$isExistUserAuthortiy->trashed()) {
+            $this->logger->info("User tried to give authority to a user list twice for an user.");
+            throw new Exception("This user already have an authority for this list.", 400);
+        }
+
+        if ($isExistUserAuthortiy && $isExistUserAuthortiy->trashed()) {
+
+            $isRestored = $this->userAuthorityCrudService->restore($isExistUserAuthortiy->id);
+            if ($isRestored) {
+                $this->logger->info("User authority {$isExistUserAuthortiy->id} is recoverd.");
+                $userAuthority = $this->userAuthorityCrudService->update($isExistUserAuthortiy->id, $userAuthorityDTO);
+
+                if (!$userAuthority) {
+                    $this->logger->alert("User authority {$isExistUserAuthortiy->id} could not updated.");
+                    throw new Exception("User authority could not updated.", 400);
+                }
+
+                $this->logger->info("User authority {$isExistUserAuthortiy->id} is updated.");
+                return $userAuthority;
+            }
+
+            $this->logger->info("User authority {$isExistUserAuthortiy->id} is can't recovered.");
+        }
+
         $userAuthority = $this->userAuthorityCrudService->create($userAuthorityDTO);
 
         if (!$userAuthority) {

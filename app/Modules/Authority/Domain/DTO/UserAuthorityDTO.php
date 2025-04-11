@@ -53,7 +53,7 @@ class UserAuthorityDTO
     {
         $userAuthorityDTO = new self();
 
-        $userAuthorityDTO->setOwnerUserId($request["owner_user_id"]);
+        $userAuthorityDTO->setOwnerUserId(auth()->user()->id);
         $userAuthorityDTO->setAuthorizedUserId($request["authorized_user_id"]);
         $userAuthorityDTO->setUserListId($request["user_list_id"]);
         $userAuthorityDTO->setAuthorityId($request["authority_id"]);

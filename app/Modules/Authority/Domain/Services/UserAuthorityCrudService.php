@@ -24,6 +24,17 @@ class UserAuthorityCrudService
     }
 
     /**
+     * Returns user authority according to given attributes
+     * 
+     * @param array $attributes
+     * @return UserAuthorityEntity||null
+     */
+    public function findByAttributesWithTrashed(array $attributes): ?UserAuthorityEntity
+    {
+        return $this->userAuthorityRepo->withTrashed()->findByAttributes($attributes);
+    }
+
+    /**
      * Creates a user authority according to given data
      * 
      * @param UserAuthorityDTO $userAuthorityDTO
@@ -65,5 +76,21 @@ class UserAuthorityCrudService
             return false;
         }
         return $this->userAuthorityRepo->delete($userAuthority);
+    }
+
+    /**
+     * Restore a user authority according to given id
+     * 
+     * @param int $id
+     * @return bool
+     */
+    public function restore(int $id): bool
+    {
+        $userAuthority = $this->userAuthorityRepo->getById($id);
+
+        if (!$userAuthority) {
+            return false;
+        }
+        return $this->userAuthorityRepo->restore($userAuthority);
     }
 }

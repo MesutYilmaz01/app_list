@@ -6,8 +6,11 @@ use App\Modules\ArtificialIntelligence\Application\Manager\ArtificialIntelligenc
 use App\Modules\ArtificialIntelligence\Domain\Interfaces\IArtificialIntelligence;
 use App\Modules\ArtificialIntelligence\Infrastructure\ThirdParty\Gemini;
 use App\Modules\Authority\Application\Manager\AuthorityManager;
+use App\Modules\Authority\Application\Manager\UserAuthorityManager;
+use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
 use App\Modules\Authority\Domain\IRepository\IAuthorityRepository;
 use App\Modules\Authority\Domain\IRepository\IUserAuthorityRepository;
+use App\Modules\Authority\Domain\Policies\UserAuthorityPolicy;
 use App\Modules\Authority\Infrastructure\Repository\AuthorityRepository;
 use App\Modules\Authority\Infrastructure\Repository\UserAuthorityRepository;
 use App\Modules\Category\Application\Manager\CategoryManager;
@@ -72,6 +75,7 @@ class ModuleServiceProvider extends ServiceProvider
         Gate::policy(UserListsItemEntity::class, UserListsItemPolicy::class);
         Gate::policy(UserListEntity::class, UserListPolicy::class);
         Gate::policy(CommentEntity::class, CommentPolicy::class);
+        Gate::policy(UserAuthorityEntity::class, UserAuthorityPolicy::class);
 
 
         //Bindings
@@ -103,7 +107,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(ArtificialIntelligenceManager::class, ArtificialIntelligenceManager::class);
         $this->app->bind(AuthorityManager::class, AuthorityManager::class);
         $this->app->bind(IAuthorityRepository::class, AuthorityRepository::class);
-
+        $this->app->bind(UserAuthorityManager::class, UserAuthorityManager::class);
         $this->app->bind(IUserAuthorityRepository::class, UserAuthorityRepository::class);
 
         $this->registerAggregates();
