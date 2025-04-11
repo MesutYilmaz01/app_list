@@ -2,6 +2,7 @@
 <?php
 
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\UserAuthorityController;
 use App\Http\Controllers\User\UserListController;
 use App\Http\Controllers\User\UserListsItemController;
 use Illuminate\Support\Facades\Route;
@@ -40,5 +41,17 @@ Route::group([
         Route::post('/', 'create');
         Route::put('/{comment_id}', 'update');
         Route::delete('/{comment_id}', 'delete');
+    });
+});
+
+Route::group([
+    'prefix' => 'user-authorities',
+    'controller' => UserAuthorityController::class
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/{user_authority_id}', 'show');
+        Route::post('/', 'create');
+        Route::put('/{user_authority_id}', 'update');
+        Route::delete('/{user_authority_id}', 'delete');
     });
 });

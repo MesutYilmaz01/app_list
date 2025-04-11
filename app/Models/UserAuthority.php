@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Authortiy extends Model
+class UserAuthority extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'authorities';
+    protected $table = 'user_authorities';
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +18,9 @@ class Authortiy extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'code',
+        'owner_user_id',
+        'authorized_user_id',
+        'user_list_id',
+        'authority_id'
     ];
 }
