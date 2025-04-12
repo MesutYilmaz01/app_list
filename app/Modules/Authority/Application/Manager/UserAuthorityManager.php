@@ -72,6 +72,32 @@ class UserAuthorityManager
     }
 
     /**
+     * Returns UserAuthorityEntity according to given user list id
+     * 
+     * @param int $userListId
+     * @param int $userId
+     * @return ?UserAuthorityEntity
+     * 
+     * @throws Exception
+     */
+    public function findByAttributes(int $userListId, int $userId): ?UserAuthorityEntity
+    {
+        $userAuthority = $this->userAuthorityCrudService->findByAttributes([
+            "user_list_id" => $userListId,
+            "authorized_user_id" => $userId
+        ]);
+
+        if (!$userAuthority) {
+            $this->logger->alert("User authority user list id {$userListId} could not listed.");
+            return null;
+        }
+
+        $this->logger->info("User authority user list id {$userListId} is listed.");
+
+        return $userAuthority;
+    }
+
+    /**
      * Creates a user authority according to given data
      * 
      * @param UserAuthorityDTO $userAuthorityDTO
