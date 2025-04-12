@@ -49,6 +49,7 @@ Route::group([
     'controller' => UserAuthorityController::class
 ], function ($router) {
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/user-list/{user_list_id}', 'getAllForUserList');
         Route::get('/{user_authority_id}', 'show');
         Route::post('/', 'create');
         Route::put('/{user_authority_id}', 'update');

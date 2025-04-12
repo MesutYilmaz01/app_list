@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserAuthority extends Model
@@ -18,9 +19,33 @@ class UserAuthority extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'owner_user_id',
         'authorized_user_id',
         'user_list_id',
-        'authority_id'
+        'authority_id',
+        'created_at',
+        'deleted_at',
+        'updated_at'
     ];
+
+    public function authorizedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'authorized_user_id', 'id');
+    }
+
+    public function ownerUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_user_id', 'id');
+    }
+
+    public function userList(): BelongsTo
+    {
+        return $this->belongsTo(UserList::class, 'user_list_id', 'id');
+    }
+
+    public function authority(): BelongsTo
+    {
+        return $this->belongsTo(Authority::class, 'authority_id', 'id');
+    }
 }

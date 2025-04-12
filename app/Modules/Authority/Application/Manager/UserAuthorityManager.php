@@ -2,9 +2,11 @@
 
 namespace App\Modules\Authority\Application\Manager;
 
+use App\Modules\Authority\Domain\Aggregate\UserAuthorityAggregate;
 use App\Modules\Authority\Domain\DTO\UserAuthorityDTO;
 use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
 use App\Modules\Authority\Domain\Services\UserAuthorityCrudService;
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -12,6 +14,7 @@ class UserAuthorityManager
 {
     public function __construct(
         private UserAuthorityCrudService $userAuthorityCrudService,
+        private UserAuthorityAggregate $userAuthorityAggregate,
         private LoggerInterface $logger
     ) {}
 
@@ -19,11 +22,11 @@ class UserAuthorityManager
      * Returns UserAuthorityEntity according to given id
      * 
      * @param int $id
-     * @return UserAuthorityEntity||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function getById(int $id): ?UserAuthorityEntity
+    public function getById(int $id): array
     {
         $userAuthority = $this->userAuthorityCrudService->getById($id);
 
@@ -33,7 +36,39 @@ class UserAuthorityManager
         }
 
         $this->logger->info("User authority {$id} is listed.");
-        return $userAuthority;
+
+        $this->userAuthorityAggregate->setUserAuthorityEntity($userAuthority);
+
+        return $this->userAuthorityAggregate->getResponseType()->fill();
+    }
+
+    /**
+     * Returns UserAuthorityEntity according to given user list id
+     * 
+     * @param int $userListId
+     * @return array
+     * 
+     * @throws Exception
+     */
+    public function getAllByAttributes(int $userListId): array
+    {
+        $userAuthorities = $this->userAuthorityCrudService->getAllByAttributes([
+            "user_list_id" => $userListId
+        ]);
+
+        if (!count($userAuthorities)) {
+            $this->logger->alert("User authority {$userListId} could not listed.");
+            throw new Exception("User authority could not found.", 404);
+        }
+
+        $userAuthoritiesResponse = [];
+        foreach ($userAuthorities as $userAuthority) {
+            $tempUserAuthorityModel = new UserAuthorityEntity($userAuthority);
+            $this->userAuthorityAggregate->setUserAuthorityEntity($tempUserAuthorityModel);
+            array_push($userAuthoritiesResponse, $this->userAuthorityAggregate->getResponseType()->fill());
+        }
+
+        return $userAuthoritiesResponse;
     }
 
     /**
@@ -55,7 +90,7 @@ class UserAuthorityManager
             "authorized_user_id" => $userAuthorityDTO->getAuthorizedUserId(),
             "user_list_id" => $userAuthorityDTO->getUserListId()
         ]);
-        
+
         if ($isExistUserAuthortiy && !$isExistUserAuthortiy->trashed()) {
             $this->logger->info("User tried to give authority to a user list twice for an user.");
             throw new Exception("This user already have an authority for this list.", 400);
@@ -132,5 +167,17 @@ class UserAuthorityManager
 
         $this->logger->info("User authority {$id} is deleted.");
         return $isDeleted;
+    }
+
+    /**
+     * Sets response type of user authority aggregate
+     * 
+     * @param class-string<IBaseResponse> $responseTypeName
+     * @return UserAuthorityManager
+     */
+    public function setResponseType(string $responseTypeName): UserAuthorityManager
+    {
+        $this->userAuthorityAggregate->setResponseType(app($responseTypeName));
+        return $this;
     }
 }
