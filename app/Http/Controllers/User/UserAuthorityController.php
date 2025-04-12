@@ -14,6 +14,7 @@ use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
 use App\Modules\Authority\Domain\Response\UserAuthorityUserResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class UserAuthorityController extends Controller
@@ -81,13 +82,18 @@ class UserAuthorityController extends Controller
         Gate::authorize('isOwner', [new UserAuthorityEntity(), $request->user_list_id]);
 
         try {
+            DB::beginTransaction();
+
             $userAuthorityDTO = UserAuthorityDTO::fromCreateRequest($request->validated());
             $userAuthority = $this->userAuthorityManager->create($userAuthorityDTO);
+
+            DB::commit();
             return response()->json([
                 "message" => "User authority added successfully.",
                 "result" => $userAuthority
             ], 201);
         } catch (Exception $e) {
+            DB::rollBack();
             return response()->json(["message" => $e->getMessage()], $e->getCode());
         }
     }
