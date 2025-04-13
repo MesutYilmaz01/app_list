@@ -20,10 +20,10 @@ class UserAuthorityManager
 
     /**
      * Returns UserAuthorityEntity according to given id
-     * 
+     *
      * @param int $id
      * @return array
-     * 
+     *
      * @throws Exception
      */
     public function getById(int $id): array
@@ -44,10 +44,10 @@ class UserAuthorityManager
 
     /**
      * Returns UserAuthorityEntity according to given user list id
-     * 
+     *
      * @param int $userListId
      * @return array
-     * 
+     *
      * @throws Exception
      */
     public function getAllByAttributes(int $userListId): array
@@ -60,6 +60,7 @@ class UserAuthorityManager
             $this->logger->alert("User authority {$userListId} could not listed.");
             throw new Exception("User authority could not found.", 404);
         }
+        $this->userAuthorityAggregate->setAuthorityCollection($userAuthorities);
 
         $userAuthoritiesResponse = [];
         foreach ($userAuthorities as $userAuthority) {
@@ -73,11 +74,11 @@ class UserAuthorityManager
 
     /**
      * Returns UserAuthorityEntity according to given user list id
-     * 
+     *
      * @param int $userListId
      * @param int $userId
      * @return ?UserAuthorityEntity
-     * 
+     *
      * @throws Exception
      */
     public function findByAttributes(int $userListId, int $userId): ?UserAuthorityEntity
@@ -99,10 +100,10 @@ class UserAuthorityManager
 
     /**
      * Creates a user authority according to given data
-     * 
+     *
      * @param UserAuthorityDTO $userAuthorityDTO
      * @return UserAuthorityEntity||null
-     * 
+     *
      * @throws Exception
      */
     public function create(UserAuthorityDTO $userAuthorityDTO): ?UserAuthorityEntity
@@ -154,11 +155,11 @@ class UserAuthorityManager
 
     /**
      * Update a user authority according to given data
-     * 
+     *
      * @param int $id
      * @param UserAuthorityDTO $userAuthorityDTO
      * @return UserAuthorityEntity||null
-     * 
+     *
      * @throws Exception
      */
     public function update(int $id, UserAuthorityDTO $userAuthorityDTO): ?UserAuthorityEntity
@@ -176,10 +177,10 @@ class UserAuthorityManager
 
     /**
      * Deletes a user authority according to given id
-     * 
+     *
      * @param int $id
      * @return bool
-     * 
+     *
      * @throws Exception
      */
     public function delete(int $id): bool
@@ -197,7 +198,7 @@ class UserAuthorityManager
 
     /**
      * Sets response type of user authority aggregate
-     * 
+     *
      * @param class-string<IBaseResponse> $responseTypeName
      * @return UserAuthorityManager
      */

@@ -10,6 +10,21 @@ class UserAuthorityAggregate
     private ?UserAuthorityEntity $userAuthorityEntity = null;
     private IBaseResponse $responseType;
 
+    /**
+     * @var UserAuthorityEntity[]
+     */
+    private array $authorityCollection = [];
+
+    public function getAuthorityCollection(): array
+    {
+        return $this->authorityCollection;
+    }
+
+    public function setAuthorityCollection(array $authorityCollection): void
+    {
+        $this->authorityCollection = $authorityCollection;
+    }
+
     public function setUserAuthorityEntity(UserAuthorityEntity $userAuthorityEntity)
     {
         $this->userAuthorityEntity = $userAuthorityEntity;

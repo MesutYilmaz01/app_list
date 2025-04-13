@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserList\Domain\Aggregate;
 
+use App\Models\User;
 use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
 use Closure;
@@ -9,7 +10,7 @@ use Closure;
 class UserListAggregate
 {
     private ?UserListEntity $userListEntity = null;
-    private ?Closure $userEntity = null;
+    private null|Closure|User $userEntity = null;
     private IBaseResponse $responseType;
 
     public function setUserListEntity(UserListEntity $userListEntity)
@@ -32,10 +33,15 @@ class UserListAggregate
         $this->userEntity = $userEntity;
     }
 
-    public function getUserEntity(int $userId = 0)
+    public function getUserEntity()
     {
-        $callable = $this->userEntity;
-        return $callable($userId);
+        if (is_callable($this->userEntity)) {
+            $callable = $this->userEntity;
+            $this->userEntity = $callable();
+        } elseif ($this->userListEntity) {
+            $this->userEntity = $this->userListEntity->user()->get();
+        }
+        return $this->userEntity;
     }
 
     public function setResponseType(IBaseResponse $responseType)

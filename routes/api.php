@@ -33,7 +33,9 @@ Route::group([
     'controller' => UserListController::class
 ], function ($router) {
     Route::get('/user/{user_id}', 'getAllForUser');
-    Route::get('/show/{list_id}', 'show');
+    Route::get('/show/{list_id}', 'show')->middleware(\App\Modules\UserList\Application\Middleware\UserEntityFillMiddleware::class);
+    //Route::get('/show/{list_id}/share', 'showForShare');
+    //Route::get('/show/{list_id}/comments', 'getAllComments');
 });
 
 Route::group([

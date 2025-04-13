@@ -22,11 +22,11 @@ class UserAuthorityPolicy
 
     /**
      * Determine if the given user list can be updated by the user.
-     * 
+     *
      * @param UserEntity $user
      * @param int $listId
      * @return bool
-     * 
+     *
      * @throws Exception
      */
     public function isOwner(UserEntity $user, UserAuthorityEntity $userAuthorityEntity, int $listId): Response
@@ -46,11 +46,11 @@ class UserAuthorityPolicy
 
     /**
      * Determine if the given user list can be updated by the user.
-     * 
+     *
      * @param UserEntity $user
      * @param int $userAuthorityId
      * @return bool
-     * 
+     *
      * @throws Exception
      */
     public function isOwnerUserAuthority(UserEntity $user, UserAuthorityEntity $userAuthorityEntity, int $userAuthorityId): Response
@@ -66,5 +66,9 @@ class UserAuthorityPolicy
             $this->logger->alert("Authentication policy problem for {$userAuthorityId} user authority -> Message : " . $e->getMessage());
             return Response::deny($e->getMessage(), 403);
         }
+    }
+    public function test()
+    {
+        dd('OK-test');
     }
 }

@@ -112,27 +112,5 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(UserAuthorityManager::class, UserAuthorityManager::class);
         $this->app->bind(IUserAuthorityRepository::class, UserAuthorityRepository::class);
 
-        $this->registerAggregates();
-    }
-
-    private function registerAggregates()
-    {
-        app(UserListAggregate::class)->setUserEntity(function (int $userId = 0) {
-            $userRepo = app(IUserRepository::class);
-            if ($userId == 0) {
-                if (is_null(auth()->user())) {
-                    $userEntity = new UserEntity();
-                    $userEntity->fill([
-                        "name" => "Jhon",
-                        "surname" => "Doe",
-                        "username" => "JhonDoe",
-                        "email" => "jhon@doe"
-                    ]);
-                    return $userEntity;
-                }
-                return auth()->user();
-            }
-            return $userRepo->getById($userId);
-        });
     }
 }
