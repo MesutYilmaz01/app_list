@@ -24,7 +24,7 @@ class UserAuthorityCrudService
     }
 
     /**
-     * Returns user authority according to given attributes
+     * Returns user authority with trashed according to given attributes
      * 
      * @param array $attributes
      * @return UserAuthorityEntity||null
@@ -32,6 +32,28 @@ class UserAuthorityCrudService
     public function findByAttributesWithTrashed(array $attributes): ?UserAuthorityEntity
     {
         return $this->userAuthorityRepo->withTrashed()->findByAttributes($attributes);
+    }
+
+    /**
+     * Returns user authority according to given attributes
+     * 
+     * @param array $attributes
+     * @return UserAuthorityEntity||null
+     */
+    public function findByAttributes(array $attributes): ?UserAuthorityEntity
+    {
+        return $this->userAuthorityRepo->findByAttributes($attributes);
+    }
+
+    /**
+     * Returns user authority according to given attributes
+     * 
+     * @param array $attributes
+     * @return array
+     */
+    public function getAllByAttributes(array $attributes): array
+    {
+        return $this->userAuthorityRepo->getAllByAttributes($attributes)->toArray();
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserListItem\Domain\Policies;
 
+use App\Modules\Authority\Application\Manager\UserAuthorityManager;
+use App\Modules\Authority\Domain\Enums\AuthorityType;
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\Response\UserListAdminResponse;
@@ -17,6 +19,7 @@ class UserListsItemPolicy
     public function __construct(
         private UserListItemManager $userListItemManager,
         private UserListManager $userListManager,
+        private UserAuthorityManager $userAuthorityManager,
         private LoggerInterface $logger
     ) {}
 
@@ -29,13 +32,13 @@ class UserListsItemPolicy
      * 
      * @throws Exception
      */
-    public function isOwnerListItem(UserEntity $user, UserListsItemEntity $listsItem, int $listItemId): Response
+    public function isOwnerListItem(UserEntity $user, UserListsItemEntity $listsItem, int $listItemId, AuthorityType $authorityType): Response
     {
         try {
             $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->show($listItemId);
             $userList =  $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListItem["user_list_id"]);
-
-            if ($userList["user_id"] != $user->id) {
+            $userAuthority = $this->userAuthorityManager->findByAttributes($userListItem["user_list_id"], auth()->user()->id);
+            if ($userList["user_id"] != $user->id && (!is_null($userAuthority) && $userAuthority->authority->code < $authorityType->value)) {
                 return Response::deny("Unauthenticated.", 403);
             }
 
