@@ -15,6 +15,7 @@ use App\Modules\Authority\Domain\Policies\UserAuthorityPolicy;
 use App\Modules\Authority\Infrastructure\Repository\AuthorityRepository;
 use App\Modules\Authority\Infrastructure\Repository\UserAuthorityRepository;
 use App\Modules\Category\Application\Manager\CategoryManager;
+use App\Modules\Category\Domain\Aggregate\CategoryAggregate;
 use App\Modules\Category\Domain\IRepository\ICategoryRepository;
 use App\Modules\Category\Infrastructure\Repository\CategoryRepository;
 use App\Modules\Comment\Domain\Aggregate\CommentAggregate;
@@ -84,6 +85,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->singleton(UserListItemAggregate::class);
         $this->app->singleton(CommentAggregate::class);
         $this->app->singleton(UserAuthorityAggregate::class);
+        $this->app->singleton(CategoryAggregate::class);
         $this->app->bind(LoggerInterface::class, function () {
             return Log::getLogger();
         });
