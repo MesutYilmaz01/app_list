@@ -22,7 +22,6 @@ class AuthorityUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['unique:authorities', 'max:50'],
             'code' => ['unique:authorities', 'integer'],
             'authority_id' => ['exists:authorities,id'],
         ];

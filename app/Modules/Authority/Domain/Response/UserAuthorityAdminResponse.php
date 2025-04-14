@@ -36,7 +36,6 @@ class UserAuthorityAdminResponse implements IBaseResponse
             ],
             "authority" => [
                 "id" =>  $this->userAuthorityAggregate->getAuthority()["id"],
-                "name" =>  $this->userAuthorityAggregate->getAuthority()["name"],
                 "code" =>  $this->userAuthorityAggregate->getAuthority()["code"],
             ],
             "created_at" => $this->userAuthorityAggregate->getUserAuthorityEntity()->created_at->toDateTimeString(),

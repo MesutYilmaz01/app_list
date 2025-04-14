@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('authorities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->integer('code')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
-
-        $this->seed();
     }
 
     /**
@@ -29,44 +25,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('authorities');
-    }
-
-    /**
-     * Creates initial data for this table.
-     */
-    private function seed(): void
-    {
-        DB::table('authorities')->insert(
-            [
-                [
-                    'name' => 'show',
-                    'code' => 1
-                ],
-                [
-                    'name' => 'update',
-                    'code' => 2
-                ],
-                [
-                    'name' => 'show_update',
-                    'code' => 3
-                ],
-                [
-                    'name' => 'delete',
-                    'code' => 4
-                ],
-                [
-                    'name' => 'show_delete',
-                    'code' => 5
-                ],
-                [
-                    'name' => 'update_delete',
-                    'code' => 6
-                ],
-                [
-                    'name' => 'show_update_delete',
-                    'code' => 7
-                ],
-            ]
-        );
     }
 };

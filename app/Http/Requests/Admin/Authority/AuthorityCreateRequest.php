@@ -22,7 +22,6 @@ class AuthorityCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'unique:authorities', 'max:50'],
             'code' => ['required', 'unique:authorities', 'integer']
         ];
     }
