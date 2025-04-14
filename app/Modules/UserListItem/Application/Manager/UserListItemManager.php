@@ -57,7 +57,9 @@ class UserListItemManager
         }
 
         $this->logger->info("Userlist sub lists are searched for {$listId} lists.");
-        return $userListsItems;
+        
+        $this->userListItemAggregate->setUserListItemList($userListsItems);
+        return $this->userListItemAggregate->getResponseType()->fill();
     }
 
     /**
