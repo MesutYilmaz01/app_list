@@ -9,6 +9,7 @@ class UserAuthorityAggregate
 {
     private ?UserAuthorityEntity $userAuthorityEntity = null;
     private IBaseResponse $responseType;
+    private array $userAuthorityList = [];
 
     public function setUserAuthorityEntity(UserAuthorityEntity $userAuthorityEntity)
     {
@@ -18,6 +19,16 @@ class UserAuthorityAggregate
     public function getUserAuthorityEntity()
     {
         return $this->userAuthorityEntity;
+    }
+
+    public function setUserAuthorityList(array $userAuthorityList)
+    {
+        $this->userAuthorityList = $userAuthorityList;
+    }
+
+    public function getUserAuthorityList()
+    {
+        return $this->userAuthorityList;
     }
 
     public function setResponseType(IBaseResponse $responseType)

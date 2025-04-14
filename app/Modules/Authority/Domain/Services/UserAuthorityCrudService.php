@@ -53,7 +53,7 @@ class UserAuthorityCrudService
      */
     public function getAllByAttributes(array $attributes): array
     {
-        return $this->userAuthorityRepo->getAllByAttributes($attributes)->toArray();
+        return $this->userAuthorityRepo->getAllByAttributes($attributes)->all();
     }
 
     /**
