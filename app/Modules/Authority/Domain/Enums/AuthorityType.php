@@ -12,4 +12,12 @@ enum AuthorityType: int
     case SHOW_DELETE = 5;
     case UPDATE_DELETE = 6;
     case SHOW_UPDATE_DELETE = 7;
+    case CREATE = 8;
+    case SHOW_CREATE = 9;
+    case UPDATE_CREATE = 10;
+    case SHOW_UPDATE_CREATE = 11;
+    case CREATE_DELETE = 12;
+    case SHOW_DELETE_CREATE = 13;
+    case UPDATE_DELETE_CREATE = 14;
+    case SHOW_UPDATE_CREATE_DELETE = 15;
 }

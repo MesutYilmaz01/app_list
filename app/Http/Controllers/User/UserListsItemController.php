@@ -7,6 +7,7 @@ use App\Http\Requests\Common\UserListsItem\UserListsItemDeleteRequest;
 use App\Http\Requests\Common\UserListsItem\UserListsItemShowRequest;
 use App\Http\Requests\User\UserListsItem\UserListsItemCreateRequest;
 use App\Http\Requests\User\UserListsItem\UserListsItemUpdateRequest;
+use App\Modules\Authority\Domain\Enums\AuthorityType;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserListItem\Domain\Entities\UserListsItemEntity;
@@ -32,9 +33,8 @@ class UserListsItemController extends Controller
      */
     public function show(UserListsItemShowRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
-
         try {
+            Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::SHOW]);
             $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->show($request->list_item_id);
             return response()->json([
                 "message" => "List item got successfully.",
@@ -86,9 +86,8 @@ class UserListsItemController extends Controller
      */
     public function update(UserListsItemUpdateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
-
         try {
+            Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::UPDATE]);
             $userListItemDTO = UserListItemDTO::fromUpdateRequest($request->validated());
             $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->update($request->list_item_id, $userListItemDTO);
             return response()->json([
@@ -110,9 +109,8 @@ class UserListsItemController extends Controller
      */
     public function delete(UserListsItemDeleteRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id]);
-
         try {
+            Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::DELETE]);
             $this->userListItemManager->delete($request->list_item_id);
             return response()->json(["message" => "User list item deletion is successfuly completed."], 200);
         } catch (Exception $e) {
