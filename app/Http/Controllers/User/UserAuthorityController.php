@@ -40,7 +40,7 @@ class UserAuthorityController extends Controller
             $userAuthority = $this->userAuthorityManager->setResponseType(UserAuthorityUserResponse::class)->getById($request->user_authority_id);
             return response()->json([
                 "message" => "User authority got successfully.",
-                "result" => $userAuthority,
+                "result" => ["user_authority" => $userAuthority],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -63,7 +63,7 @@ class UserAuthorityController extends Controller
             $userAuthorities = $this->userAuthorityManager->setResponseType(UserAuthorityUserListResponse::class)->getAllByAttributes($request->user_list_id);
             return response()->json([
                 "message" => "User authority list got successfully.",
-                "result" => $userAuthorities,
+                "result" => ["user_authorities" => $userAuthorities],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -91,7 +91,7 @@ class UserAuthorityController extends Controller
             DB::commit();
             return response()->json([
                 "message" => "User authority added successfully.",
-                "result" => $userAuthority
+                "result" => ["user_authority" => $userAuthority],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -117,7 +117,7 @@ class UserAuthorityController extends Controller
             $userAuthority = $this->userAuthorityManager->update($request->user_authority_id, $userAuthorityDTO);
             return response()->json([
                 "message" => "User authority updated successfully.",
-                "result" => $userAuthority
+                "result" => ["user_authority" => $userAuthority],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

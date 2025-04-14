@@ -43,9 +43,8 @@ class CategoryController extends Controller
      */
     public function getPopulars(): JsonResponse
     {
-        $categories = $this->categoryManager->setResponseType(CategoryGeneralListResponse::class)->getPopulars();
         try {
-           
+            $categories = $this->categoryManager->setResponseType(CategoryGeneralListResponse::class)->getPopulars();
             return response()->json([
                 "message" => "Categories got successfully.",
                 "result" => ["categories" => $categories]

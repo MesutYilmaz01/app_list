@@ -33,7 +33,7 @@ class UserListController extends Controller
             $userLists = $this->userListManager->setResponseType(UserListGeneralListResponse::class)->getAllForUser($request->user_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userLists
+                "result" => ["user_lists" => $userLists],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -54,7 +54,7 @@ class UserListController extends Controller
             $userList = $this->userListManager->setResponseType(UserListGeneralResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userList,
+                "result" => ["user_lists" => $userList],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());

@@ -49,9 +49,8 @@ class CategoryController extends Controller
      */
     public function getPopulars(): JsonResponse
     {
-        $categories = $this->categoryManager->setResponseType(CategoryAdminListResponse::class)->getPopulars();
         try {
-           
+            $categories = $this->categoryManager->setResponseType(CategoryAdminListResponse::class)->getPopulars();
             return response()->json([
                 "message" => "Categories got successfully.",
                 "result" => ["categories" => $categories]
@@ -117,7 +116,7 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request): JsonResponse
     {
         try {
-            $categoryDTO = CategoryDTO::fromCreateRequest($request->validated());
+            $categoryDTO = CategoryDTO::fromUpdateRequest($request->validated());
             $category = $this->categoryManager->update($request->category_id, $categoryDTO);
 
             $category = $this->categoryManager->setResponseType(CategoryAdminResponse::class)->getById($category->id);

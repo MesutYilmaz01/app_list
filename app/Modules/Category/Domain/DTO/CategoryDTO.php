@@ -6,7 +6,7 @@ class CategoryDTO
 {
     private string $name;
 
-    public function setName(string $name) 
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -21,6 +21,16 @@ class CategoryDTO
         $categoryDTO = new self();
 
         $categoryDTO->setName($request["name"]);
+
+        return $categoryDTO;
+    }
+
+    public static function fromUpdateRequest(array $request)
+    {
+        $categoryDTO = new self();
+
+        if (isset($request["name"]))
+            $categoryDTO->setName($request["name"]);
 
         return $categoryDTO;
     }

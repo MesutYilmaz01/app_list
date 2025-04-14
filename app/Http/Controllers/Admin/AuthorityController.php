@@ -28,10 +28,10 @@ class AuthorityController extends Controller
     public function getAll(): JsonResponse
     {
         try {
-            $authority = $this->authorityManager->getAll();
+            $authorities= $this->authorityManager->getAll();
             return response()->json([
                 "message" => "Authority list got successfully.",
-                "result" => $authority
+                "result" => ["authorties" => $authorities]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -52,7 +52,7 @@ class AuthorityController extends Controller
             $authority = $this->authorityManager->getById($request->authority_id);
             return response()->json([
                 "message" => "Authority got successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -74,7 +74,7 @@ class AuthorityController extends Controller
             $authority = $this->authorityManager->create($authorityDTO);
             return response()->json([
                 "message" => "Authority created successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -96,7 +96,7 @@ class AuthorityController extends Controller
             $authority = $this->authorityManager->update($request->authority_id, $authorityDTO);
             return response()->json([
                 "message" => "Authority updated successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
