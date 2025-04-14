@@ -18,7 +18,6 @@ class Authority extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'code',
     ];
 }

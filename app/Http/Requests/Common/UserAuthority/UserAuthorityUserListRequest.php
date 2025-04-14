@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Authority;
+namespace App\Http\Requests\Common\UserAuthority;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthorityUpdateRequest extends FormRequest
+class UserAuthorityUserListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,12 @@ class AuthorityUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['unique:authorities', 'integer'],
-            'authority_id' => ['exists:authorities,id'],
+            'user_list_id' => ['required', 'exists:user_authorities,user_list_id'],
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['authority_id' => $this->route('authority_id')]);
+        $this->merge(['user_list_id' => $this->route('user_list_id')]);
     }
 }

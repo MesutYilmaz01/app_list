@@ -4,6 +4,7 @@ namespace App\Modules\Authority\Domain\Policies;
 
 use App\Modules\Authority\Application\Manager\UserAuthorityManager;
 use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
+use App\Modules\Authority\Domain\Response\UserAuthorityAdminResponse;
 use App\Modules\User\Domain\Entities\UserEntity;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\Response\UserListAdminResponse;
@@ -55,8 +56,8 @@ class UserAuthorityPolicy
     public function isOwnerUserAuthority(UserEntity $user, UserAuthorityEntity $userAuthorityEntity, int $userAuthorityId): Response
     {
         try {
-            $userAuthority = $this->userAuthortiyManager->getById($userAuthorityId);
-            if ($userAuthority->owner_user_id != $user->id) {
+            $userAuthority = $this->userAuthortiyManager->setResponseType(UserAuthorityAdminResponse::class)->getById($userAuthorityId);
+            if ($userAuthority["owner_user"]["id"] != $user->id) {
                 return Response::deny("Unauthenticated.", 403);
             }
 

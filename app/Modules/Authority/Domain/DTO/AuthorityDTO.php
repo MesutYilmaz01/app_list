@@ -4,18 +4,7 @@ namespace App\Modules\Authority\Domain\DTO;
 
 class AuthorityDTO
 {
-    private string $name;
     private string $code;
-
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
 
     public function setCode(int $code)
     {
@@ -31,8 +20,7 @@ class AuthorityDTO
     {
         $authorityDTO = new self();
 
-        $authorityDTO->setName($request["name"]);
-        $authorityDTO->setName($request["code"]);
+        $authorityDTO->setCode($request["code"]);
 
         return $authorityDTO;
     }
@@ -41,8 +29,6 @@ class AuthorityDTO
     {
         $authorityDTO = new self();
 
-        if (isset($request["name"]))
-            $authorityDTO->setName($request["name"]);
         if (isset($request["code"]))
             $authorityDTO->setCode($request["code"]);
 
