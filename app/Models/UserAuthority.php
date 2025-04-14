@@ -19,14 +19,10 @@ class UserAuthority extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'id',
         'owner_user_id',
         'authorized_user_id',
         'user_list_id',
         'authority_id',
-        'created_at',
-        'deleted_at',
-        'updated_at'
     ];
 
     public function authorizedUser(): BelongsTo

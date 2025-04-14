@@ -11,6 +11,7 @@ use App\Http\Requests\User\UserAuthority\UserAuthorityDeleteRequest;
 use App\Modules\Authority\Application\Manager\UserAuthorityManager;
 use App\Modules\Authority\Domain\DTO\UserAuthorityDTO;
 use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
+use App\Modules\Authority\Domain\Response\UserAuthorityUserListResponse;
 use App\Modules\Authority\Domain\Response\UserAuthorityUserResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -33,9 +34,9 @@ class UserAuthorityController extends Controller
      */
     public function show(UserAuthorityRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
-
         try {
+            Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
+
             $userAuthority = $this->userAuthorityManager->setResponseType(UserAuthorityUserResponse::class)->getById($request->user_authority_id);
             return response()->json([
                 "message" => "User authority got successfully.",
@@ -56,10 +57,10 @@ class UserAuthorityController extends Controller
      */
     public function getAllForUserList(UserAuthorityUserListRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserAuthorityEntity(), $request->user_list_id]);
-
         try {
-            $userAuthorities = $this->userAuthorityManager->setResponseType(UserAuthorityUserResponse::class)->getAllByAttributes($request->user_list_id);
+            Gate::authorize('isOwner', [new UserAuthorityEntity(), $request->user_list_id]);
+
+            $userAuthorities = $this->userAuthorityManager->setResponseType(UserAuthorityUserListResponse::class)->getAllByAttributes($request->user_list_id);
             return response()->json([
                 "message" => "User authority list got successfully.",
                 "result" => $userAuthorities,
@@ -79,9 +80,9 @@ class UserAuthorityController extends Controller
      */
     public function create(UserAuthorityCreateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new UserAuthorityEntity(), $request->user_list_id]);
-
         try {
+            Gate::authorize('isOwner', [new UserAuthorityEntity(), $request->user_list_id]);
+
             DB::beginTransaction();
 
             $userAuthorityDTO = UserAuthorityDTO::fromCreateRequest($request->validated());
@@ -109,9 +110,9 @@ class UserAuthorityController extends Controller
      */
     public function update(UserAuthorityUpdateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
-
         try {
+            Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
+
             $userAuthorityDTO = UserAuthorityDTO::fromUpdateRequest($request->validated());
             $userAuthority = $this->userAuthorityManager->update($request->user_authority_id, $userAuthorityDTO);
             return response()->json([
@@ -133,9 +134,9 @@ class UserAuthorityController extends Controller
      */
     public function delete(UserAuthorityDeleteRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
-
         try {
+            Gate::authorize('isOwnerUserAuthority', [new UserAuthorityEntity(), $request->user_authority_id]);
+
             $this->userAuthorityManager->delete($request->user_authority_id);
             return response()->json(["message" => "User authority deletion is successfuly completed."], 200);
         } catch (Exception $e) {
