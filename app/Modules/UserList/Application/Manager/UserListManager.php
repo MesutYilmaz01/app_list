@@ -30,13 +30,15 @@ class UserListManager
     {
         $userLists = $this->userListCrudService->getAllForUser($userId);
 
-        if (!$userLists) {
+        if (!count($userLists)) {
             $this->logger->alert("Userlist could not find for {$userId} user.");
             throw new Exception("Userlists could not find.", 400);
         }
 
         $this->logger->info("Userlist is searched for {$userId} user.");
-        return $userLists;
+
+        $this->userListAggregate->setUserListList($userLists);
+        return $this->userListAggregate->getResponseType()->fill();
     }
 
     /**
@@ -49,13 +51,15 @@ class UserListManager
     {
         $lists = $this->userListCrudService->get($filterParams);
 
-        if (!$lists) {
+        if (!count($lists)) {
             $this->logger->alert("List could not found for this attributes.");
             throw new Exception("List could not found for this attributes.", 400);
         }
 
         $this->logger->info("List found for this attributes.");
-        return $lists;
+
+        $this->userListAggregate->setUserListList($lists);
+        return $this->userListAggregate->getResponseType()->fill();
     }
 
     /**

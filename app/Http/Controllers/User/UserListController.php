@@ -14,6 +14,7 @@ use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
+use App\Modules\UserList\Domain\Response\UserListUserListResponse;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserList\Domain\Response\UserListUserResponse;
@@ -38,14 +39,12 @@ class UserListController extends Controller
      * @throws Exception
      */
     public function getAllForUser(UserListGetAllForUserRequest $request): JsonResponse
-    {
+    {$userLists = $this->userListManager->setResponseType(UserListUserListResponse::class)->getAllForUser($request->user_id);
         try {
-            $userLists = $this->userListManager->getAllForUser($request->user_id);
+            $userLists = $this->userListManager->setResponseType(UserListUserListResponse::class)->getAllForUser($request->user_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => [
-                    "user_lists" => $userLists
-                ],
+                "result" => $userLists,
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

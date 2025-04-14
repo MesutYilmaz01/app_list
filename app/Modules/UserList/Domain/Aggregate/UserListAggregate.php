@@ -11,6 +11,7 @@ class UserListAggregate
     private ?UserListEntity $userListEntity = null;
     private ?Closure $userEntity = null;
     private IBaseResponse $responseType;
+    private array $userListList = [];
 
     public function setUserListEntity(UserListEntity $userListEntity)
     {
@@ -36,6 +37,16 @@ class UserListAggregate
     {
         $callable = $this->userEntity;
         return $callable($userId);
+    }
+
+    public function setUserListList(array $userListList)
+    {
+        $this->userListList = $userListList;
+    }
+
+    public function getUserListList()
+    {
+        return $this->userListList;
     }
 
     public function setResponseType(IBaseResponse $responseType)

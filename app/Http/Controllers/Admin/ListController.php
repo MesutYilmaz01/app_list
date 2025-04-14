@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Common\List\ListLatestRequest;
 use App\Http\Requests\Common\List\ListRequest;
 use App\Modules\UserList\Application\Manager\UserListManager;
+use App\Modules\UserList\Domain\Response\UserListAdminListResponse;
 use Exception;
 
 class ListController extends Controller
@@ -25,7 +26,7 @@ class ListController extends Controller
     public function get(array $filters)
     {
         try {
-            return $this->userListManager->get($filters);
+            return $this->userListManager->setResponseType(UserListAdminListResponse::class)->get($filters);
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
