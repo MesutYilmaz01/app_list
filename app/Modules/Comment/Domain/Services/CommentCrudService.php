@@ -26,7 +26,7 @@ class CommentCrudService
             ->parseRequest($filterParams)
             ->withFilters($filterParams)
             ->getAll()
-            ->toArray();
+            ->all();
     }
 
     /**

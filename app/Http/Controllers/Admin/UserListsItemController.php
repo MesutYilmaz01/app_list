@@ -32,7 +32,7 @@ class UserListsItemController extends Controller
             $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->show($request->list_item_id);
             return response()->json([
                 "message" => "List item got successfully.",
-                "result" => $userListItem,
+                "result" => ["user_list_item" => $userListItem],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -54,7 +54,7 @@ class UserListsItemController extends Controller
             $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->update($request->list_item_id, $userListItemDTO);
             return response()->json([
                 "message" => "User list item updated successfully.",
-                "result" => $userListItem,
+                "result" => ["user_list_item" => $userListItem],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

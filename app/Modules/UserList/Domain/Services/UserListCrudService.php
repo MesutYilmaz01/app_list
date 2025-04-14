@@ -27,7 +27,7 @@ class UserListCrudService
             'user_id' => $userId,
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
-        ])->toArray();
+        ])->all();
     }
 
     /**
@@ -42,7 +42,7 @@ class UserListCrudService
             ->parseRequest($filterParams)
             ->withFilters($filterParams)
             ->getAll()
-            ->toArray();
+            ->all();
     }
 
     /**
@@ -58,11 +58,11 @@ class UserListCrudService
             'status' => StatusType::ACTIVE->value,
             'is_public' => ShareType::PUBLIC->value
         ]);
-        
+
         if (!$userList) {
             return null;
         }
-        
+
         return $userList;
     }
 

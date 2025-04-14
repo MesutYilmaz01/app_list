@@ -32,7 +32,7 @@ class CommentController extends Controller
             $comment = $this->commentManager->setResponseType(CommentAdminResponse::class)->show($request->comment_id);
             return response()->json([
                 "message" => "Comment got successfully.",
-                "result" => $comment,
+                "result" => ["comment" => $comment],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -54,7 +54,7 @@ class CommentController extends Controller
             $comment = $this->commentManager->setResponseType(CommentAdminResponse::class)->update($request->comment_id, $commentDTO);
             return response()->json([
                 "message" => "Comment updated successfully.",
-                "result" => $comment
+                "result" => ["comment" => $comment],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

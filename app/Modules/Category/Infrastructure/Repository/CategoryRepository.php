@@ -21,9 +21,9 @@ class CategoryRepository extends BaseEloquentRepository implements ICategoryRepo
      */
     public function getAllWithCount(int $count): ?array
     {
-        return  $this->model->query()
+        return $this->model->query()
             ->withCount('userLists')
             ->having('user_lists_count', '>', $count)
-            ->get()->toArray();
+            ->get()->all();
     }
 }

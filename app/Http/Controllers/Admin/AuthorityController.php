@@ -9,6 +9,8 @@ use App\Http\Requests\Admin\Authority\AuthorityShowRequest;
 use App\Http\Requests\Admin\Authority\AuthorityUpdateRequest;
 use App\Modules\Authority\Application\Manager\AuthorityManager;
 use App\Modules\Authority\Domain\DTO\AuthorityDTO;
+use App\Modules\Authority\Domain\Response\AuthorityAdminListResponse;
+use App\Modules\Authority\Domain\Response\AuthorityAdminResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -28,10 +30,10 @@ class AuthorityController extends Controller
     public function getAll(): JsonResponse
     {
         try {
-            $authority = $this->authorityManager->getAll();
+            $authorities = $this->authorityManager->setResponseType(AuthorityAdminListResponse::class)->getAll();
             return response()->json([
                 "message" => "Authority list got successfully.",
-                "result" => $authority
+                "result" => ["authorties" => $authorities]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -49,10 +51,10 @@ class AuthorityController extends Controller
     public function show(AuthorityShowRequest $request): JsonResponse
     {
         try {
-            $authority = $this->authorityManager->getById($request->authority_id);
+            $authority = $this->authorityManager->setResponseType(AuthorityAdminResponse::class)->getById($request->authority_id);
             return response()->json([
                 "message" => "Authority got successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -72,9 +74,11 @@ class AuthorityController extends Controller
         try {
             $authorityDTO = AuthorityDTO::fromCreateRequest($request->validated());
             $authority = $this->authorityManager->create($authorityDTO);
+
+            $authority = $this->authorityManager->setResponseType(AuthorityAdminResponse::class)->getById($authority->id);
             return response()->json([
                 "message" => "Authority created successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -94,9 +98,11 @@ class AuthorityController extends Controller
         try {
             $authorityDTO = AuthorityDTO::fromUpdateRequest($request->validated());
             $authority = $this->authorityManager->update($request->authority_id, $authorityDTO);
+            
+            $authority = $this->authorityManager->setResponseType(AuthorityAdminResponse::class)->getById($authority->id);
             return response()->json([
                 "message" => "Authority updated successfully.",
-                "result" => $authority
+                "result" => ["authortiy" => $authority]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

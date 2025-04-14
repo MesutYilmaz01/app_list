@@ -14,6 +14,7 @@ use App\Modules\Shared\Events\UserList\UserListDeletedEvent;
 use App\Modules\UserList\Application\Manager\UserListManager;
 use App\Modules\UserList\Domain\DTO\UserListDTO;
 use App\Modules\UserList\Domain\Entities\UserListEntity;
+use App\Modules\UserList\Domain\Response\UserListUserListResponse;
 use App\Modules\UserListItem\Application\Manager\UserListItemManager;
 use App\Modules\UserListItem\Domain\DTO\UserListItemDTO;
 use App\Modules\UserList\Domain\Response\UserListUserResponse;
@@ -40,12 +41,10 @@ class UserListController extends Controller
     public function getAllForUser(UserListGetAllForUserRequest $request): JsonResponse
     {
         try {
-            $userLists = $this->userListManager->getAllForUser($request->user_id);
+            $userLists = $this->userListManager->setResponseType(UserListUserListResponse::class)->getAllForUser($request->user_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => [
-                    "user_lists" => $userLists
-                ],
+                "result" => ["user_lists" => $userLists],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -66,7 +65,7 @@ class UserListController extends Controller
             $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->show($request->list_id);
             return response()->json([
                 "message" => "List got successfully.",
-                "result" => $userList,
+                "result" => ["user_lists" => $userList],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -97,7 +96,7 @@ class UserListController extends Controller
 
             return response()->json([
                 "message" => "List added with it's item successfully.",
-                "result" => $userList
+                "result" => ["user_lists" => $userList],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -123,7 +122,7 @@ class UserListController extends Controller
             $userList = $this->userListManager->setResponseType(UserListUserResponse::class)->update($request->list_id, $userListDTO);
             return response()->json([
                 "message" => "User list updated successfully.",
-                "result" => $userList
+                "result" => ["user_lists" => $userList],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

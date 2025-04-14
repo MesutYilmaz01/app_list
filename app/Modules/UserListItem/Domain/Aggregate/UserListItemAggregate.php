@@ -11,6 +11,7 @@ class UserListItemAggregate
     private ?UserListsItem $userListItemEntity = null;
     private ?UserEntity $userEntity = null;
     private IBaseResponse $responseType;
+    private array $userListItemList = [];
 
     public function setUserListItemEntity(UserListsItem $userListItemEntity)
     {
@@ -30,6 +31,16 @@ class UserListItemAggregate
     public function getUserEntity()
     {
         return $this->userEntity;
+    }
+
+    public function setUserListItemList(array $userListItemList)
+    {
+        $this->userListItemList = $userListItemList;
+    }
+
+    public function getUserListItemList()
+    {
+        return $this->userListItemList;
     }
 
     public function setResponseType(IBaseResponse $responseType)

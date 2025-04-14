@@ -32,13 +32,13 @@ class CommentController extends Controller
      */
     public function show(CommentShowRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
-
         try {
+            Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
+
             $comment = $this->commentManager->setResponseType(CommentUserResponse::class)->show($request->comment_id);
             return response()->json([
                 "message" => "Comment got successfully.",
-                "result" => $comment,
+                "result" => ["comment" => $comment],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], (int)$e->getCode());
@@ -66,7 +66,7 @@ class CommentController extends Controller
 
             return response()->json([
                 "message" => "Comment added with it's item successfully.",
-                "result" => $comment
+                "result" => ["comment" => $comment],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -85,14 +85,14 @@ class CommentController extends Controller
      */
     public function update(CommentUpdateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
-
         try {
+            Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
+
             $commentDTO = CommentDTO::fromUpdateRequest($request->validated());
             $comment = $this->commentManager->setResponseType(CommentUserResponse::class)->update($request->comment_id, $commentDTO);
             return response()->json([
                 "message" => "Comment updated successfully.",
-                "result" => $comment
+                "result" => ["comment" => $comment],
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -109,9 +109,9 @@ class CommentController extends Controller
      */
     public function delete(CommentDeleteRequest $request): JsonResponse
     {
-        Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
-
         try {
+            Gate::authorize('isOwner', [new CommentEntity(), $request->comment_id]);
+
             $this->commentManager->delete($request->comment_id);
             return response()->json(["message" => "Comment deletion is successfuly completed."], 200);
         } catch (Exception $e) {

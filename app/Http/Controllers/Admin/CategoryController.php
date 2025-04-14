@@ -9,6 +9,8 @@ use App\Http\Requests\Admin\Category\CategoryShowRequest;
 use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
 use App\Modules\Category\Application\Manager\CategoryManager;
 use App\Modules\Category\Domain\DTO\CategoryDTO;
+use App\Modules\Category\Domain\Response\CategoryAdminListResponse;
+use App\Modules\Category\Domain\Response\CategoryAdminResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -28,7 +30,7 @@ class CategoryController extends Controller
     public function getAll(): JsonResponse
     {
         try {
-            $categories = $this->categoryManager->getAll();
+            $categories = $this->categoryManager->setResponseType(CategoryAdminListResponse::class)->getAll();
             return response()->json([
                 "message" => "Categories got successfully.",
                 "result" => ["categories" => $categories]
@@ -47,9 +49,8 @@ class CategoryController extends Controller
      */
     public function getPopulars(): JsonResponse
     {
-        $categories = $this->categoryManager->getPopulars();
         try {
-           
+            $categories = $this->categoryManager->setResponseType(CategoryAdminListResponse::class)->getPopulars();
             return response()->json([
                 "message" => "Categories got successfully.",
                 "result" => ["categories" => $categories]
@@ -70,10 +71,10 @@ class CategoryController extends Controller
     public function show(CategoryShowRequest $request): JsonResponse
     {
         try {
-            $category = $this->categoryManager->getById($request->category_id);
+            $category = $this->categoryManager->setResponseType(CategoryAdminResponse::class)->getById($request->category_id);
             return response()->json([
                 "message" => "Category got successfully.",
-                "result" => ["category" => $category]
+                "result" => ["categories" => $category]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -93,9 +94,11 @@ class CategoryController extends Controller
         try {
             $categoryDTO = CategoryDTO::fromCreateRequest($request->validated());
             $category = $this->categoryManager->create($categoryDTO);
+
+            $category = $this->categoryManager->setResponseType(CategoryAdminResponse::class)->getById($category->id);
             return response()->json([
                 "message" => "Category created successfully.",
-                "result" => ["category" => $category]
+                "result" => ["categories" => $category]
             ], 201);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
@@ -113,11 +116,13 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request): JsonResponse
     {
         try {
-            $categoryDTO = CategoryDTO::fromCreateRequest($request->validated());
+            $categoryDTO = CategoryDTO::fromUpdateRequest($request->validated());
             $category = $this->categoryManager->update($request->category_id, $categoryDTO);
+
+            $category = $this->categoryManager->setResponseType(CategoryAdminResponse::class)->getById($category->id);
             return response()->json([
                 "message" => "Category updated successfully.",
-                "result" => ["category" => $category]
+                "result" => ["categories" => $category]
             ], 200);
         } catch (Exception $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());

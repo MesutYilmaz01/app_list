@@ -19,7 +19,7 @@ class CategoryCrudService
      */
     public function getAll(): ?array
     {
-        return $this->categoryRepo->getAll()->toArray();
+        return $this->categoryRepo->getAll()->all();
     }
 
     /**

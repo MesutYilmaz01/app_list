@@ -2,9 +2,11 @@
 
 namespace App\Modules\Authority\Application\Manager;
 
+use App\Modules\Authority\Domain\Aggregate\AuthorityAggregate;
 use App\Modules\Authority\Domain\DTO\AuthorityDTO;
 use App\Modules\Authority\Domain\Entities\AuthorityEntity;
 use App\Modules\Authority\Domain\Services\AuthorityCrudService;
+use App\Modules\Shared\Responses\Interface\IBaseResponse;
 use Exception;
 use Psr\Log\LoggerInterface;
 
@@ -12,17 +14,18 @@ class AuthorityManager
 {
     public function __construct(
         private AuthorityCrudService $authorityCrudService,
+        private AuthorityAggregate $authorityAggregate,
         private LoggerInterface $logger
     ) {}
 
     /**
      * Returns all category data
      * 
-     * @return array||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function getAll(): ?array
+    public function getAll(): array
     {
         $authorities = $this->authorityCrudService->getAll();
 
@@ -32,18 +35,20 @@ class AuthorityManager
         }
 
         $this->logger->info("Authorities are listed.");
-        return $authorities;
+
+        $this->authorityAggregate->setAuthorityList($authorities);
+        return $this->authorityAggregate->getResponseType()->fill();
     }
 
     /**
      * Returns AuthorityEntity according to given id
      * 
      * @param int $id
-     * @return AuthorityEntity||null
+     * @return array
      * 
      * @throws Exception
      */
-    public function getById(int $id): ?AuthorityEntity
+    public function getById(int $id): array
     {
         $authority = $this->authorityCrudService->getById($id);
 
@@ -54,7 +59,9 @@ class AuthorityManager
         }
 
         $this->logger->info("Authority {$id} is listed.");
-        return $authority;
+
+        $this->authorityAggregate->setAuthorityEntity($authority);
+        return $this->authorityAggregate->getResponseType()->fill();
     }
 
     /**
@@ -119,5 +126,17 @@ class AuthorityManager
 
         $this->logger->info("Authority {$id} is deleted.");
         return $isDeleted;
+    }
+
+    /**
+     * Sets response type of user authority aggregate
+     * 
+     * @param class-string<IBaseResponse> $responseTypeName
+     * @return AuthorityManager
+     */
+    public function setResponseType(string $responseTypeName): AuthorityManager
+    {
+        $this->authorityAggregate->setResponseType(app($responseTypeName));
+        return $this;
     }
 }

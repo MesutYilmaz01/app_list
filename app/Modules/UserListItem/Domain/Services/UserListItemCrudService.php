@@ -32,7 +32,7 @@ class UserListItemCrudService
      */
     public function getAllForLists(int $listId): ?array
     {
-        return $this->userListItemRepo->getAllByAttributes(['user_list_id' => $listId, 'status' => StatusType::ACTIVE->value])->toArray();
+        return $this->userListItemRepo->getAllByAttributes(['user_list_id' => $listId, 'status' => StatusType::ACTIVE->value])->all();
     }
 
 
