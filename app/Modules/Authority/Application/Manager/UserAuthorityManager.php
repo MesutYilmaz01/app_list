@@ -61,14 +61,8 @@ class UserAuthorityManager
             throw new Exception("User authority could not found.", 404);
         }
 
-        $userAuthoritiesResponse = [];
-        foreach ($userAuthorities as $userAuthority) {
-            $tempUserAuthorityModel = new UserAuthorityEntity($userAuthority);
-            $this->userAuthorityAggregate->setUserAuthorityEntity($tempUserAuthorityModel);
-            array_push($userAuthoritiesResponse, $this->userAuthorityAggregate->getResponseType()->fill());
-        }
-
-        return $userAuthoritiesResponse;
+        $this->userAuthorityAggregate->setUserAuthorityList($userAuthorities);
+        return $this->userAuthorityAggregate->getResponseType()->fill();
     }
 
     /**
