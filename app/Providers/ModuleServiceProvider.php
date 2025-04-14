@@ -7,6 +7,7 @@ use App\Modules\ArtificialIntelligence\Domain\Interfaces\IArtificialIntelligence
 use App\Modules\ArtificialIntelligence\Infrastructure\ThirdParty\Gemini;
 use App\Modules\Authority\Application\Manager\AuthorityManager;
 use App\Modules\Authority\Application\Manager\UserAuthorityManager;
+use App\Modules\Authority\Domain\Aggregate\AuthorityAggregate;
 use App\Modules\Authority\Domain\Aggregate\UserAuthorityAggregate;
 use App\Modules\Authority\Domain\Entities\UserAuthorityEntity;
 use App\Modules\Authority\Domain\IRepository\IAuthorityRepository;
@@ -86,6 +87,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->singleton(CommentAggregate::class);
         $this->app->singleton(UserAuthorityAggregate::class);
         $this->app->singleton(CategoryAggregate::class);
+        $this->app->singleton(AuthorityAggregate::class);
         $this->app->bind(LoggerInterface::class, function () {
             return Log::getLogger();
         });

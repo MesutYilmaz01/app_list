@@ -19,7 +19,7 @@ class AuthorityCrudService
      */
     public function getAll(): ?array
     {
-        return $this->authorityRepo->getAll()->toArray();
+        return $this->authorityRepo->getAll()->all();
     }
 
     /**
