@@ -35,8 +35,10 @@ class UserListPolicy
         try {
             $userList = $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListId);
             $userAuthority = $this->userAuthorityManager->findByAttributes($userListId, auth()->user()->id);
-            if ($userList["user_id"] != $user->id && (!is_null($userAuthority) && $userAuthority->authority->code < $authorityType->value)) {
-                return Response::deny("Unauthenticated.", 403);
+            if ($userList["user_id"] != $user->id) {
+                if (is_null($userAuthority) || (!is_null($userAuthority) && ($authorityType->value & $userAuthority->authority->code) == 0)) {
+                    return Response::deny("Unauthenticated.", 403);
+                }
             }
 
             return Response::allow();

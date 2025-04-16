@@ -35,6 +35,7 @@ class UserListsItemController extends Controller
     {
         try {
             Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::SHOW]);
+
             $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->show($request->list_item_id);
             return response()->json([
                 "message" => "List item got successfully.",
@@ -55,9 +56,9 @@ class UserListsItemController extends Controller
      */
     public function create(UserListsItemCreateRequest $request): JsonResponse
     {
-        Gate::authorize('isOwnerUserList', [new UserListsItemEntity(), $request->user_list_id]);
-
         try {
+            Gate::authorize('isOwnerUserList', [new UserListsItemEntity(), $request->user_list_id, AuthorityType::CREATE]);
+
             DB::beginTransaction();
 
             $userListItemDTO = UserListItemDTO::fromRequest($request->validated());
@@ -88,6 +89,7 @@ class UserListsItemController extends Controller
     {
         try {
             Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::UPDATE]);
+            
             $userListItemDTO = UserListItemDTO::fromUpdateRequest($request->validated());
             $userListItem = $this->userListItemManager->setResponseType(UserListItemUserResponse::class)->update($request->list_item_id, $userListItemDTO);
             return response()->json([
@@ -111,6 +113,7 @@ class UserListsItemController extends Controller
     {
         try {
             Gate::authorize('isOwnerListItem', [new UserListsItemEntity(), $request->list_item_id, AuthorityType::DELETE]);
+
             $this->userListItemManager->delete($request->list_item_id);
             return response()->json(["message" => "User list item deletion is successfuly completed."], 200);
         } catch (Exception $e) {
