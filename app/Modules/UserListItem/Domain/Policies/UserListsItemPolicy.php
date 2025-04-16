@@ -38,8 +38,11 @@ class UserListsItemPolicy
             $userListItem = $this->userListItemManager->setResponseType(UserListItemAdminResponse::class)->show($listItemId);
             $userList =  $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListItem["user_list_id"]);
             $userAuthority = $this->userAuthorityManager->findByAttributes($userListItem["user_list_id"], auth()->user()->id);
-            if ($userList["user_id"] != $user->id && (!is_null($userAuthority) && $userAuthority->authority->code < $authorityType->value)) {
-                return Response::deny("Unauthenticated.", 403);
+
+            if ($userList["user_id"] != $user->id) {
+                if (is_null($userAuthority) || (!is_null($userAuthority) && ($authorityType->value & $userAuthority->authority->code) == 0)) {
+                    return Response::deny("Unauthenticated.", 403);
+                }
             }
 
             return Response::allow();
@@ -58,13 +61,16 @@ class UserListsItemPolicy
      * 
      * @throws Exception
      */
-    public function isOwnerUserList(UserEntity $user, UserListsItemEntity $listsItem, int $userListId): Response
+    public function isOwnerUserList(UserEntity $user, UserListsItemEntity $listsItem, int $userListId, AuthorityType $authorityType): Response
     {
         try {
             $userList =  $this->userListManager->setResponseType(UserListAdminResponse::class)->show($userListId);
+            $userAuthority = $this->userAuthorityManager->findByAttributes($userListId, auth()->user()->id);
 
             if ($userList["user_id"] != $user->id) {
-                return Response::deny("Unauthenticated.", 403);
+                if (is_null($userAuthority) || (!is_null($userAuthority) && ($authorityType->value & $userAuthority->authority->code) == 0)) {
+                    return Response::deny("Unauthenticated.", 403);
+                }
             }
 
             return Response::allow();
