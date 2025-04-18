@@ -6,6 +6,7 @@ use App\Http\Controllers\General\AuthController;
 use App\Http\Controllers\General\CategoryController;
 use App\Http\Controllers\General\DislikeCommentController;
 use App\Http\Controllers\General\DislikeUserListController;
+use App\Http\Controllers\General\FollowController;
 use App\Http\Controllers\General\ListController;
 use App\Http\Controllers\General\UserListController;
 use App\Http\Controllers\General\LikeCommentController;
@@ -68,3 +69,10 @@ Route::group([
     Route::get('/', [ArtificialIntelligenceController::class, 'communicate']);
 });
 
+Route::group([
+    'prefix' => 'follow',
+], function ($router) {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/{followed_user_id}', [FollowController::class, 'followReverser']);
+    });
+});
