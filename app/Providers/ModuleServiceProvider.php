@@ -30,6 +30,9 @@ use App\Modules\Dislike\Domain\IRepository\IDislikeCommentRepository;
 use App\Modules\Dislike\Domain\IRepository\IDislikeUserListRepository;
 use App\Modules\Dislike\Infrastructure\Repository\DislikeCommentRepository;
 use App\Modules\Dislike\Infrastructure\Repository\DislikeUserListRepository;
+use App\Modules\Follow\Application\Manager\FollowManager;
+use App\Modules\Follow\Domain\IRepository\IFollowRepository;
+use App\Modules\Follow\Infrastructure\Repository\FollowRepository;
 use App\Modules\Like\Application\Manager\LikeCommentManager;
 use App\Modules\Like\Application\Manager\LikeUserListManager;
 use App\Modules\Like\Domain\IRepository\ILikeCommentRepository;
@@ -80,7 +83,6 @@ class ModuleServiceProvider extends ServiceProvider
         Gate::policy(CommentEntity::class, CommentPolicy::class);
         Gate::policy(UserAuthorityEntity::class, UserAuthorityPolicy::class);
 
-
         //Bindings
         $this->app->singleton(UserListAggregate::class);
         $this->app->singleton(UserListItemAggregate::class);
@@ -115,6 +117,8 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind(IAuthorityRepository::class, AuthorityRepository::class);
         $this->app->bind(UserAuthorityManager::class, UserAuthorityManager::class);
         $this->app->bind(IUserAuthorityRepository::class, UserAuthorityRepository::class);
+        $this->app->bind(FollowManager::class, FollowManager::class);
+        $this->app->bind(IFollowRepository::class, FollowRepository::class);
 
         $this->registerAggregates();
     }
