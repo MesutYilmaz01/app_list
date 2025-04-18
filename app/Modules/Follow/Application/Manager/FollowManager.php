@@ -62,4 +62,15 @@ class FollowManager
 
         return true;
     }
+
+    /**
+     * Returns follows according to attributes
+     * 
+     * @param array $attributes
+     * @return array
+     */
+    public function getAllByAttributes(array $attributes): array
+    {
+        return $this->followCrudService->getAllByAttributes($attributes);
+    }
 }

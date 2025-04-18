@@ -7,7 +7,7 @@ Then get in app container that contain php.<br />
 Install composer with following command.<br />
 **```composer install```**<br /><br />
 Create database<br />
-**```php artisan migrate```**<br />
+**```php artisan migrate```**<br /><br />
 Seed database(Optinial) <br />
 **```php artisan db:seed ```**<br />
 
