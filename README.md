@@ -11,6 +11,12 @@ Create database<br />
 Seed database(Optinial) <br />
 **```php artisan db:seed ```**<br />
 
+## Sample Postman Scripts
+
+The postman scripts will get updated as the code progress.<br />
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/12018823-77f6372c-5c31-4f24-bf32-3720f9a66a42)
+
 **Project must work after these steps at [localhost](https://localhost:90/).**
 
 ## Database Credentials
